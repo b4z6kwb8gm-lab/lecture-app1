@@ -7,45 +7,68 @@
 <title>Lecture Stream</title>
 
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b0b0b">
+<meta name="theme-color" content="#050505">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icon.png">
 
 <style>
+/* ===== 基本背景（スパイダーマン風ダーク＋赤黒グロー） ===== */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: radial-gradient(circle at top, #0b0b0b, #050506);
+    background: radial-gradient(circle at 30% 10%, #1a0000, #050505 60%);
     color: #f5f5f5;
+    overflow-x: hidden;
 }
 
-/* ヘッダー */
-header {
-    padding: 50px 20px 10px;
+/* ===== 上部ヒーローエリア ===== */
+.hero {
+    position: relative;
+    height: 32vh;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+    padding: 20px;
+}
+
+/* 光の粒 */
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(212,175,55,0.15), transparent 60%);
+    animation: pulse 4s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.2); opacity: 0.8; }
 }
 
 h1 {
     margin: 0;
-    font-size: 36px;
+    font-size: 34px;
     letter-spacing: 2px;
     color: #d4af37;
-    text-shadow: 0 0 10px rgba(212,175,55,0.4);
+    text-shadow: 0 0 15px rgba(212,175,55,0.4);
 }
 
 p {
     opacity: 0.6;
 }
 
-/* 検索 */
-.search-box {
-    padding: 10px 20px;
+/* ===== 検索（はみ出し完全防止） ===== */
+.search-wrap {
+    padding: 10px 16px;
 }
 
 #search {
     width: 100%;
+    box-sizing: border-box;
     padding: 14px;
     border-radius: 12px;
     border: 1px solid rgba(212,175,55,0.4);
@@ -57,69 +80,80 @@ p {
 
 #search:focus {
     border-color: #d4af37;
-    box-shadow: 0 0 15px rgba(212,175,55,0.3);
+    box-shadow: 0 0 18px rgba(212,175,55,0.25);
 }
 
-/* カードレイアウト */
+/* ===== コンテナ（余白＋縦幅対策） ===== */
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 18px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    padding-bottom: 60px;
 }
 
-/* カード本体 */
+/* ===== カード（スパイダーマン風浮遊UI） ===== */
 .card {
     position: relative;
-    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.4));
+    background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(0,0,0,0.5));
     border: 1px solid rgba(212,175,55,0.25);
     border-radius: 18px;
-    padding: 28px;
+    padding: 26px;
     text-align: center;
     cursor: pointer;
-    transition: 0.35s;
     overflow: hidden;
+    transition: 0.35s;
+    transform-style: preserve-3d;
 }
 
-/* ホバー発光 */
+/* 浮遊アニメ */
+.card {
+    animation: float 6s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+}
+
+/* ホバー */
 .card:hover {
-    transform: translateY(-8px) scale(1.05);
-    border: 1px solid rgba(212,175,55,0.8);
+    transform: translateY(-10px) scale(1.06);
+    border-color: rgba(212,175,55,0.8);
     box-shadow: 0 0 25px rgba(212,175,55,0.35);
 }
 
-/* 光の流れアニメーション */
+/* 金のスパイダーライン風エフェクト */
 .card::before {
     content: "";
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    top: -60%;
+    left: -60%;
+    width: 220%;
+    height: 220%;
     background: linear-gradient(
         120deg,
         transparent,
-        rgba(212,175,55,0.15),
+        rgba(212,175,55,0.12),
         transparent
     );
     transform: rotate(25deg);
-    animation: shine 4s infinite linear;
+    animation: shine 5s infinite linear;
 }
 
 @keyframes shine {
-    0% { transform: translateX(-100%) rotate(25deg); }
-    100% { transform: translateX(100%) rotate(25deg); }
+    0% { transform: translateX(-120%) rotate(25deg); }
+    100% { transform: translateX(120%) rotate(25deg); }
 }
 
 .card span {
     position: relative;
+    z-index: 2;
     font-size: 18px;
     font-weight: bold;
-    color: #f5f5f5;
-    z-index: 2;
 }
 
-/* フッター */
+/* ===== フッター ===== */
 footer {
     text-align: center;
     padding: 30px;
@@ -132,13 +166,13 @@ footer {
 
 <body>
 
-<header>
+<div class="hero">
     <h1>Lecture Stream</h1>
-    <p>Premium Learning Dashboard</p>
-</header>
+    <p>Spider-style Learning Interface</p>
+</div>
 
 <!-- 検索 -->
-<div class="search-box">
+<div class="search-wrap">
     <input type="text" id="search" placeholder="講義を検索...">
 </div>
 
@@ -155,7 +189,7 @@ footer {
 </div>
 
 <footer>
-    Lecture Stream • Premium Edition
+    Lecture Stream • Spider Edition
 </footer>
 
 <script>
@@ -163,7 +197,7 @@ function openLecture(file) {
     window.location.href = "lectures/" + file;
 }
 
-/* 検索機能 */
+/* 検索 */
 const searchInput = document.getElementById("search");
 const cards = document.querySelectorAll(".card");
 
@@ -172,12 +206,7 @@ searchInput.addEventListener("input", function () {
 
     cards.forEach(card => {
         const text = card.innerText.toLowerCase();
-
-        if (text.includes(keyword)) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
+        card.style.display = text.includes(keyword) ? "block" : "none";
     });
 });
 </script>
