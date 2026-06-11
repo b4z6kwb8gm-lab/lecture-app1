@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>実験一覧</title>
+<title>実験ライブラリ</title>
 <style>
 *{
     margin:0;
@@ -11,124 +11,164 @@
     box-sizing:border-box;
 }
 body{
-    background:#0b0f14;
-    color:white;
-    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
     min-height:100vh;
-    padding:20px;
+    background:
+    radial-gradient(circle at top,
+    #2b2b2b 0%,
+    #0b0f14 45%,
+    #000000 100%);
+    color:white;
+    font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+    padding:90px 20px 30px;
 }
-h1{
-    text-align:center;
-    margin-bottom:25px;
-    color:#ffd700;
-    text-shadow:0 0 15px rgba(255,215,0,.7);
-}
+/* ===== 戻るボタン ===== */
 .back-btn{
-    display:inline-block;
-    margin-bottom:20px;
-    padding:10px 18px;
+    position:fixed;
+    top:20px;
+    left:20px;
+    z-index:9999;
+    border:none;
+    padding:12px 20px;
+    border-radius:16px;
     background:#ffd700;
-    color:#000;
-    text-decoration:none;
-    border-radius:12px;
+    color:black;
     font-weight:bold;
-}
-.card{
-    background:#151b23;
-    border:1px solid rgba(255,215,0,.3);
-    border-radius:18px;
-    padding:18px;
-    margin-bottom:16px;
-    box-shadow:0 0 20px rgba(255,215,0,.08);
+    font-size:15px;
+    cursor:pointer;
+    box-shadow:
+    0 0 15px rgba(255,215,0,.5);
     transition:.25s;
 }
+.back-btn:hover{
+    transform:scale(1.05);
+    box-shadow:
+    0 0 25px rgba(255,215,0,.8);
+}
+/* ===== タイトル ===== */
+.header{
+    text-align:center;
+    margin-bottom:35px;
+}
+.header h1{
+    color:#ffd700;
+    font-size:2.3rem;
+    text-shadow:
+    0 0 10px rgba(255,215,0,.7),
+    0 0 30px rgba(255,215,0,.4);
+    margin-bottom:10px;
+}
+.header p{
+    opacity:.8;
+}
+/* ===== 実験一覧 ===== */
+.grid{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+    gap:18px;
+}
+.card{
+    background:
+    rgba(255,255,255,.04);
+    backdrop-filter:blur(10px);
+    border:
+    1px solid rgba(255,215,0,.25);
+    border-radius:22px;
+    padding:22px;
+    transition:.3s;
+    box-shadow:
+    0 0 20px rgba(255,215,0,.05);
+}
 .card:hover{
-    transform:translateY(-2px);
+    transform:
+    translateY(-5px);
+    box-shadow:
+    0 0 25px rgba(255,215,0,.25);
 }
 .card h2{
     color:#ffd700;
-    margin-bottom:12px;
-    font-size:18px;
+    font-size:1.1rem;
+    margin-bottom:15px;
 }
-.btn{
-    display:inline-block;
-    margin:5px;
-    padding:10px 16px;
-    border-radius:10px;
+/* ===== 開くボタン ===== */
+.open-btn{
+    display:block;
+    text-align:center;
     text-decoration:none;
-    font-weight:bold;
     background:#ffd700;
-    color:#000;
+    color:black;
+    font-weight:bold;
+    padding:14px;
+    border-radius:14px;
+    transition:.25s;
 }
-.btn:hover{
-    opacity:.9;
+.open-btn:hover{
+    transform:scale(1.03);
+    filter:brightness(1.05);
 }
 </style>
 </head>
 <body>
 
-← ホームへ戻る
-
-<h1>実験一覧</h1>
+← ホーム
+<div class="header">
+<h1>🧪 実験ライブラリ</h1>
+<p>
+PDF・Excel・レポート資料
+</p>
+</div>
+<div class="grid">
 <div class="card">
 <h2>OPアンプ</h2>
-<a class="btn" href="opamp/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="opamp/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="opamp/index.html">開く</a>
 </div>
 <div class="card">
 <h2>X線による結晶の方位決定</h2>
-<a class="btn" href="xray_orientation/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="xray_orientation/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="xray_orientation/index.html">開く</a>
 </div>
 <div class="card">
 <h2>サーミスタの特性</h2>
-<a class="btn" href="thermistor/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="thermistor/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="thermistor/index.html">開く</a>
 </div>
 <div class="card">
 <h2>デジタル回路</h2>
-<a class="btn" href="digital_circuits/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="digital_circuits/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="digital_circuits/index.html">開く</a>
 </div>
 <div class="card">
 <h2>はんだ付け</h2>
-<a class="btn" href="soldering/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="soldering/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="soldering/index.html">開く</a>
 </div>
 <div class="card">
 <h2>強磁性体</h2>
-<a class="btn" href="ferromagnetism/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="ferromagnetism/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="ferromagnetism/index.html">開く</a>
 </div>
 <div class="card">
 <h2>高温超伝導体</h2>
-<a class="btn" href="high_tc_superconductor/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="high_tc_superconductor/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="high_tc_superconductor/index.html">開く</a>
 </div>
 <div class="card">
 <h2>光の回折</h2>
-<a class="btn" href="diffraction/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="diffraction/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="diffraction/index.html">開く</a>
 </div>
 <div class="card">
 <h2>示差熱</h2>
-<a class="btn" href="dta/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="dta/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="dta/index.html">開く</a>
 </div>
 <div class="card">
 <h2>真空蒸着</h2>
-<a class="btn" href="vacuum_deposition/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="vacuum_deposition/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="vacuum_deposition/index.html">開く</a>
 </div>
 <div class="card">
 <h2>半導体のホール効果</h2>
-<a class="btn" href="hall_effect/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="hall_effect/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="hall_effect/index.html">開く</a>
 </div>
 <div class="card">
 <h2>偏光</h2>
-<a class="btn" href="polarization/report.pdf" target="_blank">📄 PDF</a>
-<a class="btn" href="polarization/data.xlsx">📊 Excel</a>
+<a class="open-btn" href="polarization/index.html">開く</a>
+</div>
 </div>
 </body>
 </html>

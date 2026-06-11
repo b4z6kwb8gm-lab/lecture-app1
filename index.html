@@ -2,131 +2,181 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Lecture Stream</title>
 
-<!-- ===== PWA設定 ===== -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b0f14">
-
-<!-- ===== iOS対応 ===== -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icon.png">
-
-<!-- ===== Android対応 ===== -->
-<meta name="mobile-web-app-capable" content="yes">
-
 <style>
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #050014;
-    color: white;
+
+/* ===== 全体 ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* ===== 画面切り替え ===== */
-.view { display: none; padding: 20px; }
-.view.active { display: block; }
-
-/* ===== メニュー（黒×金ネオン） ===== */
-.menu {
-    padding: 18px;
-    margin: 12px 0;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #ffd700, #6a00ff);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.25s;
-    box-shadow: 0 0 10px rgba(255,215,0,0.4);
-}
-.menu:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(255,215,0,0.8);
+body{
+    min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    background:
+        radial-gradient(circle at top,#1f1f1f,#0b0f14 60%,#000);
+    color:white;
+    padding:20px;
 }
 
-/* ===== 講義ボタン ===== */
-.lecture {
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: 0.2s;
-}
-.lecture:hover {
-    background: rgba(255,255,255,0.18);
-    transform: translateX(6px);
+/* ===== タイトル ===== */
+h1{
+    text-align:center;
+    color:#ffd700;
+    font-size:2.2rem;
+    margin-top:10px;
+    text-shadow:0 0 20px rgba(255,215,0,0.5);
 }
 
-/* ===== 戻る ===== */
-.back {
-    margin-bottom: 20px;
-    opacity: 0.7;
-    cursor: pointer;
+/* ===== 検索 ===== */
+.search{
+    margin:20px auto;
+    display:block;
+    width:100%;
+    max-width:500px;
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    outline:none;
+    font-size:16px;
 }
+
+/* ===== カテゴリカード ===== */
+.card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,215,0,0.3);
+    border-radius:18px;
+    padding:18px;
+    margin:15px auto;
+    max-width:600px;
+    box-shadow:0 0 15px rgba(255,215,0,0.08);
+}
+
+/* ===== ボタン ===== */
+.btn{
+    display:block;
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    background:#ffd700;
+    color:#000;
+    border:none;
+    border-radius:12px;
+    font-weight:bold;
+    text-align:center;
+    text-decoration:none;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.btn:hover{
+    transform:scale(1.02);
+}
+
+/* ===== 展開 ===== */
+.hidden{
+    display:none;
+}
+
+.sub{
+    margin-top:10px;
+}
+
+.sub a{
+    display:block;
+    padding:10px;
+    margin:6px 0;
+    background:#1a1a1a;
+    border:1px solid rgba(255,215,0,0.2);
+    border-radius:10px;
+    color:white;
+    text-decoration:none;
+}
+
+.sub a:hover{
+    background:#2a2a2a;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- ===== HOME ===== -->
-<div id="home" class="view active">
+<h1>📘 Lecture Stream</h1>
 
-    <h2>Lecture Stream</h2>
+<input class="search" id="search" placeholder="検索（力学・統計・実験・講義）">
 
-    <div class="menu" onclick="show('mechanics')">
-        力学演習
-    </div>
+<!-- ===== 力学 ===== -->
+<div class="card">
+<button class="btn" onclick="toggle('mech')">⚙️ 力学演習</button>
 
-    <div class="menu" onclick="show('statmech')">
-        統計力学
-    </div>
+<div id="mech" class="sub hidden">
 
-    <div class="menu" onclick="window.location.href='lectures/experiments/index.html'">
-        実験
-    </div>
+<a href="lectures/mechanics/lecture1.html">講義1</a>
+<a href="lectures/mechanics/lecture2.html">講義2</a>
+<a href="lectures/mechanics/lecture3.html">講義3</a>
+<a href="lectures/mechanics/lecture4.html">講義4</a>
+<a href="lectures/mechanics/lecture5.html">講義5</a>
+<a href="lectures/mechanics/lecture6.html">講義6</a>
 
 </div>
-
-<!-- ===== mechanics ===== -->
-<div id="mechanics" class="view">
-    <div class="back" onclick="show('home')">← ホーム</div>
-    <h3>力学演習</h3>
-
-    <div class="lecture" onclick="openLecture('mechanics/lecture1.html')">講義1</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture2.html')">講義2</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture3.html')">講義3</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture4.html')">講義4</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture5.html')">講義5</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture6.html')">講義6</div>
 </div>
 
-<!-- ===== statmech ===== -->
-<div id="statmech" class="view">
-    <div class="back" onclick="show('home')">← ホーム</div>
-    <h3>統計力学</h3>
+<!-- ===== 統計力学 ===== -->
+<div class="card">
+<button class="btn" onclick="toggle('stat')">📊 統計力学</button>
 
-    <div class="lecture" onclick="openLecture('statmech/lecture1.html')">講義1</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture2.html')">講義2</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture3.html')">講義3</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture4.html')">講義4</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture5.html')">講義5</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture6.html')">講義6</div>
+<div id="stat" class="sub hidden">
+
+<a href="lectures/statmech/lecture1.html">講義1</a>
+<a href="lectures/statmech/lecture2.html">講義2</a>
+<a href="lectures/statmech/lecture3.html">講義3</a>
+<a href="lectures/statmech/lecture4.html">講義4</a>
+<a href="lectures/statmech/lecture5.html">講義5</a>
+<a href="lectures/statmech/lecture6.html">講義6</a>
+
+</div>
+</div>
+
+<!-- ===== 実験 ===== -->
+<div class="card">
+<button class="btn" onclick="location.href='lectures/experiments/index.html'">
+🧪 実験
+</button>
 </div>
 
 <script>
-function show(id){
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+
+/* ===== 展開 ===== */
+function toggle(id){
+    const el = document.getElementById(id);
+    el.classList.toggle("hidden");
 }
 
-function openLecture(path){
-    window.location.href = "lectures/" + path;
-}
+/* ===== 検索 ===== */
+document.getElementById("search").addEventListener("input", function(){
+
+    let v = this.value.toLowerCase();
+
+    document.querySelectorAll(".card").forEach(card => {
+
+        let text = card.innerText.toLowerCase();
+
+        if(text.includes(v)){
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+
+    });
+
+});
+
 </script>
 
 </body>
