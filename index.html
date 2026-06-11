@@ -6,161 +6,62 @@
 
 <title>Lecture Stream</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#050014">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-
 <style>
-/* ===== 背景（動くネオン宇宙） ===== */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #050014;
     color: white;
-    overflow-x: hidden;
-    background: linear-gradient(-45deg,
-        #050014,
-        #12002b,
-        #001b2e,
-        #2b001e
-    );
-    background-size: 400% 400%;
-    animation: bgMove 12s ease infinite;
 }
 
-@keyframes bgMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* ===== 画面切り替え ===== */
+.view {
+    display: none;
+    padding: 20px;
 }
 
-/* ===== ヘッダー ===== */
-.hero {
-    text-align: center;
-    padding: 50px 20px 10px;
+.view.active {
+    display: block;
 }
 
-h1 {
-    font-size: 38px;
-    margin: 0;
-    color: #ffd700;
-    text-shadow:
-        0 0 10px #ffd700,
-        0 0 25px #ff00ff,
-        0 0 40px #00ffff;
-    animation: glow 2.5s infinite alternate;
-}
-
-@keyframes glow {
-    0% { filter: brightness(1); }
-    100% { filter: brightness(1.5); }
-}
-
-p {
-    opacity: 0.7;
-}
-
-/* ===== 検索（ガラス＋発光） ===== */
-.search-wrap {
-    padding: 10px 16px;
-}
-
-#search {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.08);
-    color: white;
-    outline: none;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 15px rgba(255,0,255,0.2);
-    transition: 0.3s;
-}
-
-#search:focus {
-    box-shadow:
-        0 0 20px rgba(255,0,255,0.5),
-        0 0 40px rgba(0,255,255,0.3);
-}
-
-/* ===== カードグリッド ===== */
-.container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 16px;
-    padding: 16px;
-    padding-bottom: 80px;
-}
-
-/* ===== カード（超派手UI） ===== */
-.card {
-    position: relative;
-    padding: 26px;
-    border-radius: 18px;
-    text-align: center;
-    cursor: pointer;
-    overflow: hidden;
-
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.15);
-
-    transition: 0.4s;
-    animation: float 5s ease-in-out infinite;
-}
-
-/* 浮遊 */
-@keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-/* ホバー：回転＋発光 */
-.card:hover {
-    transform: scale(1.08) rotate(1deg);
-    box-shadow:
-        0 0 20px rgba(255,0,255,0.4),
-        0 0 40px rgba(0,255,255,0.2);
-    border-color: rgba(255,255,255,0.5);
-}
-
-/* 光の走査 */
-.card::before {
-    content: "";
-    position: absolute;
-    top: -60%;
-    left: -60%;
-    width: 220%;
-    height: 220%;
-    background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,0.15),
-        transparent
-    );
-    transform: rotate(25deg);
-    animation: shine 4s linear infinite;
-}
-
-@keyframes shine {
-    0% { transform: translateX(-120%) rotate(25deg); }
-    100% { transform: translateX(120%) rotate(25deg); }
-}
-
-.card span {
-    position: relative;
-    z-index: 2;
+/* ===== ホームカード ===== */
+.menu {
+    padding: 20px;
+    margin: 12px 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffd700, #6a00ff);
     font-weight: bold;
-    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.25s;
 }
 
-/* ===== フッター ===== */
-footer {
-    text-align: center;
-    opacity: 0.5;
-    padding: 30px;
-    font-size: 12px;
+.menu:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+/* ===== 戻るボタン ===== */
+.back {
+    margin-bottom: 20px;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+/* ===== 講義ボタン ===== */
+.lecture {
+    padding: 14px;
+    margin: 8px 0;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lecture:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateX(4px);
 }
 </style>
 
@@ -168,46 +69,62 @@ footer {
 
 <body>
 
-<div class="hero">
-    <h1>Lecture Stream</h1>
-    <p>Neon Hero Learning Dashboard</p>
-</div>
+<!-- ================= HOME ================= -->
+<div id="home" class="view active">
 
-<div class="search-wrap">
-    <input type="text" id="search" placeholder="講義を検索...">
-</div>
+    <h2>Lecture Stream</h2>
 
-<div class="container">
+    <div class="menu" onclick="show('mechanics')">
+        力学演習
+    </div>
 
-    <div class="card" onclick="openLecture('lecture1.html')"><span>講義1</span></div>
-    <div class="card" onclick="openLecture('lecture2.html')"><span>講義2</span></div>
-    <div class="card" onclick="openLecture('lecture3.html')"><span>講義3</span></div>
-    <div class="card" onclick="openLecture('lecture4.html')"><span>講義4</span></div>
-    <div class="card" onclick="openLecture('lecture5.html')"><span>講義5</span></div>
-    <div class="card" onclick="openLecture('lecture6.html')"><span>講義6</span></div>
+    <div class="menu" onclick="show('statmech')">
+        統計力学
+    </div>
 
 </div>
 
-<footer>
-    Lecture Stream • Neon Hero Edition
-</footer>
+<!-- ================= 力学 ================= -->
+<div id="mechanics" class="view">
+
+    <div class="back" onclick="show('home')">← ホームに戻る</div>
+
+    <h3>力学演習</h3>
+
+    <div class="lecture" onclick="openLecture('mechanics/lecture1.html')">講義1</div>
+    <div class="lecture" onclick="openLecture('mechanics/lecture2.html')">講義2</div>
+    <div class="lecture" onclick="openLecture('mechanics/lecture3.html')">講義3</div>
+    <div class="lecture" onclick="openLecture('mechanics/lecture4.html')">講義4</div>
+    <div class="lecture" onclick="openLecture('mechanics/lecture5.html')">講義5</div>
+    <div class="lecture" onclick="openLecture('mechanics/lecture6.html')">講義6</div>
+
+</div>
+
+<!-- ================= 統計力学 ================= -->
+<div id="statmech" class="view">
+
+    <div class="back" onclick="show('home')">← ホームに戻る</div>
+
+    <h3>統計力学</h3>
+
+    <div class="lecture" onclick="openLecture('statmech/lecture1.html')">講義1</div>
+    <div class="lecture" onclick="openLecture('statmech/lecture2.html')">講義2</div>
+    <div class="lecture" onclick="openLecture('statmech/lecture3.html')">講義3</div>
+    <div class="lecture" onclick="openLecture('statmech/lecture4.html')">講義4</div>
+    <div class="lecture" onclick="openLecture('statmech/lecture5.html')">講義5</div>
+    <div class="lecture" onclick="openLecture('statmech/lecture6.html')">講義6</div>
+
+</div>
 
 <script>
-function openLecture(file) {
-    window.location.href = "lectures/" + file;
+function show(id){
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
 }
 
-const searchInput = document.getElementById("search");
-const cards = document.querySelectorAll(".card");
-
-searchInput.addEventListener("input", function () {
-    const keyword = this.value.toLowerCase();
-
-    cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(keyword) ? "block" : "none";
-    });
-});
+function openLecture(path){
+    window.location.href = "lectures/" + path;
+}
 </script>
 
 </body>
