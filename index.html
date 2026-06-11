@@ -7,61 +7,60 @@
 <title>Lecture Stream</title>
 
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#050505">
+<meta name="theme-color" content="#050014">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
-/* ===== 基本背景（スパイダーマン風ダーク＋赤黒グロー） ===== */
+/* ===== 背景（動くネオン宇宙） ===== */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: radial-gradient(circle at 30% 10%, #1a0000, #050505 60%);
-    color: #f5f5f5;
+    color: white;
     overflow-x: hidden;
+    background: linear-gradient(-45deg,
+        #050014,
+        #12002b,
+        #001b2e,
+        #2b001e
+    );
+    background-size: 400% 400%;
+    animation: bgMove 12s ease infinite;
 }
 
-/* ===== 上部ヒーローエリア ===== */
+@keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ===== ヘッダー ===== */
 .hero {
-    position: relative;
-    height: 32vh;
-    min-height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     text-align: center;
-    padding: 20px;
-}
-
-/* 光の粒 */
-.hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 50%, rgba(212,175,55,0.15), transparent 60%);
-    animation: pulse 4s infinite ease-in-out;
-}
-
-@keyframes pulse {
-    0%,100% { transform: scale(1); opacity: 0.4; }
-    50% { transform: scale(1.2); opacity: 0.8; }
+    padding: 50px 20px 10px;
 }
 
 h1 {
+    font-size: 38px;
     margin: 0;
-    font-size: 34px;
-    letter-spacing: 2px;
-    color: #d4af37;
-    text-shadow: 0 0 15px rgba(212,175,55,0.4);
+    color: #ffd700;
+    text-shadow:
+        0 0 10px #ffd700,
+        0 0 25px #ff00ff,
+        0 0 40px #00ffff;
+    animation: glow 2.5s infinite alternate;
+}
+
+@keyframes glow {
+    0% { filter: brightness(1); }
+    100% { filter: brightness(1.5); }
 }
 
 p {
-    opacity: 0.6;
+    opacity: 0.7;
 }
 
-/* ===== 検索（はみ出し完全防止） ===== */
+/* ===== 検索（ガラス＋発光） ===== */
 .search-wrap {
     padding: 10px 16px;
 }
@@ -70,60 +69,63 @@ p {
     width: 100%;
     box-sizing: border-box;
     padding: 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(212,175,55,0.4);
-    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
     color: white;
     outline: none;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(255,0,255,0.2);
     transition: 0.3s;
 }
 
 #search:focus {
-    border-color: #d4af37;
-    box-shadow: 0 0 18px rgba(212,175,55,0.25);
+    box-shadow:
+        0 0 20px rgba(255,0,255,0.5),
+        0 0 40px rgba(0,255,255,0.3);
 }
 
-/* ===== コンテナ（余白＋縦幅対策） ===== */
+/* ===== カードグリッド ===== */
 .container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 16px;
     padding: 16px;
-    padding-bottom: 60px;
+    padding-bottom: 80px;
 }
 
-/* ===== カード（スパイダーマン風浮遊UI） ===== */
+/* ===== カード（超派手UI） ===== */
 .card {
     position: relative;
-    background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(0,0,0,0.5));
-    border: 1px solid rgba(212,175,55,0.25);
-    border-radius: 18px;
     padding: 26px;
+    border-radius: 18px;
     text-align: center;
     cursor: pointer;
     overflow: hidden;
-    transition: 0.35s;
-    transform-style: preserve-3d;
+
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+
+    transition: 0.4s;
+    animation: float 5s ease-in-out infinite;
 }
 
-/* 浮遊アニメ */
-.card {
-    animation: float 6s infinite ease-in-out;
-}
-
+/* 浮遊 */
 @keyframes float {
-    0%,100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
-/* ホバー */
+/* ホバー：回転＋発光 */
 .card:hover {
-    transform: translateY(-10px) scale(1.06);
-    border-color: rgba(212,175,55,0.8);
-    box-shadow: 0 0 25px rgba(212,175,55,0.35);
+    transform: scale(1.08) rotate(1deg);
+    box-shadow:
+        0 0 20px rgba(255,0,255,0.4),
+        0 0 40px rgba(0,255,255,0.2);
+    border-color: rgba(255,255,255,0.5);
 }
 
-/* 金のスパイダーライン風エフェクト */
+/* 光の走査 */
 .card::before {
     content: "";
     position: absolute;
@@ -134,11 +136,11 @@ p {
     background: linear-gradient(
         120deg,
         transparent,
-        rgba(212,175,55,0.12),
+        rgba(255,255,255,0.15),
         transparent
     );
     transform: rotate(25deg);
-    animation: shine 5s infinite linear;
+    animation: shine 4s linear infinite;
 }
 
 @keyframes shine {
@@ -149,16 +151,16 @@ p {
 .card span {
     position: relative;
     z-index: 2;
-    font-size: 18px;
     font-weight: bold;
+    font-size: 18px;
 }
 
 /* ===== フッター ===== */
 footer {
     text-align: center;
+    opacity: 0.5;
     padding: 30px;
     font-size: 12px;
-    opacity: 0.4;
 }
 </style>
 
@@ -168,15 +170,13 @@ footer {
 
 <div class="hero">
     <h1>Lecture Stream</h1>
-    <p>Spider-style Learning Interface</p>
+    <p>Neon Hero Learning Dashboard</p>
 </div>
 
-<!-- 検索 -->
 <div class="search-wrap">
     <input type="text" id="search" placeholder="講義を検索...">
 </div>
 
-<!-- カード -->
 <div class="container">
 
     <div class="card" onclick="openLecture('lecture1.html')"><span>講義1</span></div>
@@ -189,7 +189,7 @@ footer {
 </div>
 
 <footer>
-    Lecture Stream • Spider Edition
+    Lecture Stream • Neon Hero Edition
 </footer>
 
 <script>
@@ -197,7 +197,6 @@ function openLecture(file) {
     window.location.href = "lectures/" + file;
 }
 
-/* 検索 */
 const searchInput = document.getElementById("search");
 const cards = document.querySelectorAll(".card");
 
