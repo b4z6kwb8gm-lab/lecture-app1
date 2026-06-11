@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>力学演習A — 微積分クイズ</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2230;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #7ee787;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --correct: #238636;
+    --correct-text: #56d364;
+    --wrong: #8b1a1a;
+    --wrong-text: #f85149;
+    --tab-active: #58a6ff;
+    --radius: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hiragino Kaku Gothic Pro', 'Noto Sans JP', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 32px 20px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+  header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+  .tab-bar {
+    display: flex; gap: 0; overflow-x: auto;
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    padding: 0 16px;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted);
+    font-size: 0.82rem; font-weight: 600;
+    padding: 12px 18px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+    font-family: inherit;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--tab-active); border-bottom-color: var(--tab-active); }
+
+  .tab-content { display: none; padding: 32px 24px 60px; max-width: 860px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  .section-title {
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--accent4);
+    border-left: 3px solid var(--accent4);
+    padding-left: 12px;
+    margin: 36px 0 20px;
+  }
+
+  /* Quiz card */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  .quiz-card .q-label {
+    font-size: 0.72rem; font-weight: 700;
+    color: var(--accent); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .quiz-card .q-text {
+    font-size: 1rem; line-height: 1.9;
+    margin-bottom: 14px;
+  }
+  .blank { color: var(--accent); font-weight: 700; }
+
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  @media (max-width: 520px) { .choices { grid-template-columns: 1fr; } }
+
+  .choice-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.9rem;
+    padding: 9px 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: inherit;
+  }
+  .choice-btn:hover:not(:disabled) { border-color: var(--accent); background: #1d2a3a; }
+  .choice-btn.correct { background: var(--correct) !important; border-color: var(--correct-text) !important; color: var(--correct-text) !important; }
+  .choice-btn.wrong   { background: var(--wrong)   !important; border-color: var(--wrong-text)   !important; color: var(--wrong-text)   !important; }
+  .choice-btn:disabled { cursor: default; opacity: 0.85; }
+
+  .verdict {
+    font-size: 0.88rem; font-weight: 600;
+    padding: 6px 0 2px;
+    min-height: 24px;
+  }
+  .verdict.ok  { color: var(--correct-text); }
+  .verdict.ng  { color: var(--wrong-text); }
+
+  .reveal-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 5px; cursor: pointer;
+    color: var(--text-muted); font-size: 0.8rem;
+    padding: 5px 12px; margin-top: 8px;
+    transition: border-color 0.15s, color 0.15s;
+    font-family: inherit;
+  }
+  .reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .explanation {
+    display: none;
+    background: #0d1a2d;
+    border: 1px solid #1f3a5c;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-top: 10px;
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: #a8c7fa;
+  }
+  .explanation.visible { display: block; }
+
+  /* Step-by-step guide */
+  .guide {
+    margin-top: 48px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 32px;
+  }
+  .guide h2 {
+    font-size: 1rem; font-weight: 700;
+    color: var(--accent2); margin-bottom: 20px;
+    border-bottom: 1px solid var(--border); padding-bottom: 10px;
+  }
+  .guide h3 {
+    font-size: 0.95rem; font-weight: 700;
+    color: var(--accent); margin: 20px 0 8px;
+  }
+  .guide p { margin-bottom: 10px; font-size: 0.9rem; color: #cdd9e5; }
+  .guide ol, .guide ul { padding-left: 20px; margin-bottom: 10px; }
+  .guide li { margin-bottom: 6px; font-size: 0.9rem; color: #cdd9e5; }
+
+  .point-box {
+    background: #12211a;
+    border: 1px solid #238636;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 0.88rem;
+    color: var(--accent2);
+  }
+  .point-box strong { display: block; margin-bottom: 4px; color: var(--accent2); font-size: 0.8rem; letter-spacing: 0.05em; }
+
+  .key-box {
+    background: #1a1224;
+    border: 1px solid #6e40c9;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 0.88rem;
+    color: var(--accent4);
+  }
+  .key-box strong { display: block; margin-bottom: 4px; color: var(--accent4); font-size: 0.8rem; letter-spacing: 0.05em; }
+
+  .math-block {
+    background: #0d1420;
+    border-radius: 5px;
+    padding: 10px 16px;
+    margin: 8px 0;
+    overflow-x: auto;
+    font-size: 0.95rem;
+  }
+
+  .step {
+    display: flex; gap: 12px; margin: 10px 0; align-items: flex-start;
+  }
+  .step-num {
+    background: var(--accent);
+    color: #0d1117;
+    font-size: 0.75rem; font-weight: 700;
+    border-radius: 50%;
+    min-width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px; flex-shrink: 0;
+  }
+  .step-body { flex: 1; font-size: 0.88rem; color: #cdd9e5; }
+
+  .score-bar {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    font-size: 0.85rem; color: var(--text-muted);
+  }
+  .score-bar span { color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>力学演習A — 微積分クイズ</h1>
+  <p>2026年4月20日 | 穴埋め4択 + ステップバイステップ解説</p>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('t1',this)">大問1　速度・位置</button>
+  <button class="tab-btn" onclick="switchTab('t2',this)">大問2　微分</button>
+  <button class="tab-btn" onclick="switchTab('t3',this)">大問3　積分</button>
+  <button class="tab-btn" onclick="switchTab('t4',this)">大問4　二重積分</button>
+  <button class="tab-btn" onclick="switchTab('t5',this)">大問5　ガウス積分</button>
+  <button class="tab-btn" onclick="switchTab('t6',this)">大問6　線積分</button>
+</div>
+
+<!-- ========== 大問1 ========== -->
+<div id="t1" class="tab-content active">
+  <div class="score-bar" id="score-t1">正解: <span>0</span> / <span id="total-t1">0</span></div>
+
+  <div class="section-title">大問1 — 加速度から速度・位置を求める</div>
+  <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:20px;">
+    加速度 \(a(t)=\dfrac{1}{3}t^2+4t\) が与えられる。
+  </p>
+
+  <!-- Q1-1 -->
+  <div class="quiz-card" id="card-q1-1">
+    <div class="q-label">Q 1-1</div>
+    <div class="q-text">
+      速度は \(v(t)=\displaystyle\int a(t)\,dt\) で求める。積分すると<br>
+      \(v(t)=\) <span class="blank">ア</span> \(+4\cdot\) <span class="blank">イ</span> \(+C_1\)
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q1-1',false)">a) \(\dfrac{1}{3}t^3\) かつ \(\dfrac{t^2}{3}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q1-1',true)">b) \(\dfrac{1}{9}t^3\) かつ \(\dfrac{t^2}{2}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q1-1',false)">c) \(\dfrac{1}{3}t^2\) かつ \(t^2\)</button>
+      <button class="choice-btn" onclick="answer(this,'q1-1',false)">d) \(\dfrac{1}{9}t^2\) かつ \(2t^2\)</button>
+    </div>
+    <div class="verdict" id="v-q1-1"></div>
+    <button class="reveal-btn" onclick="reveal('q1-1')">答えを見る</button>
+    <div class="explanation" id="e-q1-1">
+      \(\displaystyle\int \frac{1}{3}t^2\,dt = \frac{1}{3}\cdot\frac{t^3}{3}=\frac{t^3}{9}\)、
+      \(\displaystyle\int 4t\,dt=\frac{4t^2}{2}=2t^2\)。<br>
+      ∴ \(v(t)=\dfrac{t^3}{9}+2t^2+C_1\)（ア＝\(\frac{t^3}{9}\)、イ＝\(\frac{t^2}{2}\)）
+    </div>
+  </div>
+
+  <!-- Q1-2 -->
+  <div class="quiz-card" id="card-q1-2">
+    <div class="q-label">Q 1-2</div>
+    <div class="q-text">
+      位置は \(x(t)=\displaystyle\int v(t)\,dt\) で求める。\(v(t)=\dfrac{t^3}{9}+2t^2+C_1\) を積分すると<br>
+      \(x(t)=\) <span class="blank">ウ</span> \(+\) <span class="blank">エ</span> \(+C_1 t+C_2\)
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q1-2',false)">a) \(\dfrac{t^4}{9}\) かつ \(\dfrac{2t^3}{3}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q1-2',false)">b) \(\dfrac{t^4}{36}\) かつ \(t^3\)</button>
+      <button class="choice-btn" onclick="answer(this,'q1-2',true)">c) \(\dfrac{t^4}{36}\) かつ \(\dfrac{2t^3}{3}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q1-2',false)">d) \(\dfrac{t^3}{9}\) かつ \(\dfrac{2t^2}{3}\)</button>
+    </div>
+    <div class="verdict" id="v-q1-2"></div>
+    <button class="reveal-btn" onclick="reveal('q1-2')">答えを見る</button>
+    <div class="explanation" id="e-q1-2">
+      \(\displaystyle\int \frac{t^3}{9}\,dt=\frac{t^4}{9\times4}=\frac{t^4}{36}\)、
+      \(\displaystyle\int 2t^2\,dt=\frac{2t^3}{3}\)。<br>
+      ∴ \(x(t)=\dfrac{t^4}{36}+\dfrac{2t^3}{3}+C_1 t+C_2\)
+    </div>
+  </div>
+
+  <!-- Guide -->
+  <div class="guide">
+    <h2>📖 ステップバイステップ解説 — 加速度から速度・位置を求める</h2>
+
+    <h3>基本的な考え方</h3>
+    <p>一次元運動では、加速度・速度・位置は積分で結ばれています：</p>
+    <div class="math-block">\(a(t) \xrightarrow{\int dt} v(t) \xrightarrow{\int dt} x(t)\)</div>
+
+    <div class="point-box">
+      <strong>📌 POINT</strong>
+      不定積分を行うたびに積分定数（\(C_1, C_2\)）が現れる。これらは初期条件（\(t=0\) での速度・位置）が与えられれば決定できる。
+    </div>
+
+    <h3>STEP 1 — 速度 \(v(t)\) を求める</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">\(a(t)=\dfrac{1}{3}t^2+4t\) を \(t\) で積分する。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        べき乗の積分公式 \(\displaystyle\int t^n\,dt=\dfrac{t^{n+1}}{n+1}+C\) を適用：
+        <div class="math-block">\(\int \frac{1}{3}t^2\,dt = \frac{1}{3}\cdot\frac{t^3}{3}=\frac{t^3}{9}\)</div>
+        <div class="math-block">\(\int 4t\,dt = 4\cdot\frac{t^2}{2}=2t^2\)</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">まとめると \(v(t)=\dfrac{t^3}{9}+2t^2+C_1\)。</div>
+    </div>
+
+    <h3>STEP 2 — 位置 \(x(t)\) を求める</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">\(v(t)\) をさらに \(t\) で積分する。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        各項に積分公式を適用：
+        <div class="math-block">\(\int \frac{t^3}{9}\,dt = \frac{t^4}{36},\quad \int 2t^2\,dt=\frac{2t^3}{3},\quad \int C_1\,dt=C_1 t\)</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        \(x(t)=\dfrac{t^4}{36}+\dfrac{2t^3}{3}+C_1 t+C_2\)
+      </div>
+    </div>
+
+    <div class="key-box">
+      <strong>🔑 キーポイントまとめ</strong>
+      ① 積分の度に定数が増える ② べき乗公式 \(\int t^n\,dt=\frac{t^{n+1}}{n+1}\)（\(n\neq -1\)）を確実に使える ③ 初期条件があれば \(C_1,C_2\) を決定できる
+    </div>
+  </div>
+</div>
+
+<!-- ========== 大問2 ========== -->
+<div id="t2" class="tab-content">
+  <div class="score-bar" id="score-t2">正解: <span>0</span> / <span id="total-t2">0</span></div>
+  <div class="section-title">大問2 — 微分（合成関数・ベクトル解析）</div>
+
+  <!-- Q2-1 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 2-1</div>
+    <div class="q-text">
+      \(f(t)=4t^{-3}(2t+1)\) を展開して微分すると \(f'(t)=\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q2-1',false)">a) \(-16t^{-3}-12t^{-4}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-1',false)">b) \(-8t^{-4}+12t^{-3}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-1',true)">c) \(-16t^{-3}-12t^{-4}\) → \(-16t^{-3}-12t^{-4}\)<br><small>（展開：\(8t^{-2}+4t^{-3}\)→微分）</small></button>
+      <button class="choice-btn" onclick="answer(this,'q2-1',false)">d) \(4t^{-3}+12t^{-4}\)</button>
+    </div>
+    <div class="verdict" id="v-q2-1"></div>
+    <button class="reveal-btn" onclick="reveal('q2-1')">答えを見る</button>
+    <div class="explanation" id="e-q2-1">
+      展開：\(f(t)=8t^{-2}+4t^{-3}\)<br>
+      微分：\(f'(t)=-16t^{-3}-12t^{-4}\)
+    </div>
+  </div>
+
+  <!-- Q2-2 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 2-2</div>
+    <div class="q-text">
+      \(f(t)=4(t^2-t+2)^4\) を微分する。合成関数微分を使うと \(f'(t)=\)<span class="blank">ア</span>\(\cdot(t^2-t+2)^3\)
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q2-2',false)">a) \(8(2t-1)\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-2',true)">b) \(16(2t-1)\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-2',false)">c) \(4(2t-1)\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-2',false)">d) \(32(2t-1)\)</button>
+    </div>
+    <div class="verdict" id="v-q2-2"></div>
+    <button class="reveal-btn" onclick="reveal('q2-2')">答えを見る</button>
+    <div class="explanation" id="e-q2-2">
+      \([u^4]'=4u^3\)、\(u=t^2-t+2\)、\(u'=2t-1\)<br>
+      \(f'=4\cdot4(t^2-t+2)^3\cdot(2t-1)=16(2t-1)(t^2-t+2)^3\)
+    </div>
+  </div>
+
+  <!-- Q2-3 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 2-3</div>
+    <div class="q-text">
+      \(f(t)=3e^{-2t^2}\) を微分する。\(f'(t)=3e^{-2t^2}\cdot\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q2-3',false)">a) \(-4t^2\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-3',true)">b) \(-12t\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-3',false)">c) \(-6t\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-3',false)">d) \(-2t\)</button>
+    </div>
+    <div class="verdict" id="v-q2-3"></div>
+    <button class="reveal-btn" onclick="reveal('q2-3')">答えを見る</button>
+    <div class="explanation" id="e-q2-3">
+      \([e^{u}]'=e^u u'\)、\(u=-2t^2\)、\(u'=-4t\)<br>
+      \(f'=3e^{-2t^2}\cdot(-4t)=-12t\,e^{-2t^2}\)
+    </div>
+  </div>
+
+  <!-- Q2-4 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 2-4</div>
+    <div class="q-text">
+      \(f(t)=\cos^2 2t\) を微分する。倍角公式 \(\cos^2\theta=\dfrac{1+\cos 2\theta}{2}\) を用いると \(f'(t)=\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q2-4',false)">a) \(-2\sin 4t\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-4',true)">b) \(-2\sin 4t\)（合成関数でも同じ）</button>
+      <button class="choice-btn" onclick="answer(this,'q2-4',false)">c) \(-4\sin 2t\cos 2t\) ≠ \(-2\sin 4t\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-4',false)">d) \(\sin 4t\)</button>
+    </div>
+    <div class="verdict" id="v-q2-4"></div>
+    <button class="reveal-btn" onclick="reveal('q2-4')">答えを見る</button>
+    <div class="explanation" id="e-q2-4">
+      合成関数微分：\(f'=2\cos2t\cdot(-\sin2t)\cdot2=-4\sin2t\cos2t\)<br>
+      倍角公式 \(\sin4t=2\sin2t\cos2t\) より \(f'=-2\sin4t\)
+    </div>
+  </div>
+
+  <!-- Q2-5 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 2-5</div>
+    <div class="q-text">
+      \(\nabla(r^{-1})\) を計算する。\(r=\sqrt{x^2+y^2+z^2}\) なので結果は<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q2-5',false)">a) \(\dfrac{\vec{r}}{r}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-5',true)">b) \(-\dfrac{\vec{r}}{r^3}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-5',false)">c) \(\dfrac{1}{r^2}\vec{r}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-5',false)">d) \(-\dfrac{1}{r^2}\)</button>
+    </div>
+    <div class="verdict" id="v-q2-5"></div>
+    <button class="reveal-btn" onclick="reveal('q2-5')">答えを見る</button>
+    <div class="explanation" id="e-q2-5">
+      \(\dfrac{\partial}{\partial x}(r^{-1})=-r^{-2}\dfrac{\partial r}{\partial x}=-r^{-2}\dfrac{x}{r}=-\dfrac{x}{r^3}\)<br>
+      同様に \(y,z\) 成分も求め：\(\nabla(r^{-1})=-\dfrac{\vec{r}}{r^3}\)
+    </div>
+  </div>
+
+  <!-- Q2-6 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 2-6</div>
+    <div class="q-text">
+      \(\vec{A}=6y\,\hat{e}_x+2xy^2\,\hat{e}_y+3(z^2-1)x\,\hat{e}_z\) のとき、
+      \(\nabla\cdot\vec{A}=\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q2-6',false)">a) \(2y^2+6xz\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-6',true)">b) \(4xy+6xz\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-6',false)">c) \(6+4xy+3z^2\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-6',false)">d) \(4xy+3z^2\)</button>
+    </div>
+    <div class="verdict" id="v-q2-6"></div>
+    <button class="reveal-btn" onclick="reveal('q2-6')">答えを見る</button>
+    <div class="explanation" id="e-q2-6">
+      \(\dfrac{\partial(6y)}{\partial x}=0\)、\(\dfrac{\partial(2xy^2)}{\partial y}=4xy\)、\(\dfrac{\partial[3(z^2-1)x]}{\partial z}=6xz\)<br>
+      ∴ \(\nabla\cdot\vec{A}=4xy+6xz\)
+    </div>
+  </div>
+
+  <!-- Q2-7 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 2-7</div>
+    <div class="q-text">
+      \(\vec{A}=6t\,\hat{e}_x+2\hat{e}_y+(t^2-1)\hat{e}_z\) のとき、
+      \(\dfrac{d\vec{A}}{dt}=\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q2-7',true)">a) \(6\hat{e}_x+0\hat{e}_y+2t\hat{e}_z\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-7',false)">b) \(6t^2\hat{e}_x+2t\hat{e}_y+(t^3-t)\hat{e}_z\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-7',false)">c) \(6\hat{e}_x+2\hat{e}_y+2t\hat{e}_z\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-7',false)">d) \(3\hat{e}_x+\hat{e}_y+t^2\hat{e}_z\)</button>
+    </div>
+    <div class="verdict" id="v-q2-7"></div>
+    <button class="reveal-btn" onclick="reveal('q2-7')">答えを見る</button>
+    <div class="explanation" id="e-q2-7">
+      各成分を \(t\) で微分：\((6t)'=6\)、\((2)'=0\)、\((t^2-1)'=2t\)<br>
+      ∴ \(\dfrac{d\vec{A}}{dt}=6\hat{e}_x+2t\hat{e}_z\)
+    </div>
+  </div>
+
+  <!-- Q2-8 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 2-8</div>
+    <div class="q-text">
+      \(\dfrac{d}{dt}(\vec{A}\cdot\vec{B})\) の積の微分法則を示す問題。正しい展開式は<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q2-8',false)">a) \(\dfrac{d\vec{A}}{dt}\cdot\dfrac{d\vec{B}}{dt}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-8',true)">b) \(\left(\dfrac{d\vec{A}}{dt}\right)\cdot\vec{B}+\vec{A}\cdot\left(\dfrac{d\vec{B}}{dt}\right)\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-8',false)">c) \(\vec{A}\cdot\vec{B}\dfrac{d}{dt}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q2-8',false)">d) \(\vec{A}\times\dfrac{d\vec{B}}{dt}\)</button>
+    </div>
+    <div class="verdict" id="v-q2-8"></div>
+    <button class="reveal-btn" onclick="reveal('q2-8')">答えを見る</button>
+    <div class="explanation" id="e-q2-8">
+      成分表示 \(\vec{A}\cdot\vec{B}=A_x B_x+A_y B_y+A_z B_z\) を \(t\) で微分し、各項に積の微分則を適用すると<br>
+      \(\dfrac{d}{dt}(\vec{A}\cdot\vec{B})=\dot{\vec{A}}\cdot\vec{B}+\vec{A}\cdot\dot{\vec{B}}\)
+    </div>
+  </div>
+
+  <!-- Guide -->
+  <div class="guide">
+    <h2>📖 ステップバイステップ解説 — 微分の手法まとめ</h2>
+
+    <h3>1. 合成関数の微分（連鎖律）</h3>
+    <p>\(f(t)=g(u(t))\) のとき：</p>
+    <div class="math-block">\(\frac{df}{dt}=\frac{dg}{du}\cdot\frac{du}{dt}\)</div>
+    <div class="point-box">
+      <strong>📌 POINT — よく使う公式</strong>
+      \([u^n]'=nu^{n-1}u'\)、\([e^u]'=e^u u'\)、\([\cos u]'=-\sin u\cdot u'\)
+    </div>
+
+    <h3>2. ナブラ演算子 \(\nabla\)</h3>
+    <p>3次元直交座標系では \(\nabla=\left(\dfrac{\partial}{\partial x},\dfrac{\partial}{\partial y},\dfrac{\partial}{\partial z}\right)\)。</p>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">勾配 \(\nabla f\)：スカラー場に作用し、ベクトルを返す。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">発散 \(\nabla\cdot\vec{A}=\dfrac{\partial A_x}{\partial x}+\dfrac{\partial A_y}{\partial y}+\dfrac{\partial A_z}{\partial z}\)：ベクトル場に作用しスカラーを返す。</div>
+    </div>
+
+    <h3>3. \(\nabla(r^{-1})\) の計算</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">\(r=\sqrt{x^2+y^2+z^2}\) より \(\dfrac{\partial r}{\partial x}=\dfrac{x}{r}\)。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">\(\dfrac{\partial}{\partial x}(r^{-1})=-r^{-2}\dfrac{x}{r}=-\dfrac{x}{r^3}\)。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">\(\nabla(r^{-1})=-\dfrac{1}{r^3}(x,y,z)=-\dfrac{\vec{r}}{r^3}\)。</div>
+    </div>
+
+    <h3>4. ベクトルの時間微分 ＆ 積の微分則</h3>
+    <div class="math-block">\(\frac{d\vec{A}}{dt}=\frac{dA_x}{dt}\hat{e}_x+\frac{dA_y}{dt}\hat{e}_y+\frac{dA_z}{dt}\hat{e}_z\)</div>
+    <div class="math-block">\(\frac{d}{dt}(\vec{A}\cdot\vec{B})=\dot{\vec{A}}\cdot\vec{B}+\vec{A}\cdot\dot{\vec{B}}\)</div>
+
+    <div class="key-box">
+      <strong>🔑 キーポイントまとめ</strong>
+      ① 合成関数微分：外×内の微分 ② ∇は偏微分演算子 ③ 発散は各成分の偏微分の和 ④ ベクトルの積の微分則はスカラーと同形
+    </div>
+  </div>
+</div>
+
+<!-- ========== 大問3 ========== -->
+<div id="t3" class="tab-content">
+  <div class="score-bar" id="score-t3">正解: <span>0</span> / <span id="total-t3">0</span></div>
+  <div class="section-title">大問3 — 不定積分</div>
+
+  <!-- Q3-1 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 3-1</div>
+    <div class="q-text">\(\displaystyle\int 2\,dx =\) <span class="blank">ア</span></div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q3-1',false)">a) \(x+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-1',false)">b) \(x^2+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-1',true)">c) \(2x+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-1',false)">d) \(2+C\)</button>
+    </div>
+    <div class="verdict" id="v-q3-1"></div>
+    <button class="reveal-btn" onclick="reveal('q3-1')">答えを見る</button>
+    <div class="explanation" id="e-q3-1">定数の積分：\(\int c\,dx=cx+C\)。よって \(2x+C\)。</div>
+  </div>
+
+  <!-- Q3-2 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 3-2</div>
+    <div class="q-text">\(\displaystyle\int x^{-3}\,dx =\) <span class="blank">ア</span></div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q3-2',true)">a) \(-\dfrac{1}{2}x^{-2}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-2',false)">b) \(-3x^{-4}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-2',false)">c) \(\dfrac{1}{2}x^{-2}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-2',false)">d) \(-x^{-2}+C\)</button>
+    </div>
+    <div class="verdict" id="v-q3-2"></div>
+    <button class="reveal-btn" onclick="reveal('q3-2')">答えを見る</button>
+    <div class="explanation" id="e-q3-2">
+      \(\int x^{-3}\,dx=\dfrac{x^{-3+1}}{-3+1}=\dfrac{x^{-2}}{-2}=-\dfrac{1}{2x^2}+C\)
+    </div>
+  </div>
+
+  <!-- Q3-3 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 3-3</div>
+    <div class="q-text">\(\displaystyle\int \cos x\,dx =\) <span class="blank">ア</span></div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q3-3',false)">a) \(-\sin x+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-3',true)">b) \(\sin x+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-3',false)">c) \(\cos^2 x+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-3',false)">d) \(\tan x+C\)</button>
+    </div>
+    <div class="verdict" id="v-q3-3"></div>
+    <button class="reveal-btn" onclick="reveal('q3-3')">答えを見る</button>
+    <div class="explanation" id="e-q3-3">\(\int \cos x\,dx=\sin x+C\)（基本公式）</div>
+  </div>
+
+  <!-- Q3-4 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 3-4</div>
+    <div class="q-text">
+      \(\displaystyle\int x\sqrt{2x-1}\,dx\) を置換 \(u=2x-1\) で解く。結果は <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q3-4',false)">a) \(\dfrac{(2x-1)^{3/2}}{3}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-4',true)">b) \(\dfrac{(2x-1)^{5/2}}{10}+\dfrac{(2x-1)^{3/2}}{6}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-4',false)">c) \(\dfrac{x(2x-1)^{3/2}}{3}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-4',false)">d) \(\dfrac{(2x-1)^{5/2}}{5}+C\)</button>
+    </div>
+    <div class="verdict" id="v-q3-4"></div>
+    <button class="reveal-btn" onclick="reveal('q3-4')">答えを見る</button>
+    <div class="explanation" id="e-q3-4">
+      \(u=2x-1\)、\(x=\frac{u+1}{2}\)、\(dx=\frac{du}{2}\)<br>
+      \(\int \frac{u+1}{2}\cdot\sqrt{u}\cdot\frac{du}{2}=\frac{1}{4}\int(u^{3/2}+u^{1/2})\,du=\frac{1}{4}\left[\frac{u^{5/2}}{5/2}+\frac{u^{3/2}}{3/2}\right]+C\)<br>
+      \(=\dfrac{(2x-1)^{5/2}}{10}+\dfrac{(2x-1)^{3/2}}{6}+C\)
+    </div>
+  </div>
+
+  <!-- Q3-5 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 3-5</div>
+    <div class="q-text">
+      \(\displaystyle\int \sin^2 x\cos x\,dx\) を \(u=\sin x\) で置換すると <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q3-5',false)">a) \(\dfrac{\cos^3 x}{3}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-5',true)">b) \(\dfrac{\sin^3 x}{3}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-5',false)">c) \(\sin^2 x\cdot(-\cos x)+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-5',false)">d) \(\sin x\cos^2 x+C\)</button>
+    </div>
+    <div class="verdict" id="v-q3-5"></div>
+    <button class="reveal-btn" onclick="reveal('q3-5')">答えを見る</button>
+    <div class="explanation" id="e-q3-5">
+      \(u=\sin x\)、\(du=\cos x\,dx\)：\(\int u^2\,du=\dfrac{u^3}{3}+C=\dfrac{\sin^3 x}{3}+C\)
+    </div>
+  </div>
+
+  <!-- Q3-6 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 3-6</div>
+    <div class="q-text">
+      \(\displaystyle\int xe^{-x}\,dx\) を部分積分すると <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q3-6',false)">a) \(-xe^{-x}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-6',true)">b) \(-(x+1)e^{-x}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-6',false)">c) \((x+1)e^{-x}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-6',false)">d) \(-xe^{x}+C\)</button>
+    </div>
+    <div class="verdict" id="v-q3-6"></div>
+    <button class="reveal-btn" onclick="reveal('q3-6')">答えを見る</button>
+    <div class="explanation" id="e-q3-6">
+      部分積分 \(\int u\,dv=uv-\int v\,du\)：\(u=x\)、\(dv=e^{-x}dx\)、\(v=-e^{-x}\)<br>
+      \(=-xe^{-x}-\int(-e^{-x})\,dx=-xe^{-x}-e^{-x}+C=-(x+1)e^{-x}+C\)
+    </div>
+  </div>
+
+  <!-- Q3-7 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 3-7</div>
+    <div class="q-text">
+      \(\displaystyle\int \sin^2 x\,dx\) を半角公式で変換すると <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q3-7',false)">a) \(\dfrac{x}{2}+\sin 2x+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-7',true)">b) \(\dfrac{x}{2}-\dfrac{\sin 2x}{4}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-7',false)">c) \(x-\dfrac{\sin 2x}{2}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-7',false)">d) \(-\cos x\sin x+C\)</button>
+    </div>
+    <div class="verdict" id="v-q3-7"></div>
+    <button class="reveal-btn" onclick="reveal('q3-7')">答えを見る</button>
+    <div class="explanation" id="e-q3-7">
+      半角公式 \(\sin^2 x=\dfrac{1-\cos2x}{2}\) より<br>
+      \(\int\dfrac{1-\cos2x}{2}\,dx=\dfrac{x}{2}-\dfrac{\sin2x}{4}+C\)
+    </div>
+  </div>
+
+  <!-- Q3-8 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 3-8</div>
+    <div class="q-text">
+      \(\displaystyle\int r^{-2}\,dx\)（\(r=\sqrt{x^2+y^2+z^2}\)、\(y,z\) 定数）の結果は <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q3-8',false)">a) \(-\dfrac{x}{r^3}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-8',false)">b) \(-2r^{-3}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-8',true)">c) \(\dfrac{x}{\rho^2 r}+C\)（\(\rho^2=y^2+z^2\)）— または標準結果 \(\dfrac{1}{\rho}\arctan\dfrac{x}{\rho}+C\)</button>
+      <button class="choice-btn" onclick="answer(this,'q3-8',false)">d) \(\ln r+C\)</button>
+    </div>
+    <div class="verdict" id="v-q3-8"></div>
+    <button class="reveal-btn" onclick="reveal('q3-8')">答えを見る</button>
+    <div class="explanation" id="e-q3-8">
+      \(r^{-2}=(x^2+\rho^2)^{-1}\)（\(\rho^2=y^2+z^2\)定数）。<br>
+      標準積分公式 \(\displaystyle\int\frac{dx}{x^2+a^2}=\frac{1}{a}\arctan\frac{x}{a}+C\) を用いて<br>
+      \(\displaystyle\int\frac{dx}{x^2+\rho^2}=\frac{1}{\rho}\arctan\frac{x}{\rho}+C\)
+    </div>
+  </div>
+
+  <!-- Guide -->
+  <div class="guide">
+    <h2>📖 ステップバイステップ解説 — 不定積分の技法</h2>
+
+    <h3>1. 基本積分公式</h3>
+    <div class="math-block">
+      \(\int x^n\,dx=\frac{x^{n+1}}{n+1}+C\quad(n\neq-1)\)<br>
+      \(\int e^{ax}\,dx=\frac{e^{ax}}{a}+C,\quad\int\cos x\,dx=\sin x+C,\quad\int\sin x\,dx=-\cos x+C\)
+    </div>
+
+    <h3>2. 置換積分</h3>
+    <div class="step">
+      <div class="step-num">1</div><div class="step-body">\(u=g(x)\) と置く。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div><div class="step-body">\(du=g'(x)\,dx\) を使って \(dx\) を消去。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div><div class="step-body">\(u\) だけの積分を解いて、最後に \(x\) に戻す。</div>
+    </div>
+    <div class="point-box">
+      <strong>📌 POINT</strong>
+      被積分関数に「内側の関数の微分」が因数として含まれているとき置換が有効。
+    </div>
+
+    <h3>3. 部分積分</h3>
+    <div class="math-block">\(\int u\,dv = uv - \int v\,du\)</div>
+    <p>選び方の目安：「多項式 × 指数関数」「多項式 × 三角関数」のときは多項式を \(u\) に。</p>
+
+    <h3>4. 三角関数の変換</h3>
+    <div class="math-block">
+      \(\sin^2 x=\frac{1-\cos2x}{2},\quad\cos^2 x=\frac{1+\cos2x}{2}\)<br>
+      \(\sin2x=2\sin x\cos x\)
+    </div>
+
+    <div class="key-box">
+      <strong>🔑 キーポイントまとめ</strong>
+      ① べき乗：指数に+1して割る ② 置換：内側の微分が外にある ③ 部分積分：\(uv-\int v\,du\) ④ \(\sin^2\)は半角公式で変換
+    </div>
+  </div>
+</div>
+
+<!-- ========== 大問4 ========== -->
+<div id="t4" class="tab-content">
+  <div class="score-bar" id="score-t4">正解: <span>0</span> / <span id="total-t4">0</span></div>
+  <div class="section-title">大問4 — 二重積分 \(\iint_D y^2\,dxdy\)（半径 \(a\) の円領域）</div>
+
+  <!-- Q4-1 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 4-1</div>
+    <div class="q-text">
+      直交座標で積分するとき、\(x\) の積分範囲は <span class="blank">ア</span>、\(y\) の積分範囲は <span class="blank">イ</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q4-1',true)">a) \(-a\leq x\leq a\)、\(-\sqrt{a^2-x^2}\leq y\leq\sqrt{a^2-x^2}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-1',false)">b) \(0\leq x\leq a\)、\(0\leq y\leq a\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-1',false)">c) \(-a\leq x\leq a\)、\(-a\leq y\leq a\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-1',false)">d) \(-a\leq x\leq a\)、\(0\leq y\leq\sqrt{a^2-x^2}\)</button>
+    </div>
+    <div class="verdict" id="v-q4-1"></div>
+    <button class="reveal-btn" onclick="reveal('q4-1')">答えを見る</button>
+    <div class="explanation" id="e-q4-1">
+      円 \(x^2+y^2\leq a^2\) を直交座標で表すと、\(x\in[-a,a]\) に対し \(y\in[-\sqrt{a^2-x^2},\sqrt{a^2-x^2}]\)。
+    </div>
+  </div>
+
+  <!-- Q4-2 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 4-2</div>
+    <div class="q-text">
+      直交座標で計算すると \(\iint_D y^2\,dxdy=\) <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q4-2',false)">a) \(\dfrac{\pi a^4}{8}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-2',false)">b) \(\dfrac{\pi a^4}{2}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-2',true)">c) \(\dfrac{\pi a^4}{4}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-2',false)">d) \(\dfrac{2\pi a^4}{3}\)</button>
+    </div>
+    <div class="verdict" id="v-q4-2"></div>
+    <button class="reveal-btn" onclick="reveal('q4-2')">答えを見る</button>
+    <div class="explanation" id="e-q4-2">
+      \(y\) の積分：\(\int_{-h}^{h}y^2\,dy=\dfrac{2h^3}{3}\)（\(h=\sqrt{a^2-x^2}\)）<br>
+      \(x\) の積分：\(\int_{-a}^{a}\dfrac{2(a^2-x^2)^{3/2}}{3}\,dx\)。\(x=a\sin\theta\) 置換でウォリス積分を使い \(\dfrac{\pi a^4}{4}\)。
+    </div>
+  </div>
+
+  <!-- Q4-3 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 4-3</div>
+    <div class="q-text">
+      極座標変換 \(x=r\cos\theta,\,y=r\sin\theta\) で \(y^2=\)<span class="blank">ア</span>、ヤコビアン \(=\)<span class="blank">イ</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q4-3',false)">a) \(r^2\cos^2\theta\)、\(1\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-3',true)">b) \(r^2\sin^2\theta\)、\(r\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-3',false)">c) \(r\sin\theta\)、\(r^2\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-3',false)">d) \(r^2\sin^2\theta\)、\(r^2\)</button>
+    </div>
+    <div class="verdict" id="v-q4-3"></div>
+    <button class="reveal-btn" onclick="reveal('q4-3')">答えを見る</button>
+    <div class="explanation" id="e-q4-3">
+      \(y=r\sin\theta\) より \(y^2=r^2\sin^2\theta\)。<br>
+      ヤコビアン：\(\left|\dfrac{\partial(x,y)}{\partial(r,\theta)}\right|=r\)（極座標の基本）。
+    </div>
+  </div>
+
+  <!-- Q4-4 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 4-4</div>
+    <div class="q-text">
+      極座標で積分すると \(\iint_D y^2\,dxdy=\int_0^{2\pi}\int_0^a r^2\sin^2\theta\cdot r\,dr\,d\theta=\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q4-4',true)">a) \(\dfrac{\pi a^4}{4}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-4',false)">b) \(\dfrac{\pi a^4}{2}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-4',false)">c) \(\dfrac{a^4}{4}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q4-4',false)">d) \(\pi a^4\)</button>
+    </div>
+    <div class="verdict" id="v-q4-4"></div>
+    <button class="reveal-btn" onclick="reveal('q4-4')">答えを見る</button>
+    <div class="explanation" id="e-q4-4">
+      \(\int_0^a r^3\,dr=\dfrac{a^4}{4}\)、\(\int_0^{2\pi}\sin^2\theta\,d\theta=\pi\)<br>
+      積：\(\dfrac{a^4}{4}\cdot\pi=\dfrac{\pi a^4}{4}\)（直交座標の結果と一致）
+    </div>
+  </div>
+
+  <!-- Guide -->
+  <div class="guide">
+    <h2>📖 ステップバイステップ解説 — 二重積分（直交座標 & 極座標）</h2>
+
+    <h3>直交座標での計算</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">積分領域 \(D: x^2+y^2\leq a^2\) を特定し、先に \(y\) を積分（内側）。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        \(\displaystyle\int_{-\sqrt{a^2-x^2}}^{\sqrt{a^2-x^2}} y^2\,dy = \left[\frac{y^3}{3}\right]_{-h}^{h}=\frac{2h^3}{3}\)（\(h=\sqrt{a^2-x^2}\)）
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">次に \(x=-a\to a\) で積分。\(x=a\sin\theta\) で置換しウォリス積分へ帰着。</div>
+    </div>
+
+    <h3>極座標での計算（より簡単）</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">\(x=r\cos\theta,\;y=r\sin\theta\) と変数変換。ヤコビアン \(=r\)。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        領域 \(D\)：\(0\leq r\leq a\)、\(0\leq\theta\leq 2\pi\)
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        \(\displaystyle\int_0^{2\pi}\sin^2\theta\,d\theta=\pi\)、\(\displaystyle\int_0^a r^3\,dr=\frac{a^4}{4}\)<br>
+        積 \(=\dfrac{\pi a^4}{4}\)
+      </div>
+    </div>
+
+    <div class="point-box">
+      <strong>📌 POINT — 対称性の活用</strong>
+      \(\iint_D x^2\,dxdy = \iint_D y^2\,dxdy\) （円の対称性より）。
+      また \(\iint_D(x^2+y^2)\,dxdy=\int_0^{2\pi}d\theta\int_0^a r^3\,dr=\dfrac{\pi a^4}{2}\)。
+    </div>
+
+    <div class="key-box">
+      <strong>🔑 キーポイントまとめ</strong>
+      ① 円領域は極座標が有利 ② ヤコビアン \(J=r\) を忘れずに ③ \(\theta\) 積分で \(\int_0^{2\pi}\sin^2\theta\,d\theta=\pi\) ④ 対称性を使うと計算が半分以下になる
+    </div>
+  </div>
+</div>
+
+<!-- ========== 大問5 ========== -->
+<div id="t5" class="tab-content">
+  <div class="score-bar" id="score-t5">正解: <span>0</span> / <span id="total-t5">0</span></div>
+  <div class="section-title">大問5 — ガウス積分の証明</div>
+
+  <!-- Q5-1 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 5-1</div>
+    <div class="q-text">
+      \(I^2\) を二重積分で表すと \(I^2=\displaystyle\int_{-\infty}^\infty\int_{-\infty}^\infty\)<span class="blank">ア</span>\(\,dx\,dy\)
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q5-1',false)">a) \(e^{-a(x+y)^2}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-1',true)">b) \(e^{-a(x^2+y^2)}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-1',false)">c) \(e^{-ax^2}e^{-ay}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-1',false)">d) \(e^{-2ax^2y^2}\)</button>
+    </div>
+    <div class="verdict" id="v-q5-1"></div>
+    <button class="reveal-btn" onclick="reveal('q5-1')">答えを見る</button>
+    <div class="explanation" id="e-q5-1">
+      \(I^2=\left(\int_{-\infty}^\infty e^{-ax^2}\,dx\right)\left(\int_{-\infty}^\infty e^{-ay^2}\,dy\right)=\iint e^{-a(x^2+y^2)}\,dx\,dy\)
+    </div>
+  </div>
+
+  <!-- Q5-2 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 5-2</div>
+    <div class="q-text">
+      極座標変換後、\(I^2=\displaystyle\int_0^{2\pi}d\theta\int_0^\infty e^{-ar^2}\cdot\)<span class="blank">ア</span>\(\,dr\)
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q5-2',false)">a) \(1\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-2',true)">b) \(r\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-2',false)">c) \(r^2\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-2',false)">d) \(2r\)</button>
+    </div>
+    <div class="verdict" id="v-q5-2"></div>
+    <button class="reveal-btn" onclick="reveal('q5-2')">答えを見る</button>
+    <div class="explanation" id="e-q5-2">極座標変換のヤコビアンは \(r\)。よって \(dx\,dy=r\,dr\,d\theta\)。</div>
+  </div>
+
+  <!-- Q5-3 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 5-3</div>
+    <div class="q-text">
+      \(\displaystyle\int_0^\infty re^{-ar^2}\,dr\) を \(u=ar^2\) で置換すると <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q5-3',false)">a) \(\dfrac{1}{a}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-3',true)">b) \(\dfrac{1}{2a}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-3',false)">c) \(\dfrac{1}{\sqrt{a}}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-3',false)">d) \(\dfrac{\sqrt{\pi}}{2a}\)</button>
+    </div>
+    <div class="verdict" id="v-q5-3"></div>
+    <button class="reveal-btn" onclick="reveal('q5-3')">答えを見る</button>
+    <div class="explanation" id="e-q5-3">
+      \(u=ar^2\)、\(du=2ar\,dr\)、\(r\,dr=\dfrac{du}{2a}\)<br>
+      \(\displaystyle\int_0^\infty e^{-u}\dfrac{du}{2a}=\dfrac{1}{2a}[-e^{-u}]_0^\infty=\dfrac{1}{2a}\)
+    </div>
+  </div>
+
+  <!-- Q5-4 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 5-4</div>
+    <div class="q-text">
+      \(I^2=2\pi\cdot\dfrac{1}{2a}=\dfrac{\pi}{a}\) より \(I=\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q5-4',false)">a) \(\sqrt{\dfrac{a}{\pi}}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-4',false)">b) \(\dfrac{\pi}{a}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-4',true)">c) \(\sqrt{\dfrac{\pi}{a}}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q5-4',false)">d) \(\dfrac{1}{\sqrt{a}}\)</button>
+    </div>
+    <div class="verdict" id="v-q5-4"></div>
+    <button class="reveal-btn" onclick="reveal('q5-4')">答えを見る</button>
+    <div class="explanation" id="e-q5-4">
+      \(I>0\) なので \(I=\sqrt{I^2}=\sqrt{\dfrac{\pi}{a}}\)。証明完了。
+    </div>
+  </div>
+
+  <!-- Guide -->
+  <div class="guide">
+    <h2>📖 ステップバイステップ解説 — ガウス積分の証明</h2>
+
+    <h3>なぜ直接積分できないのか</h3>
+    <p>\(e^{-ax^2}\) の原始関数は初等関数で書けない。そこで \(I^2\) を計算してから平方根をとる巧妙な手法を使う。</p>
+
+    <h3>STEP 1 — \(I^2\) を二重積分へ</h3>
+    <div class="math-block">
+      \(I^2 = \int_{-\infty}^{\infty}e^{-ax^2}dx \cdot \int_{-\infty}^{\infty}e^{-ay^2}dy = \iint_{\mathbb{R}^2}e^{-a(x^2+y^2)}dxdy\)
+    </div>
+    <div class="point-box">
+      <strong>📌 POINT</strong>
+      2つの独立した1次元積分を、被積分関数が \(e^{-ar^2}\)（円対称）になる2次元積分に変換する。
+    </div>
+
+    <h3>STEP 2 — 極座標変換</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">\(x=r\cos\theta,\;y=r\sin\theta\)。ヤコビアン \(r\)。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        \(I^2=\displaystyle\int_0^{2\pi}d\theta\int_0^\infty re^{-ar^2}\,dr=2\pi\int_0^\infty re^{-ar^2}\,dr\)
+      </div>
+    </div>
+
+    <h3>STEP 3 — \(r\) 積分を実行</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">\(u=ar^2\)、\(du=2ar\,dr\) で置換。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        \(\displaystyle\int_0^\infty re^{-ar^2}dr=\int_0^\infty e^{-u}\frac{du}{2a}=\frac{1}{2a}\)
+      </div>
+    </div>
+
+    <h3>STEP 4 — \(I\) を求める</h3>
+    <div class="math-block">
+      \(I^2=2\pi\cdot\frac{1}{2a}=\frac{\pi}{a} \;\Rightarrow\; I=\sqrt{\frac{\pi}{a}}\)
+    </div>
+
+    <div class="key-box">
+      <strong>🔑 キーポイントまとめ</strong>
+      ① \(I\to I^2\) に変換して二重積分へ ② 極座標で円対称性を活かす ③ ヤコビアン \(r\) が積分可能にする鍵 ④ 最後に平方根をとる（\(I>0\) に注意）
+    </div>
+  </div>
+</div>
+
+<!-- ========== 大問6 ========== -->
+<div id="t6" class="tab-content">
+  <div class="score-bar" id="score-t6">正解: <span>0</span> / <span id="total-t6">0</span></div>
+  <div class="section-title">大問6 — 線積分・仕事</div>
+
+  <!-- Q6-1a -->
+  <div class="quiz-card">
+    <div class="q-label">Q 6-1a</div>
+    <div class="q-text">
+      重力 \(\vec{g}=(0,-g)\) 下で、経路1（\(x=0\)、\((0,0)\to(0,1)\)）の仕事は <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q6-1a',false)">a) \(g\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1a',true)">b) \(-g\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1a',false)">c) \(0\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1a',false)">d) \(-mg\)</button>
+    </div>
+    <div class="verdict" id="v-q6-1a"></div>
+    <button class="reveal-btn" onclick="reveal('q6-1a')">答えを見る</button>
+    <div class="explanation" id="e-q6-1a">
+      \(W=\int\vec{g}\cdot d\vec{r}=\int_0^1(0,-g)\cdot(0,dy)=\int_0^1(-g)\,dy=-g\)
+    </div>
+  </div>
+
+  <!-- Q6-1b -->
+  <div class="quiz-card">
+    <div class="q-label">Q 6-1b</div>
+    <div class="q-text">
+      経路2（\(y=x\)、\((0,0)\to(1,1)\)）の重力による仕事は <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q6-1b',false)">a) \(0\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1b',true)">b) \(-g\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1b',false)">c) \(-g/2\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1b',false)">d) \(-2g\)</button>
+    </div>
+    <div class="verdict" id="v-q6-1b"></div>
+    <button class="reveal-btn" onclick="reveal('q6-1b')">答えを見る</button>
+    <div class="explanation" id="e-q6-1b">
+      \(y=x\)、\(dy=dx\)：\(W=\int_0^1(0,-g)\cdot(dx,dx)=\int_0^1(-g)dx=-g\)<br>
+      重力は保存力なので経路によらず \(\Delta y=1\) なら仕事は同じ \(-g\)。
+    </div>
+  </div>
+
+  <!-- Q6-1c -->
+  <div class="quiz-card">
+    <div class="q-label">Q 6-1c</div>
+    <div class="q-text">
+      経路3（\(y=x^2\)、\((0,0)\to(1,1)\)）の重力による仕事は <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q6-1c',true)">a) \(-g\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1c',false)">b) \(-g/2\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1c',false)">c) \(-2g\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-1c',false)">d) \(g\)</button>
+    </div>
+    <div class="verdict" id="v-q6-1c"></div>
+    <button class="reveal-btn" onclick="reveal('q6-1c')">答えを見る</button>
+    <div class="explanation" id="e-q6-1c">
+      重力は保存力（\(\nabla\times\vec{g}=0\)）なので仕事は経路に依存しない。<br>
+      \(W=-g\Delta y=-g\cdot1=-g\)（すべての経路で同じ）
+    </div>
+  </div>
+
+  <!-- Q6-2 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 6-2</div>
+    <div class="q-text">
+      \(\varphi(x,y)=x\) の線積分 \(\int_C\varphi\,ds\)（\(y=x+2\)、\((0,2)\to(2,4)\)）。<br>
+      弧長要素 \(ds=\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q6-2',false)">a) \(dx\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-2',false)">b) \(\sqrt{2}\,dy\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-2',true)">c) \(\sqrt{2}\,dx\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-2',false)">d) \(2\,dx\)</button>
+    </div>
+    <div class="verdict" id="v-q6-2"></div>
+    <button class="reveal-btn" onclick="reveal('q6-2')">答えを見る</button>
+    <div class="explanation" id="e-q6-2">
+      \(y=x+2\)：\(dy=dx\)。\(ds=\sqrt{dx^2+dy^2}=\sqrt{1+1}\,dx=\sqrt{2}\,dx\)
+    </div>
+  </div>
+
+  <!-- Q6-2b -->
+  <div class="quiz-card">
+    <div class="q-label">Q 6-2b</div>
+    <div class="q-text">
+      \(\int_C x\,ds\) の値は <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q6-2b',false)">a) \(2\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-2b',true)">b) \(2\sqrt{2}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-2b',false)">c) \(4\sqrt{2}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-2b',false)">d) \(\sqrt{2}\)</button>
+    </div>
+    <div class="verdict" id="v-q6-2b"></div>
+    <button class="reveal-btn" onclick="reveal('q6-2b')">答えを見る</button>
+    <div class="explanation" id="e-q6-2b">
+      \(\int_0^2 x\cdot\sqrt{2}\,dx=\sqrt{2}\left[\dfrac{x^2}{2}\right]_0^2=\sqrt{2}\cdot2=2\sqrt{2}\)
+    </div>
+  </div>
+
+  <!-- Q6-3 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 6-3</div>
+    <div class="q-text">
+      経路 \(C=C_1+C_2\)（\(C_1\): \((0,2)\to(2,2)\)、\(C_2\): \((2,2)\to(2,4)\)）での \(\int_C x\,ds\) の値は <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q6-3',true)">a) \(2+4=6\)（\(C_1\)で\(2\)、\(C_2\)で\(4\)）</button>
+      <button class="choice-btn" onclick="answer(this,'q6-3',false)">b) \(2\sqrt{2}\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-3',false)">c) \(4\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-3',false)">d) \(8\)</button>
+    </div>
+    <div class="verdict" id="v-q6-3"></div>
+    <button class="reveal-btn" onclick="reveal('q6-3')">答えを見る</button>
+    <div class="explanation" id="e-q6-3">
+      \(C_1\)（水平、\(y=2\)固定、\(x:0\to2\)）：\(ds=dx\)、\(\int_0^2 x\,dx=2\)<br>
+      \(C_2\)（垂直、\(x=2\)固定、\(y:2\to4\)）：\(ds=dy\)、\(\int_2^4 2\,dy=4\)<br>
+      合計 \(=6\)
+    </div>
+  </div>
+
+  <!-- Q6-4 -->
+  <div class="quiz-card">
+    <div class="q-label">Q 6-4</div>
+    <div class="q-text">
+      力 \(\vec{F}=(y,x^2)\)、経路 \(C\)（\(y=3x^2+2\)、\((0,2)\to(2,14)\)）での仕事を求める。<br>
+      \(d\vec{r}=(dx,dy)\) と \(y=3x^2+2\) を代入した被積分関数は <span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q6-4',false)">a) \((3x^2+2+x^2\cdot6x)\,dx\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-4',true)">b) \((3x^2+2+6x^3)\,dx\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-4',false)">c) \((3x^2+x^2)\,dx\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-4',false)">d) \((y+x^2)dx\)</button>
+    </div>
+    <div class="verdict" id="v-q6-4"></div>
+    <button class="reveal-btn" onclick="reveal('q6-4')">答えを見る</button>
+    <div class="explanation" id="e-q6-4">
+      \(\vec{F}\cdot d\vec{r}=y\,dx+x^2\,dy\)。\(y=3x^2+2\)、\(dy=6x\,dx\) を代入：<br>
+      \(=(3x^2+2)dx+x^2\cdot6x\,dx=(3x^2+2+6x^3)dx\)
+    </div>
+  </div>
+
+  <!-- Q6-4b -->
+  <div class="quiz-card">
+    <div class="q-label">Q 6-4b</div>
+    <div class="q-text">
+      \(\displaystyle\int_0^2(6x^3+3x^2+2)\,dx=\)<span class="blank">ア</span>
+    </div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(this,'q6-4b',false)">a) \(28\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-4b',true)">b) \(36\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-4b',false)">c) \(24\)</button>
+      <button class="choice-btn" onclick="answer(this,'q6-4b',false)">d) \(40\)</button>
+    </div>
+    <div class="verdict" id="v-q6-4b"></div>
+    <button class="reveal-btn" onclick="reveal('q6-4b')">答えを見る</button>
+    <div class="explanation" id="e-q6-4b">
+      \(\left[\dfrac{6x^4}{4}+x^3+2x\right]_0^2=\dfrac{6\cdot16}{4}+8+4=24+8+4=36\)
+    </div>
+  </div>
+
+  <!-- Guide -->
+  <div class="guide">
+    <h2>📖 ステップバイステップ解説 — 線積分・仕事</h2>
+
+    <h3>力による仕事の線積分</h3>
+    <div class="math-block">W=\int_C \vec{F}\cdot d\vec{r}=\int_C(F_x\,dx+F_y\,dy)</div>
+
+    <h3>STEP 1 — 経路をパラメータ化</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">経路の方程式（例：\(y=f(x)\)）を使い、\(dy=f'(x)dx\) を代入。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">積分変数を \(x\) 一つに統一し、区間を設定。</div>
+    </div>
+
+    <h3>スカラー場の線積分</h3>
+    <div class="math-block">\int_C \varphi\,ds,\quad ds=\sqrt{dx^2+dy^2}=\sqrt{1+\left(\frac{dy}{dx}\right)^2}\,dx</div>
+    <div class="point-box">
+      <strong>📌 POINT — 保存力</strong>
+      \(\vec{F}=-\nabla U\) の形で書けるとき、仕事は始点・終点のみで決まる（経路によらない）。<br>
+      重力 \(\vec{g}=(0,-g)\) は \(U=gy\) のポテンシャルを持つ保存力。
+    </div>
+
+    <h3>複合経路の計算</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">各区間で \(ds\) を別々に計算する（水平区間は \(ds=dx\)、垂直区間は \(ds=dy\)）。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">各区間の積分値を足し合わせる。</div>
+    </div>
+
+    <div class="key-box">
+      <strong>🔑 キーポイントまとめ</strong>
+      ① 線積分は経路をパラメータ化して1変数積分へ ② 弧長 \(ds=\sqrt{1+(dy/dx)^2}\,dx\) ③ 保存力は経路非依存（始点・終点で決まる）④ 複合経路は各区間の和
+    </div>
+  </div>
+</div>
+
+<script>
+// Score tracking
+const scores = {};
+const totals = {};
+
+function getTab(id) {
+  // Find which tab this question belongs to
+  const card = document.getElementById('card-' + id) || document.querySelector('[id^="v-' + id + '"]').closest('.tab-content');
+  const tc = document.querySelector('[id^="v-' + id + '"]').closest('.tab-content');
+  return tc ? tc.id : null;
+}
+
+function answer(btn, id, correct) {
+  const verdictEl = document.getElementById('v-' + id);
+  const card = verdictEl.closest('.quiz-card');
+  const btns = card.querySelectorAll('.choice-btn');
+  
+  // Find tab
+  const tabContent = btn.closest('.tab-content');
+  const tabId = tabContent.id;
+  
+  // Already answered?
+  if (btn.disabled) return;
+  
+  // Disable all buttons
+  btns.forEach(b => b.disabled = true);
+  
+  // Track total
+  if (!totals[tabId]) totals[tabId] = 0;
+  if (!scores[tabId]) scores[tabId] = 0;
+  totals[tabId]++;
+  
+  if (correct) {
+    btn.classList.add('correct');
+    verdictEl.textContent = '✓ 正解！';
+    verdictEl.className = 'verdict ok';
+    scores[tabId]++;
+  } else {
+    btn.classList.add('wrong');
+    verdictEl.textContent = '✗ 不正解';
+    verdictEl.className = 'verdict ng';
+    // Highlight correct
+    btns.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  
+  updateScore(tabId);
+}
+
+function updateScore(tabId) {
+  const bar = document.getElementById('score-' + tabId);
+  if (bar) {
+    bar.innerHTML = `正解: <span>${scores[tabId]||0}</span> / <span id="total-${tabId}">${totals[tabId]||0}</span>`;
+  }
+}
+
+function reveal(id) {
+  const el = document.getElementById('e-' + id);
+  if (el) {
+    el.classList.toggle('visible');
+    const btn = el.previousElementSibling;
+    if (btn) btn.textContent = el.classList.contains('visible') ? '閉じる' : '答えを見る';
+    if (el.classList.contains('visible')) {
+      renderMathInElement(el, {delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true},{left:'$$',right:'$$',display:true}]});
+    }
+  }
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Render KaTeX on load
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '\\(', right: '\\)', display: false},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '$$', right: '$$', display: true}
+    ],
+    throwOnError: false
+  });
+});
+</script>
+</body>
+</html>

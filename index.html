@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Lecture Stream</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0f14">
+
+<style>
+body {
+  margin: 0;
+  background: #0b0f14;
+  color: #e6edf3;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== HEADER ===== */
+header {
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: #0b0f14;
+
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  color: #e50914;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.home-btn {
+  background: #1f2933;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e6edf3;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ===== HOME ===== */
+#home {
+  padding: 16px;
+}
+
+/* セクションタイトル */
+.section h2 {
+  font-size: 13px;
+  color: #8b949e;
+  margin: 14px 0;
+}
+
+/* ===== ⭐ 縦リスト（Netflixカード風） ===== */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* カード */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 14px 16px;
+
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1c1f26, #111827);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #e50914;
+}
+
+.card small {
+  color: #8b949e;
+  margin-top: 4px;
+}
+
+/* ===== IFRAME ===== */
+iframe {
+  width: 100%;
+  height: calc(100dvh - 60px);
+  border: none;
+  display: none;
+  background: white;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">LECTURE STREAM</div>
+  <button class="home-btn" onclick="goHome()">🏠 HOME</button>
+</header>
+
+<!-- HOME -->
+<div id="home">
+
+  <div class="section">
+    <h2>講義一覧</h2>
+
+    <div class="row">
+
+      <div class="card" onclick="openLecture('lecture1.html')">
+        講義1
+        <small>力学の基礎</small>
+      </div>
+
+      <div class="card" onclick="openLecture('lecture2.html')">
+        講義2
+        <small>運動方程式</small>
+      </div>
+
+      <div class="card" onclick="openLecture('lecture3.html')">
+        講義3
+        <small>エネルギー</small>
+      </div>
+
+      <div class="card" onclick="openLecture('lecture4.html')">
+        講義4
+        <small>保存則</small>
+      </div>
+
+      <div class="card" onclick="openLecture('lecture5.html')">
+        講義5
+        <small>応用</small>
+      </div>
+
+      <div class="card" onclick="openLecture('lecture6.html')">
+        講義6
+        <small>総まとめ</small>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- VIEWER -->
+<iframe id="viewer"></iframe>
+
+<script>
+function openLecture(file) {
+  document.getElementById("home").style.display = "none";
+  const iframe = document.getElementById("viewer");
+  iframe.style.display = "block";
+  iframe.src = "lectures/" + file;
+}
+
+function goHome() {
+  document.getElementById("viewer").style.display = "none";
+  document.getElementById("home").style.display = "block";
+  document.getElementById("viewer").src = "";
+}
+</script>
+
+</body>
+</html>
