@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>実験</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    background:#050014;
+    color:white;
+    padding:20px;
+}
+
+/* ===== 戻るボタン ===== */
+.back{
+    margin-bottom:20px;
+    opacity:0.7;
+    cursor:pointer;
+}
+.back:hover{
+    opacity:1;
+    color:#ffd700;
+}
+
+/* ===== タイトル ===== */
+h2{
+    text-align:center;
+    color:#ffd700;
+    margin-bottom:25px;
+}
+
+/* ===== ボタン ===== */
+.item{
+    padding:16px;
+    margin:12px 0;
+    border-radius:12px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,215,0,0.2);
+    cursor:pointer;
+    transition:0.2s;
+}
+.item:hover{
+    background:rgba(255,255,255,0.15);
+    transform:translateX(5px);
+}
+.item:active{
+    transform:scale(0.98);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- 戻る -->
+<div class="back" onclick="location.href='../index.html'">
+← 実験一覧へ戻る
+</div>
+
+<!-- タイトル（ここだけ変更） -->
+<h2>強磁性体</h2>
+
+<!-- PDF -->
+<div class="item" onclick="openFile('report.pdf')">
+📄 レポート（PDF）
+</div>
+
+<!-- Excel -->
+<div class="item" onclick="openFile('data.xlsx')">
+📊 実験データ（Excel）
+</div>
+
+<script>
+
+/* ===== ファイルを開く ===== */
+function openFile(file){
+    window.open(file, '_blank');
+}
+
+</script>
+
+</body>
+</html>
