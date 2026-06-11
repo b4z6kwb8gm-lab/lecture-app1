@@ -6,7 +6,7 @@
 
 <title>Lecture Stream</title>
 
-<!-- ===== PWA ===== -->
+<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0b0f14">
 
@@ -14,92 +14,93 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="icon.png">
 
-<meta name="mobile-web-app-capable" content="yes">
-
 <style>
 
-body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-    background:#0b0f14;
-    color:white;
+*{
+    box-sizing:border-box;
 }
 
-/* ===== view ===== */
-.view{
-    display:none;
-    padding:20px;
-}
-.view.active{
-    display:block;
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #050014;
+    color: white;
 }
 
-/* ===== title ===== */
-h2,h3{
-    text-align:center;
-    color:#ffd700;
-    margin-bottom:20px;
+/* ===== タイトル ===== */
+h2, h3 {
+    text-align: center;
+    color: #ffd700;
+    margin-bottom: 20px;
 }
 
-/* ===== search ===== */
-.search{
-    width:100%;
-    max-width:500px;
-    display:block;
-    margin:10px auto 20px;
-    padding:14px;
-    border-radius:12px;
-    border:none;
-    outline:none;
-    font-size:16px;
+/* ===== 検索 ===== */
+.search {
+    width: calc(100% - 40px);
+    max-width: 500px;
+    display: block;
+    margin: 10px auto 20px;
+
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 16px;
 }
 
-/* ===== menu ===== */
-.menu{
-    padding:18px;
-    margin:12px 0;
-    border-radius:16px;
-    background:linear-gradient(135deg,#ffd700,#b8860b);
-    color:#000;
-    font-weight:bold;
-    text-align:center;
-    cursor:pointer;
-    box-shadow:0 0 15px rgba(255,215,0,0.25);
-    transition:0.2s;
+/* ===== メニュー ===== */
+.menu {
+    padding: 18px;
+    margin: 12px 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffd700, #6a00ff);
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 0 10px rgba(255,215,0,0.4);
 }
 
-.menu:hover{
-    transform:scale(1.03);
+.menu:active {
+    transform: scale(0.98);
 }
 
-/* ===== lecture ===== */
-.lecture{
-    padding:14px;
-    margin:10px 0;
-    border-radius:12px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,215,0,0.2);
-    cursor:pointer;
-    transition:0.2s;
+/* ===== 講義 ===== */
+.lecture {
+    padding: 14px;
+    margin: 8px 0;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-.lecture:hover{
-    background:rgba(255,215,0,0.1);
-    transform:translateX(6px);
+.lecture:hover {
+    background: rgba(255,255,255,0.18);
+    transform: translateX(6px);
 }
 
-/* ===== back ===== */
-.back{
-    margin-bottom:15px;
-    color:#aaa;
-    cursor:pointer;
+/* ===== 戻る ===== */
+.back {
+    margin-bottom: 20px;
+    opacity: 0.7;
+    cursor: pointer;
 }
 
-.back:hover{
-    color:#ffd700;
+.back:hover {
+    opacity: 1;
+    color: #ffd700;
 }
 
-.hidden{ display:none; }
+.view {
+    display: none;
+    padding: 20px;
+}
+
+.view.active {
+    display: block;
+}
 
 </style>
 </head>
@@ -113,55 +114,66 @@ h2,h3{
 
 <input id="search" class="search" placeholder="検索（力学・統計・実験・講義）">
 
-<!-- ===== 力学 ===== -->
-<div class="menu" onclick="toggle('mechList')">
+<div class="menu" onclick="show('mechanics')">
 ⚙️ 力学演習
 </div>
 
-<div id="mechList" class="hidden">
-    <div class="lecture" onclick="openLecture('mechanics/lecture1.html')">講義1</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture2.html')">講義2</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture3.html')">講義3</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture4.html')">講義4</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture5.html')">講義5</div>
-    <div class="lecture" onclick="openLecture('mechanics/lecture6.html')">講義6</div>
-</div>
-
-<!-- ===== 統計力学 ===== -->
-<div class="menu" onclick="toggle('statList')">
+<div class="menu" onclick="show('statmech')">
 📊 統計力学
 </div>
 
-<div id="statList" class="hidden">
-    <div class="lecture" onclick="openLecture('statmech/lecture1.html')">講義1</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture2.html')">講義2</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture3.html')">講義3</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture4.html')">講義4</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture5.html')">講義5</div>
-    <div class="lecture" onclick="openLecture('statmech/lecture6.html')">講義6</div>
-</div>
-
-<!-- ===== 実験 ===== -->
 <div class="menu" onclick="location.href='lectures/experiments/index.html'">
 🧪 実験
 </div>
 
 </div>
 
+<!-- ================= mechanics ================= -->
+<div id="mechanics" class="view">
+
+<div class="back" onclick="show('home')">← ホーム</div>
+<h3>力学演習</h3>
+
+<div class="lecture" onclick="openLecture('mechanics/lecture1.html')">講義1</div>
+<div class="lecture" onclick="openLecture('mechanics/lecture2.html')">講義2</div>
+<div class="lecture" onclick="openLecture('mechanics/lecture3.html')">講義3</div>
+<div class="lecture" onclick="openLecture('mechanics/lecture4.html')">講義4</div>
+<div class="lecture" onclick="openLecture('mechanics/lecture5.html')">講義5</div>
+<div class="lecture" onclick="openLecture('mechanics/lecture6.html')">講義6</div>
+
+</div>
+
+<!-- ================= statmech ================= -->
+<div id="statmech" class="view">
+
+<div class="back" onclick="show('home')">← ホーム</div>
+<h3>統計力学</h3>
+
+<div class="lecture" onclick="openLecture('statmech/lecture1.html')">講義1</div>
+<div class="lecture" onclick="openLecture('statmech/lecture2.html')">講義2</div>
+<div class="lecture" onclick="openLecture('statmech/lecture3.html')">講義3</div>
+<div class="lecture" onclick="openLecture('statmech/lecture4.html')">講義4</div>
+<div class="lecture" onclick="openLecture('statmech/lecture5.html')">講義5</div>
+<div class="lecture" onclick="openLecture('statmech/lecture6.html')">講義6</div>
+
+</div>
+
 <script>
 
-/* ===== toggle ===== */
-function toggle(id){
-    const el = document.getElementById(id);
-    el.classList.toggle("hidden");
+/* ===== 画面切替 ===== */
+function show(id){
+    document.querySelectorAll('.view').forEach(v=>{
+        v.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
 }
 
-/* ===== lecture open ===== */
+/* ===== 講義遷移 ===== */
 function openLecture(path){
     location.href = "lectures/" + path;
 }
 
-/* ===== search ===== */
+/* ===== 検索 ===== */
 document.getElementById("search").addEventListener("input", function(){
 
     const v = this.value.toLowerCase();
@@ -170,11 +182,7 @@ document.getElementById("search").addEventListener("input", function(){
 
         const text = el.textContent.toLowerCase();
 
-        if(text.includes(v)){
-            el.style.display = "block";
-        }else{
-            el.style.display = "none";
-        }
+        el.style.display = text.includes(v) ? "block" : "none";
 
     });
 
