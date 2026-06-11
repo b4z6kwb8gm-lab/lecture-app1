@@ -3,175 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
 <title>Lecture Stream</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b0f14">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0b0f14">
+<link rel="apple-touch-icon" href="icon.png">
 
 <style>
 body {
-  margin: 0;
-  background: #0b0f14;
-  color: #e6edf3;
-  font-family: "Segoe UI", sans-serif;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #141a22, #0b0f14);
+    color: white;
 }
 
-/* ===== HEADER ===== */
+/* ヘッダー */
 header {
-  padding: 14px 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  background: #0b0f14;
-
-  position: sticky;
-  top: 0;
-  z-index: 10;
+    padding: 40px 20px 10px;
 }
 
-.logo {
-  color: #e50914;
-  font-weight: bold;
-  letter-spacing: 1px;
+h1 {
+    margin: 0;
+    font-size: 28px;
 }
 
-.home-btn {
-  background: #1f2933;
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #e6edf3;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
+p {
+    opacity: 0.6;
+    margin-top: 5px;
 }
 
-/* ===== HOME ===== */
-#home {
-  padding: 16px;
+/* 検索 */
+.search-box {
+    padding: 0 20px 10px;
 }
 
-/* セクションタイトル */
-.section h2 {
-  font-size: 13px;
-  color: #8b949e;
-  margin: 14px 0;
+#search {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    backdrop-filter: blur(10px);
 }
 
-/* ===== ⭐ 縦リスト（Netflixカード風） ===== */
-.row {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+#search::placeholder {
+    color: rgba(255,255,255,0.4);
 }
 
 /* カード */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
 .card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  padding: 14px 16px;
-
-  border-radius: 14px;
-  background: linear-gradient(135deg, #1c1f26, #111827);
-  border: 1px solid rgba(255,255,255,0.08);
-
-  cursor: pointer;
-  transition: 0.2s;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 25px;
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.25s;
+    backdrop-filter: blur(10px);
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  border-color: #e50914;
+    transform: scale(1.05);
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.card small {
-  color: #8b949e;
-  margin-top: 4px;
+.card span {
+    font-size: 18px;
+    font-weight: bold;
 }
 
-/* ===== IFRAME ===== */
-iframe {
-  width: 100%;
-  height: calc(100dvh - 60px);
-  border: none;
-  display: none;
-  background: white;
+footer {
+    text-align: center;
+    opacity: 0.4;
+    font-size: 12px;
+    padding: 30px;
 }
 </style>
+
 </head>
 
 <body>
 
 <header>
-  <div class="logo">LECTURE STREAM</div>
-  <button class="home-btn" onclick="goHome()">🏠 HOME</button>
+    <h1>Lecture Stream</h1>
+    <p>学習コンテンツダッシュボード</p>
 </header>
 
-<!-- HOME -->
-<div id="home">
+<!-- 検索バー -->
+<div class="search-box">
+    <input type="text" id="search" placeholder="講義を検索...">
+</div>
 
-  <div class="section">
-    <h2>講義一覧</h2>
+<!-- カード一覧 -->
+<div class="container">
 
-    <div class="row">
-
-      <div class="card" onclick="openLecture('lecture1.html')">
-        講義1
-        <small>力学の基礎</small>
-      </div>
-
-      <div class="card" onclick="openLecture('lecture2.html')">
-        講義2
-        <small>運動方程式</small>
-      </div>
-
-      <div class="card" onclick="openLecture('lecture3.html')">
-        講義3
-        <small>エネルギー</small>
-      </div>
-
-      <div class="card" onclick="openLecture('lecture4.html')">
-        講義4
-        <small>保存則</small>
-      </div>
-
-      <div class="card" onclick="openLecture('lecture5.html')">
-        講義5
-        <small>応用</small>
-      </div>
-
-      <div class="card" onclick="openLecture('lecture6.html')">
-        講義6
-        <small>総まとめ</small>
-      </div>
-
+    <div class="card" onclick="openLecture('lecture1.html')">
+        <span>講義1</span>
     </div>
-  </div>
+
+    <div class="card" onclick="openLecture('lecture2.html')">
+        <span>講義2</span>
+    </div>
+
+    <div class="card" onclick="openLecture('lecture3.html')">
+        <span>講義3</span>
+    </div>
+
+    <div class="card" onclick="openLecture('lecture4.html')">
+        <span>講義4</span>
+    </div>
+
+    <div class="card" onclick="openLecture('lecture5.html')">
+        <span>講義5</span>
+    </div>
+
+    <div class="card" onclick="openLecture('lecture6.html')">
+        <span>講義6</span>
+    </div>
 
 </div>
 
-<!-- VIEWER -->
-<iframe id="viewer"></iframe>
+<footer>
+    Lecture Stream v1.0
+</footer>
 
 <script>
 function openLecture(file) {
-  document.getElementById("home").style.display = "none";
-  const iframe = document.getElementById("viewer");
-  iframe.style.display = "block";
-  iframe.src = "lectures/" + file;
+    window.location.href = "lectures/" + file;
 }
 
-function goHome() {
-  document.getElementById("viewer").style.display = "none";
-  document.getElementById("home").style.display = "block";
-  document.getElementById("viewer").src = "";
-}
+/* 検索フィルター */
+const searchInput = document.getElementById("search");
+const cards = document.querySelectorAll(".card");
+
+searchInput.addEventListener("input", function () {
+    const keyword = this.value.toLowerCase();
+
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+
+        if (text.includes(keyword)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+});
 </script>
 
 </body>
