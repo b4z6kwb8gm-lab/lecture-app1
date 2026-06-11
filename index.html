@@ -6,6 +6,18 @@
 
 <title>Lecture Stream</title>
 
+<!-- ===== PWA基本設定 ===== -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b0f14">
+
+<!-- ===== iPhone / iOS対応 ===== -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon.png">
+
+<!-- ===== Android対応（旧仕様互換） ===== -->
+<meta name="mobile-web-app-capable" content="yes">
+
 <style>
 body {
     margin: 0;
@@ -19,7 +31,6 @@ body {
     display: none;
     padding: 20px;
 }
-
 .view.active {
     display: block;
 }
@@ -35,13 +46,11 @@ body {
     text-align: center;
     transition: 0.25s;
 }
-
 .menu:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 20px rgba(255,215,0,0.3);
 }
 
-/* ===== 戻るボタン ===== */
+/* ===== 戻る ===== */
 .back {
     margin-bottom: 20px;
     opacity: 0.6;
@@ -58,7 +67,6 @@ body {
     cursor: pointer;
     transition: 0.2s;
 }
-
 .lecture:hover {
     background: rgba(255,255,255,0.15);
     transform: translateX(4px);
@@ -84,7 +92,7 @@ body {
 
 </div>
 
-<!-- ================= 力学 ================= -->
+<!-- ================= mechanics ================= -->
 <div id="mechanics" class="view">
 
     <div class="back" onclick="show('home')">← ホームに戻る</div>
@@ -100,7 +108,7 @@ body {
 
 </div>
 
-<!-- ================= 統計力学 ================= -->
+<!-- ================= statmech ================= -->
 <div id="statmech" class="view">
 
     <div class="back" onclick="show('home')">← ホームに戻る</div>
