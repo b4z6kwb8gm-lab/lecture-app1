@@ -2,20 +2,20 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Lecture Stream</title>
 
-<!-- ===== PWA基本設定 ===== -->
+<!-- ===== PWA設定 ===== -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0b0f14">
 
-<!-- ===== iPhone / iOS対応 ===== -->
+<!-- ===== iOS対応 ===== -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="icon.png">
 
-<!-- ===== Android対応（旧仕様互換） ===== -->
+<!-- ===== Android対応 ===== -->
 <meta name="mobile-web-app-capable" content="yes">
 
 <style>
@@ -27,34 +27,24 @@ body {
 }
 
 /* ===== 画面切り替え ===== */
-.view {
-    display: none;
-    padding: 20px;
-}
-.view.active {
-    display: block;
-}
+.view { display: none; padding: 20px; }
+.view.active { display: block; }
 
-/* ===== ホームカード ===== */
+/* ===== メニュー（黒×金ネオン） ===== */
 .menu {
-    padding: 20px;
+    padding: 18px;
     margin: 12px 0;
     border-radius: 16px;
     background: linear-gradient(135deg, #ffd700, #6a00ff);
     font-weight: bold;
-    cursor: pointer;
     text-align: center;
+    cursor: pointer;
     transition: 0.25s;
+    box-shadow: 0 0 10px rgba(255,215,0,0.4);
 }
 .menu:hover {
-    transform: scale(1.04);
-}
-
-/* ===== 戻る ===== */
-.back {
-    margin-bottom: 20px;
-    opacity: 0.6;
-    cursor: pointer;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255,215,0,0.8);
 }
 
 /* ===== 講義ボタン ===== */
@@ -68,18 +58,23 @@ body {
     transition: 0.2s;
 }
 .lecture:hover {
-    background: rgba(255,255,255,0.15);
-    transform: translateX(4px);
+    background: rgba(255,255,255,0.18);
+    transform: translateX(6px);
+}
+
+/* ===== 戻る ===== */
+.back {
+    margin-bottom: 20px;
+    opacity: 0.7;
+    cursor: pointer;
 }
 </style>
-
 </head>
 
 <body>
 
-<!-- ================= HOME ================= -->
+<!-- ===== HOME ===== -->
 <div id="home" class="view active">
-
     <h2>Lecture Stream</h2>
 
     <div class="menu" onclick="show('mechanics')">
@@ -89,14 +84,11 @@ body {
     <div class="menu" onclick="show('statmech')">
         統計力学
     </div>
-
 </div>
 
-<!-- ================= mechanics ================= -->
+<!-- ===== mechanics ===== -->
 <div id="mechanics" class="view">
-
-    <div class="back" onclick="show('home')">← ホームに戻る</div>
-
+    <div class="back" onclick="show('home')">← ホーム</div>
     <h3>力学演習</h3>
 
     <div class="lecture" onclick="openLecture('mechanics/lecture1.html')">講義1</div>
@@ -105,14 +97,11 @@ body {
     <div class="lecture" onclick="openLecture('mechanics/lecture4.html')">講義4</div>
     <div class="lecture" onclick="openLecture('mechanics/lecture5.html')">講義5</div>
     <div class="lecture" onclick="openLecture('mechanics/lecture6.html')">講義6</div>
-
 </div>
 
-<!-- ================= statmech ================= -->
+<!-- ===== statmech ===== -->
 <div id="statmech" class="view">
-
-    <div class="back" onclick="show('home')">← ホームに戻る</div>
-
+    <div class="back" onclick="show('home')">← ホーム</div>
     <h3>統計力学</h3>
 
     <div class="lecture" onclick="openLecture('statmech/lecture1.html')">講義1</div>
@@ -121,7 +110,6 @@ body {
     <div class="lecture" onclick="openLecture('statmech/lecture4.html')">講義4</div>
     <div class="lecture" onclick="openLecture('statmech/lecture5.html')">講義5</div>
     <div class="lecture" onclick="openLecture('statmech/lecture6.html')">講義6</div>
-
 </div>
 
 <script>
