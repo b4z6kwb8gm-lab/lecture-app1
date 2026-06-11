@@ -7,7 +7,7 @@
 <title>Lecture Stream</title>
 
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b0f14">
+<meta name="theme-color" content="#0b0b0b">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,81 +17,114 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: radial-gradient(circle at top, #141a22, #0b0f14);
-    color: white;
+    background: radial-gradient(circle at top, #0b0b0b, #050506);
+    color: #f5f5f5;
 }
 
 /* ヘッダー */
 header {
-    padding: 40px 20px 10px;
+    padding: 50px 20px 10px;
+    text-align: center;
 }
 
 h1 {
     margin: 0;
-    font-size: 28px;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: #d4af37;
+    text-shadow: 0 0 10px rgba(212,175,55,0.4);
 }
 
 p {
     opacity: 0.6;
-    margin-top: 5px;
 }
 
 /* 検索 */
 .search-box {
-    padding: 0 20px 10px;
+    padding: 10px 20px;
 }
 
 #search {
     width: 100%;
-    padding: 12px 15px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    background: rgba(255,255,255,0.08);
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(212,175,55,0.4);
+    background: rgba(255,255,255,0.05);
     color: white;
-    backdrop-filter: blur(10px);
+    outline: none;
+    transition: 0.3s;
 }
 
-#search::placeholder {
-    color: rgba(255,255,255,0.4);
+#search:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 15px rgba(212,175,55,0.3);
 }
 
-/* カード */
+/* カードレイアウト */
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 18px;
     padding: 20px;
 }
 
+/* カード本体 */
 .card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 25px;
-    border-radius: 16px;
+    position: relative;
+    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.4));
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 18px;
+    padding: 28px;
     text-align: center;
     cursor: pointer;
-    transition: 0.25s;
-    backdrop-filter: blur(10px);
+    transition: 0.35s;
+    overflow: hidden;
 }
 
+/* ホバー発光 */
 .card:hover {
-    transform: scale(1.05);
-    background: rgba(255,255,255,0.1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: translateY(-8px) scale(1.05);
+    border: 1px solid rgba(212,175,55,0.8);
+    box-shadow: 0 0 25px rgba(212,175,55,0.35);
+}
+
+/* 光の流れアニメーション */
+.card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(212,175,55,0.15),
+        transparent
+    );
+    transform: rotate(25deg);
+    animation: shine 4s infinite linear;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) rotate(25deg); }
+    100% { transform: translateX(100%) rotate(25deg); }
 }
 
 .card span {
+    position: relative;
     font-size: 18px;
     font-weight: bold;
+    color: #f5f5f5;
+    z-index: 2;
 }
 
+/* フッター */
 footer {
     text-align: center;
-    opacity: 0.4;
-    font-size: 12px;
     padding: 30px;
+    font-size: 12px;
+    opacity: 0.4;
 }
 </style>
 
@@ -101,45 +134,28 @@ footer {
 
 <header>
     <h1>Lecture Stream</h1>
-    <p>学習コンテンツダッシュボード</p>
+    <p>Premium Learning Dashboard</p>
 </header>
 
-<!-- 検索バー -->
+<!-- 検索 -->
 <div class="search-box">
     <input type="text" id="search" placeholder="講義を検索...">
 </div>
 
-<!-- カード一覧 -->
+<!-- カード -->
 <div class="container">
 
-    <div class="card" onclick="openLecture('lecture1.html')">
-        <span>講義1</span>
-    </div>
-
-    <div class="card" onclick="openLecture('lecture2.html')">
-        <span>講義2</span>
-    </div>
-
-    <div class="card" onclick="openLecture('lecture3.html')">
-        <span>講義3</span>
-    </div>
-
-    <div class="card" onclick="openLecture('lecture4.html')">
-        <span>講義4</span>
-    </div>
-
-    <div class="card" onclick="openLecture('lecture5.html')">
-        <span>講義5</span>
-    </div>
-
-    <div class="card" onclick="openLecture('lecture6.html')">
-        <span>講義6</span>
-    </div>
+    <div class="card" onclick="openLecture('lecture1.html')"><span>講義1</span></div>
+    <div class="card" onclick="openLecture('lecture2.html')"><span>講義2</span></div>
+    <div class="card" onclick="openLecture('lecture3.html')"><span>講義3</span></div>
+    <div class="card" onclick="openLecture('lecture4.html')"><span>講義4</span></div>
+    <div class="card" onclick="openLecture('lecture5.html')"><span>講義5</span></div>
+    <div class="card" onclick="openLecture('lecture6.html')"><span>講義6</span></div>
 
 </div>
 
 <footer>
-    Lecture Stream v1.0
+    Lecture Stream • Premium Edition
 </footer>
 
 <script>
@@ -147,7 +163,7 @@ function openLecture(file) {
     window.location.href = "lectures/" + file;
 }
 
-/* 検索フィルター */
+/* 検索機能 */
 const searchInput = document.getElementById("search");
 const cards = document.querySelectorAll(".card");
 
