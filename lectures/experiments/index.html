@@ -5,72 +5,130 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>実験一覧</title>
 <style>
-body{
+*{
     margin:0;
-    padding:20px;
+    padding:0;
+    box-sizing:border-box;
+}
+body{
     background:#0b0f14;
     color:white;
     font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    min-height:100vh;
+    padding:20px;
 }
 h1{
     text-align:center;
+    margin-bottom:25px;
     color:#ffd700;
+    text-shadow:0 0 15px rgba(255,215,0,.7);
+}
+.back-btn{
+    display:inline-block;
+    margin-bottom:20px;
+    padding:10px 18px;
+    background:#ffd700;
+    color:#000;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:bold;
 }
 .card{
     background:#151b23;
-    border:1px solid rgba(255,215,0,0.3);
-    border-radius:15px;
-    padding:15px;
-    margin:12px 0;
+    border:1px solid rgba(255,215,0,.3);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 0 20px rgba(255,215,0,.08);
+    transition:.25s;
+}
+.card:hover{
+    transform:translateY(-2px);
 }
 .card h2{
-    margin:0 0 10px 0;
     color:#ffd700;
+    margin-bottom:12px;
     font-size:18px;
 }
 .btn{
     display:inline-block;
-    text-decoration:none;
-    padding:10px 15px;
     margin:5px;
+    padding:10px 16px;
     border-radius:10px;
-    background:#ffd700;
-    color:black;
+    text-decoration:none;
     font-weight:bold;
+    background:#ffd700;
+    color:#000;
+}
+.btn:hover{
+    opacity:.9;
 }
 </style>
 </head>
 <body>
+
+← ホームへ戻る
+
 <h1>実験一覧</h1>
 <div class="card">
 <h2>OPアンプ</h2>
-<a class="btn" href="opamp/report.pdf" target="_blank">
-📄 PDF閲覧
-</a>
-<a class="btn" href="opamp/report.pdf" download>
-⬇ PDF保存
-</a>
-<a class="btn" href="opamp/data.xlsx">
-📊 Excel閲覧
-</a>
-<a class="btn" href="opamp/data.xlsx" download>
-⬇ Excel保存
-</a>
+<a class="btn" href="opamp/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="opamp/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>X線による結晶の方位決定</h2>
+<a class="btn" href="xray_orientation/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="xray_orientation/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>サーミスタの特性</h2>
+<a class="btn" href="thermistor/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="thermistor/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>デジタル回路</h2>
+<a class="btn" href="digital_circuits/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="digital_circuits/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>はんだ付け</h2>
+<a class="btn" href="soldering/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="soldering/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>強磁性体</h2>
+<a class="btn" href="ferromagnetism/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="ferromagnetism/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>高温超伝導体</h2>
+<a class="btn" href="high_tc_superconductor/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="high_tc_superconductor/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>光の回折</h2>
+<a class="btn" href="diffraction/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="diffraction/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>示差熱</h2>
+<a class="btn" href="dta/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="dta/data.xlsx">📊 Excel</a>
 </div>
 <div class="card">
 <h2>真空蒸着</h2>
-<a class="btn" href="vacuum_deposition/report.pdf" target="_blank">
-📄 PDF閲覧
-</a>
-<a class="btn" href="vacuum_deposition/report.pdf" download>
-⬇ PDF保存
-</a>
-<a class="btn" href="vacuum_deposition/data.xlsx">
-📊 Excel閲覧
-</a>
-<a class="btn" href="vacuum_deposition/data.xlsx" download>
-⬇ Excel保存
-</a>
+<a class="btn" href="vacuum_deposition/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="vacuum_deposition/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>半導体のホール効果</h2>
+<a class="btn" href="hall_effect/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="hall_effect/data.xlsx">📊 Excel</a>
+</div>
+<div class="card">
+<h2>偏光</h2>
+<a class="btn" href="polarization/report.pdf" target="_blank">📄 PDF</a>
+<a class="btn" href="polarization/data.xlsx">📊 Excel</a>
 </div>
 </body>
 </html>
