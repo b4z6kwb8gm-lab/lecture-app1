@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mechanics Hub</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+/* RESET */
+*,*::before,*::after{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#000;
+  color:#e8dfc8;
+  font-family:'Noto Sans JP',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* BACKGROUND */
+.bg-layer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+
+.bg-stars{
+  background:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 40% 8%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,.5), transparent);
+  background-color:#000010;
+}
+
+.bg-glow-blue{
+  background:radial-gradient(ellipse at bottom, rgba(20,60,160,.35), transparent 70%);
+}
+
+/* LAYOUT */
+#menu-page{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+  z-index:10;
+}
+
+/* HEADER */
+.menu-header{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.menu-eyebrow{
+  font-family:'Cinzel',serif;
+  font-size:11px;
+  letter-spacing:.35em;
+  color:rgba(200,170,80,.75);
+}
+
+.menu-title-main{
+  font-family:'Cinzel',serif;
+  font-size:clamp(28px,5vw,48px);
+  background:linear-gradient(180deg,#fff8e8,#c8aa50,#8a6e20);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* SEARCH */
+.search-wrap{
+  width:100%;
+  max-width:420px;
+  margin:20px 0 30px;
+  position:relative;
+  z-index:20;
+}
+
+.search-box{
+  width:100%;
+  padding:12px;
+  background:rgba(0,0,0,.4);
+  border:1px solid rgba(200,170,80,.3);
+  color:#e8dfc8;
+  outline:none;
+}
+
+/* SUGGEST */
+.suggest-box{
+  position:absolute;
+  top:48px;
+  left:0;
+  width:100%;
+  background:rgba(10,10,20,.95);
+  border:1px solid rgba(200,170,80,.2);
+  display:none;
+  flex-direction:column;
+}
+
+.suggest-item{
+  padding:10px;
+  cursor:pointer;
+}
+
+.suggest-item:hover{
+  background:rgba(80,150,255,.15);
+}
+
+/* MENU */
+.menu-list{
+  width:100%;
+  max-width:560px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.menu-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+}
+
+.mi-bg{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:.25s;
+  background:linear-gradient(90deg,rgba(50,100,230,0),rgba(80,150,255,.2),rgba(50,100,230,0));
+}
+
+.menu-item:hover .mi-bg{
+  opacity:1;
+}
+
+.mi-num{
+  width:40px;
+  text-align:right;
+  font-family:'Cinzel',serif;
+  color:rgba(200,170,80,.6);
+}
+
+.mi-body{
+  flex:1;
+  padding:14px 10px;
+}
+
+.mi-round{
+  font-size:10px;
+  letter-spacing:.3em;
+  color:rgba(200,170,80,.6);
+}
+
+.mi-title{
+  font-size:18px;
+}
+
+/* FOOTER */
+.menu-footer{
+  margin-top:40px;
+  font-size:10px;
+  color:rgba(200,170,80,.25);
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-layer bg-stars"></div>
+<div class="bg-layer bg-glow-blue"></div>
+
+<div id="menu-page">
+
+  <div class="menu-header">
+    <div class="menu-eyebrow">Mechanics Hub</div>
+    <div class="menu-title-main">Select Lecture</div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input id="search" class="search-box" type="text" placeholder="Search lectures...">
+    <div id="suggest" class="suggest-box"></div>
+  </div>
+
+  <!-- MENU -->
+  <div class="menu-list">
+
+    <div class="menu-item" onclick="location.href='lecture1.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">01</div>
+      <div class="mi-body"><div class="mi-round">LECTURE</div><div class="mi-title">講義1</div></div>
+    </div>
+
+    <div class="menu-item" onclick="location.href='lecture2.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">02</div>
+      <div class="mi-body"><div class="mi-round">LECTURE</div><div class="mi-title">講義2</div></div>
+    </div>
+
+    <div class="menu-item" onclick="location.href='lecture3.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">03</div>
+      <div class="mi-body"><div class="mi-round">LECTURE</div><div class="mi-title">講義3</div></div>
+    </div>
+
+    <div class="menu-item" onclick="location.href='lecture4.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">04</div>
+      <div class="mi-body"><div class="mi-round">LECTURE</div><div class="mi-title">講義4</div></div>
+    </div>
+
+    <div class="menu-item" onclick="location.href='lecture5.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">05</div>
+      <div class="mi-body"><div class="mi-round">LECTURE</div><div class="mi-title">講義5</div></div>
+    </div>
+
+    <div class="menu-item" onclick="location.href='lecture6.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">06</div>
+      <div class="mi-body"><div class="mi-round">LECTURE</div><div class="mi-title">講義6</div></div>
+    </div>
+
+  </div>
+
+  <div class="menu-footer">Classical Mechanics</div>
+
+</div>
+
+<script>
+const data=[
+ {k:"講義1",l:"lecture1.html"},
+ {k:"講義2",l:"lecture2.html"},
+ {k:"講義3",l:"lecture3.html"},
+ {k:"講義4",l:"lecture4.html"},
+ {k:"講義5",l:"lecture5.html"},
+ {k:"講義6",l:"lecture6.html"}
+];
+
+const input=document.getElementById("search");
+const suggest=document.getElementById("suggest");
+
+input.addEventListener("input",()=>{
+ const q=input.value.trim();
+ suggest.innerHTML="";
+
+ if(!q){
+   suggest.style.display="none";
+   return;
+ }
+
+ const res=data.filter(d=>d.k.includes(q));
+
+ if(res.length===0){
+   suggest.style.display="none";
+   return;
+ }
+
+ res.forEach(r=>{
+   const div=document.createElement("div");
+   div.className="suggest-item";
+   div.textContent=r.k;
+   div.onclick=()=>location.href=r.l;
+   suggest.appendChild(div);
+ });
+
+ suggest.style.display="flex";
+});
+</script>
+
+</body>
+</html>
