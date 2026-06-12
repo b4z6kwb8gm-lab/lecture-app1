@@ -3,172 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>実験ライブラリ</title>
+<title>Experiments Library</title>
+
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+/* ===== RESET ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-body{
-    min-height:100vh;
-    background:
-    radial-gradient(circle at top,
-    #2b2b2b 0%,
-    #0b0f14 45%,
-    #000000 100%);
-    color:white;
-    font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-    padding:90px 20px 30px;
+
+body {
+  background: #000;
+  color: #e8dfc8;
+  font-family: 'Noto Sans JP', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
-/* ===== 戻るボタン ===== */
-.back-btn{
-    position:fixed;
-    top:20px;
-    left:20px;
-    z-index:9999;
-    border:none;
-    padding:12px 20px;
-    border-radius:16px;
-    background:#ffd700;
-    color:black;
-    font-weight:bold;
-    font-size:15px;
-    cursor:pointer;
-    box-shadow:
-    0 0 15px rgba(255,215,0,.5);
-    transition:.25s;
+
+/* ===== BACKGROUND（HOME完全統一） ===== */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
-.back-btn:hover{
-    transform:scale(1.05);
-    box-shadow:
-    0 0 25px rgba(255,215,0,.8);
+
+.bg-stars {
+  background: #000010;
 }
-/* ===== タイトル ===== */
-.header{
-    text-align:center;
-    margin-bottom:35px;
+
+.bg-glow-blue {
+  background: radial-gradient(ellipse at bottom, rgba(20,60,160,0.35), transparent 70%);
 }
-.header h1{
-    color:#ffd700;
-    font-size:2.3rem;
-    text-shadow:
-    0 0 10px rgba(255,215,0,.7),
-    0 0 30px rgba(255,215,0,.4);
-    margin-bottom:10px;
+
+.bg-glow-gold {
+  background: radial-gradient(ellipse at top, rgba(180,130,40,0.12), transparent 70%);
 }
-.header p{
-    opacity:.8;
+
+/* ===== LAYOUT ===== */
+.page {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-/* ===== 実験一覧 ===== */
-.grid{
-    display:grid;
-    grid-template-columns:
-    repeat(auto-fit,minmax(280px,1fr));
-    gap:18px;
+
+/* ===== HEADER ===== */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
 }
-.card{
-    background:
-    rgba(255,255,255,.04);
-    backdrop-filter:blur(10px);
-    border:
-    1px solid rgba(255,215,0,.25);
-    border-radius:22px;
-    padding:22px;
-    transition:.3s;
-    box-shadow:
-    0 0 20px rgba(255,215,0,.05);
+
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: 42px;
+  background: linear-gradient(180deg,#fff8e8,#c8aa50,#8a6e20);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.card:hover{
-    transform:
-    translateY(-5px);
-    box-shadow:
-    0 0 25px rgba(255,215,0,.25);
+
+.sub {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: rgba(200,170,80,0.6);
 }
-.card h2{
-    color:#ffd700;
-    font-size:1.1rem;
-    margin-bottom:15px;
+
+/* ===== GRID ===== */
+.grid {
+  width: 100%;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
 }
-/* ===== 開くボタン ===== */
-.open-btn{
-    display:block;
-    text-align:center;
-    text-decoration:none;
-    background:#ffd700;
-    color:black;
-    font-weight:bold;
-    padding:14px;
-    border-radius:14px;
-    transition:.25s;
+
+/* ===== CARD ===== */
+.card {
+  padding: 16px;
+  border: 1px solid rgba(200,170,80,0.2);
+  background: rgba(0,0,0,0.3);
+  transition: 0.2s;
+  cursor: pointer;
 }
-.open-btn:hover{
-    transform:scale(1.03);
-    filter:brightness(1.05);
+
+.card:hover {
+  background: rgba(80,150,255,0.12);
+  border-color: rgba(80,150,255,0.4);
+  transform: translateY(-3px);
 }
+
+.card h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.card p {
+  font-size: 12px;
+  color: rgba(200,170,80,0.6);
+}
+
+/* ===== BACK ===== */
+.back {
+  margin-top: 40px;
+  font-size: 12px;
+  color: rgba(200,170,80,0.5);
+  cursor: pointer;
+}
+
+.back:hover {
+  color: #fff;
+}
+
 </style>
 </head>
+
 <body>
 
-← ホーム
-<div class="header">
-<h1>🧪 実験ライブラリ</h1>
-<p>
-PDF・Excel・レポート資料
-</p>
+<!-- BACKGROUND -->
+<div class="bg-layer bg-stars"></div>
+<div class="bg-layer bg-glow-blue"></div>
+<div class="bg-layer bg-glow-gold"></div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="title">Experiments</div>
+    <div class="sub">実験・データ解析</div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <div class="card" onclick="location.href='./opamp/index.html'">
+      <h2>OPアンプ</h2>
+      <p>増幅回路・演算増幅器の特性解析</p>
+    </div>
+
+    <div class="card" onclick="location.href='./xray_orientation/index.html'">
+      <h2>X線による結晶の方位決定</h2>
+      <p>X線回折を用いた結晶構造解析</p>
+    </div>
+
+    <div class="card" onclick="location.href='./thermistor/index.html'">
+      <h2>サーミスタの特性</h2>
+      <p>温度依存性と抵抗変化の測定</p>
+    </div>
+
+    <div class="card" onclick="location.href='./digital_circuits/index.html'">
+      <h2>デジタル回路</h2>
+      <p>論理回路設計と動作検証</p>
+    </div>
+
+    <div class="card" onclick="location.href='./soldering/index.html'">
+      <h2>はんだ付け</h2>
+      <p>電子工作基礎技術</p>
+    </div>
+
+    <div class="card" onclick="location.href='./ferromagnetism/index.html'">
+      <h2>強磁性体</h2>
+      <p>磁化特性とヒステリシス</p>
+    </div>
+
+    <div class="card" onclick="location.href='./high_tc_superconductor/index.html'">
+      <h2>高温超伝導体</h2>
+      <p>超伝導転移と抵抗測定</p>
+    </div>
+
+    <div class="card" onclick="location.href='./diffraction/index.html'">
+      <h2>光の回折</h2>
+      <p>干渉・回折パターン解析</p>
+    </div>
+
+    <div class="card" onclick="location.href='./dta/index.html'">
+      <h2>示差熱分析</h2>
+      <p>熱物性測定と相変化解析</p>
+    </div>
+
+    <div class="card" onclick="location.href='./vacuum_deposition/index.html'">
+      <h2>真空蒸着</h2>
+      <p>薄膜形成プロセス</p>
+    </div>
+
+    <div class="card" onclick="location.href='./hall_effect/index.html'">
+      <h2>ホール効果</h2>
+      <p>キャリア濃度と移動度測定</p>
+    </div>
+
+    <div class="card" onclick="location.href='./polarization/index.html'">
+      <h2>偏光</h2>
+      <p>光の偏光特性解析</p>
+    </div>
+
+  </div>
+
+  <!-- BACK -->
+  <div class="back" onclick="location.href='../index.html'">
+    ← HOMEに戻る
+  </div>
+
 </div>
-<div class="grid">
-<div class="card">
-<h2>OPアンプ</h2>
-<a class="open-btn" href="opamp/index.html">開く</a>
-</div>
-<div class="card">
-<h2>X線による結晶の方位決定</h2>
-<a class="open-btn" href="xray_orientation/index.html">開く</a>
-</div>
-<div class="card">
-<h2>サーミスタの特性</h2>
-<a class="open-btn" href="thermistor/index.html">開く</a>
-</div>
-<div class="card">
-<h2>デジタル回路</h2>
-<a class="open-btn" href="digital_circuits/index.html">開く</a>
-</div>
-<div class="card">
-<h2>はんだ付け</h2>
-<a class="open-btn" href="soldering/index.html">開く</a>
-</div>
-<div class="card">
-<h2>強磁性体</h2>
-<a class="open-btn" href="ferromagnetism/index.html">開く</a>
-</div>
-<div class="card">
-<h2>高温伝導体</h2>
-<a class="open-btn" href="high_tc_superconductor/index.html">開く</a>
-</div>
-<div class="card">
-<h2>光の回折</h2>
-<a class="open-btn" href="diffraction/index.html">開く</a>
-</div>
-<div class="card">
-<h2>示差熱</h2>
-<a class="open-btn" href="dta/index.html">開く</a>
-</div>
-<div class="card">
-<h2>真空蒸着</h2>
-<a class="open-btn" href="vacuum_deposition/index.html">開く</a>
-</div>
-<div class="card">
-<h2>半導体のホール効果</h2>
-<a class="open-btn" href="hall_effect/index.html">開く</a>
-</div>
-<div class="card">
-<h2>偏光</h2>
-<a class="open-btn" href="polarization/index.html">開く</a>
-</div>
-</div>
+
 </body>
 </html>
