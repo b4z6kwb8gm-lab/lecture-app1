@@ -8,7 +8,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-/* ================= RESET ================= */
+/* ===== RESET ===== */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -23,7 +23,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ================= BACKGROUND ================= */
+/* ===== BACKGROUND ===== */
 .bg-layer {
   position: fixed;
   inset: 0;
@@ -33,33 +33,25 @@ body {
 
 .bg-stars {
   background:
-    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6), transparent 100%),
-    radial-gradient(1px 1px at 40% 8%, rgba(255,255,255,0.7), transparent 100%),
-    radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,0.4), transparent 100%),
-    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.5), transparent 100%),
-    radial-gradient(1px 1px at 35% 85%, rgba(255,255,255,0.4), transparent 100%);
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 40% 8%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 35% 85%, rgba(255,255,255,0.4), transparent);
   background-color: #000010;
 }
 
 .bg-glow-blue {
   background: radial-gradient(ellipse at bottom, rgba(20,60,160,0.35), transparent 70%);
-  animation: glow 6s ease-in-out infinite alternate;
 }
 
-.bg-glow-gold {
-  background: radial-gradient(ellipse at top, rgba(180,130,40,0.12), transparent 70%);
-}
-
-@keyframes glow {
-  from { opacity: 0.6; }
-  to { opacity: 1; }
-}
-
+/* ===== ORB ===== */
 .orb {
   position: fixed;
   border-radius: 50%;
   filter: blur(60px);
   animation: float 10s ease-in-out infinite alternate;
+  z-index: 0;
 }
 
 .orb-1 {
@@ -83,7 +75,7 @@ body {
   to { transform: translate(20px,-30px) scale(1.1); }
 }
 
-/* ================= LAYOUT ================= */
+/* ===== LAYOUT ===== */
 #menu-page {
   position: relative;
   min-height: 100vh;
@@ -95,7 +87,7 @@ body {
   z-index: 10;
 }
 
-/* ================= HEADER ================= */
+/* ===== HEADER ===== */
 .menu-header {
   text-align: center;
   margin-bottom: 20px;
@@ -106,7 +98,6 @@ body {
   font-size: 11px;
   letter-spacing: 0.35em;
   color: rgba(200,170,80,0.75);
-  text-transform: uppercase;
 }
 
 .menu-title-main {
@@ -117,7 +108,7 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* ================= SEARCH ================= */
+/* ===== SEARCH ===== */
 .search-wrap {
   width: 100%;
   max-width: 420px;
@@ -133,14 +124,11 @@ body {
   border: 1px solid rgba(200,170,80,0.3);
   color: #e8dfc8;
   outline: none;
-  font-family: 'Noto Sans JP';
 }
 
-/* SUGGEST */
 .suggest-box {
   position: absolute;
   top: 48px;
-  left: 0;
   width: 100%;
   background: rgba(10,10,20,0.95);
   border: 1px solid rgba(200,170,80,0.2);
@@ -149,17 +137,15 @@ body {
 }
 
 .suggest-item {
-  padding: 10px 12px;
+  padding: 10px;
   cursor: pointer;
-  font-size: 14px;
-  color: rgba(232,220,195,0.9);
 }
 
 .suggest-item:hover {
   background: rgba(80,150,255,0.15);
 }
 
-/* ================= MENU ================= */
+/* ===== MENU ===== */
 .menu-list {
   width: 100%;
   max-width: 560px;
@@ -173,21 +159,17 @@ body {
   display: flex;
   align-items: center;
   cursor: pointer;
-  background: none;
-  border: none;
-  width: 100%;
-  text-align: left;
 }
 
 .mi-bg {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: 0.25s;
+  transition: .25s;
   background: linear-gradient(90deg,
-    rgba(50,100,230,0),
+    rgba(80,150,255,0),
     rgba(80,150,255,0.2),
-    rgba(50,100,230,0));
+    rgba(80,150,255,0));
 }
 
 .menu-item:hover .mi-bg {
@@ -197,7 +179,6 @@ body {
 .mi-num {
   width: 40px;
   font-family: 'Cinzel', serif;
-  font-size: 11px;
   text-align: right;
   color: rgba(200,170,80,0.6);
 }
@@ -208,7 +189,6 @@ body {
 }
 
 .mi-round {
-  font-family: 'Cinzel', serif;
   font-size: 10px;
   letter-spacing: 0.3em;
   color: rgba(200,170,80,0.6);
@@ -218,15 +198,13 @@ body {
   font-size: 18px;
 }
 
-/* ================= FOOTER ================= */
+/* ===== FOOTER ===== */
 .menu-footer {
   margin-top: 40px;
-  font-family: 'Cinzel', serif;
   font-size: 10px;
   letter-spacing: 0.3em;
   color: rgba(200,170,80,0.25);
 }
-
 </style>
 </head>
 
@@ -234,7 +212,7 @@ body {
 
 <div class="bg-layer bg-stars"></div>
 <div class="bg-layer bg-glow-blue"></div>
-<div class="bg-layer bg-glow-gold"></div>
+
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
@@ -254,7 +232,7 @@ body {
   <!-- MENU -->
   <div class="menu-list">
 
-    <div class="menu-item" onclick="location.href='mechanics/index.html'">
+    <div class="menu-item" onclick="location.href='lectures/mechanics/index.html'">
       <div class="mi-bg"></div>
       <div class="mi-num">01</div>
       <div class="mi-body">
@@ -263,7 +241,7 @@ body {
       </div>
     </div>
 
-    <div class="menu-item" onclick="location.href='statmech/index.html'">
+    <div class="menu-item" onclick="location.href='lectures/statmech/index.html'">
       <div class="mi-bg"></div>
       <div class="mi-num">02</div>
       <div class="mi-body">
@@ -272,7 +250,7 @@ body {
       </div>
     </div>
 
-    <div class="menu-item" onclick="location.href='experiments/index.html'">
+    <div class="menu-item" onclick="location.href='lectures/experiments/index.html'">
       <div class="mi-bg"></div>
       <div class="mi-num">03</div>
       <div class="mi-body">
@@ -284,20 +262,20 @@ body {
   </div>
 
   <div class="menu-footer">Physics Navigation System</div>
-
 </div>
 
 <script>
+
 const data = [
-  { key: "力学", link: "mechanics/index.html" },
-  { key: "運動", link: "mechanics/index.html" },
-  { key: "ニュートン", link: "mechanics/index.html" },
-  { key: "統計", link: "statmech/index.html" },
-  { key: "エントロピー", link: "statmech/index.html" },
-  { key: "分布", link: "statmech/index.html" },
-  { key: "実験", link: "experiments/index.html" },
-  { key: "誤差", link: "experiments/index.html" },
-  { key: "データ", link: "experiments/index.html" }
+  { key:"力学", link:"lectures/mechanics/index.html" },
+  { key:"運動", link:"lectures/mechanics/index.html" },
+
+  { key:"統計力学", link:"lectures/statmech/index.html" },
+  { key:"エントロピー", link:"lectures/statmech/index.html" },
+
+  { key:"実験", link:"lectures/experiments/index.html" },
+  { key:"誤差", link:"lectures/experiments/index.html" },
+  { key:"データ", link:"lectures/experiments/index.html" }
 ];
 
 const input = document.getElementById("search");
@@ -312,22 +290,18 @@ input.addEventListener("input", () => {
     return;
   }
 
-  const results = data.filter(d => d.key.includes(q));
+  const res = data.filter(d => d.key.includes(q));
 
-  if (results.length === 0) {
+  if (res.length === 0) {
     suggest.style.display = "none";
     return;
   }
 
-  results.forEach(r => {
+  res.forEach(r => {
     const div = document.createElement("div");
     div.className = "suggest-item";
     div.textContent = r.key;
-
-    div.onclick = () => {
-      location.href = r.link;
-    };
-
+    div.onclick = () => location.href = r.link;
     suggest.appendChild(div);
   });
 
@@ -339,6 +313,7 @@ document.addEventListener("click", (e) => {
     suggest.style.display = "none";
   }
 });
+
 </script>
 
 </body>
