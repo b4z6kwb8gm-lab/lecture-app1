@@ -259,7 +259,7 @@ body {
     </div>
   </div>
 
-  <div class="menu-item" onclick="location.href='quantum/index.html'">
+  <div class="menu-item" onclick="location.href='lectures/quantum/index.html'">
     <div class="mi-bg"></div>
     <div class="mi-num">04</div>
     <div class="mi-body">
@@ -277,15 +277,22 @@ body {
 <script>
 
 const data = [
-  { key:"力学", link:"lectures/mechanics/index.html" },
-  { key:"運動", link:"lectures/mechanics/index.html" },
+  { key: "力学", link: "mechanics/index.html" },
+  { key: "運動", link: "mechanics/index.html" },
+  { key: "ニュートン", link: "mechanics/index.html" },
 
-  { key:"統計力学", link:"lectures/statmech/index.html" },
-  { key:"エントロピー", link:"lectures/statmech/index.html" },
+  { key: "統計", link: "statmech/index.html" },
+  { key: "エントロピー", link: "statmech/index.html" },
+  { key: "分布", link: "statmech/index.html" },
 
-  { key:"実験", link:"lectures/experiments/index.html" },
-  { key:"誤差", link:"lectures/experiments/index.html" },
-  { key:"データ", link:"lectures/experiments/index.html" }
+  { key: "実験", link: "experiments/index.html" },
+  { key: "誤差", link: "experiments/index.html" },
+  { key: "データ", link: "experiments/index.html" },
+
+  // 👇追加
+  { key: "量子", link: "quantum/index.html" },
+  { key: "波動", link: "quantum/index.html" },
+  { key: "シュレーディンガー", link: "quantum/index.html" }
 ];
 
 const input = document.getElementById("search");
