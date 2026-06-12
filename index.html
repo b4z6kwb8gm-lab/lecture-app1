@@ -2,104 +2,229 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<title>Lecture Stream</title>
-
-<!-- PWA -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b0f14">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics Hub — HOME</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-*{
-    box-sizing:border-box;
+/* ================= RESET ================= */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #050014;
-    color: white;
+  background: #000;
+  color: #e8dfc8;
+  font-family: 'Noto Sans JP', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* ===== タイトル ===== */
-h2, h3 {
-    text-align: center;
-    color: #ffd700;
-    margin-bottom: 20px;
+/* ================= BACKGROUND ================= */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* ===== 検索 ===== */
-.search {
-    width: calc(100% - 40px);
-    max-width: 500px;
-    display: block;
-    margin: 10px auto 20px;
-
-    padding: 14px;
-    border-radius: 12px;
-    border: none;
-    outline: none;
-    font-size: 16px;
+.bg-stars {
+  background:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6), transparent 100%),
+    radial-gradient(1px 1px at 40% 8%, rgba(255,255,255,0.7), transparent 100%),
+    radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,0.4), transparent 100%),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.5), transparent 100%),
+    radial-gradient(1px 1px at 35% 85%, rgba(255,255,255,0.4), transparent 100%);
+  background-color: #000010;
 }
 
-/* ===== メニュー ===== */
-.menu {
-    padding: 18px;
-    margin: 12px 20px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #ffd700, #6a00ff);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.2s;
-    box-shadow: 0 0 10px rgba(255,215,0,0.4);
+.bg-glow-blue {
+  background: radial-gradient(ellipse at bottom, rgba(20,60,160,0.35), transparent 70%);
+  animation: glow 6s ease-in-out infinite alternate;
 }
 
-.menu:active {
-    transform: scale(0.98);
+.bg-glow-gold {
+  background: radial-gradient(ellipse at top, rgba(180,130,40,0.12), transparent 70%);
 }
 
-/* ===== 講義 ===== */
-.lecture {
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: 0.2s;
+@keyframes glow {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
 }
 
-.lecture:hover {
-    background: rgba(255,255,255,0.18);
-    transform: translateX(6px);
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: float 10s ease-in-out infinite alternate;
 }
 
-/* ===== 戻る ===== */
-.back {
-    margin-bottom: 20px;
-    opacity: 0.7;
-    cursor: pointer;
+.orb-1 {
+  width: 280px;
+  height: 280px;
+  background: rgba(60,100,220,0.18);
+  top: -80px;
+  right: -60px;
 }
 
-.back:hover {
-    opacity: 1;
-    color: #ffd700;
+.orb-2 {
+  width: 200px;
+  height: 200px;
+  background: rgba(180,130,40,0.12);
+  bottom: 40px;
+  left: -40px;
 }
 
-.view {
-    display: none;
-    padding: 20px;
+@keyframes float {
+  from { transform: translate(0,0) scale(1); }
+  to { transform: translate(20px,-30px) scale(1.1); }
 }
 
-.view.active {
-    display: block;
+/* ================= LAYOUT ================= */
+#menu-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  z-index: 10;
+}
+
+/* ================= HEADER ================= */
+.menu-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.menu-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: rgba(200,170,80,0.75);
+  text-transform: uppercase;
+}
+
+.menu-title-main {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(28px,5vw,48px);
+  background: linear-gradient(180deg,#fff8e8,#c8aa50,#8a6e20);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ================= SEARCH ================= */
+.search-wrap {
+  width: 100%;
+  max-width: 420px;
+  margin: 20px 0 30px;
+  position: relative;
+  z-index: 20;
+}
+
+.search-box {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(200,170,80,0.3);
+  color: #e8dfc8;
+  outline: none;
+  font-family: 'Noto Sans JP';
+}
+
+/* SUGGEST */
+.suggest-box {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 100%;
+  background: rgba(10,10,20,0.95);
+  border: 1px solid rgba(200,170,80,0.2);
+  display: none;
+  flex-direction: column;
+}
+
+.suggest-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: rgba(232,220,195,0.9);
+}
+
+.suggest-item:hover {
+  background: rgba(80,150,255,0.15);
+}
+
+/* ================= MENU ================= */
+.menu-list {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.mi-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: 0.25s;
+  background: linear-gradient(90deg,
+    rgba(50,100,230,0),
+    rgba(80,150,255,0.2),
+    rgba(50,100,230,0));
+}
+
+.menu-item:hover .mi-bg {
+  opacity: 1;
+}
+
+.mi-num {
+  width: 40px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  text-align: right;
+  color: rgba(200,170,80,0.6);
+}
+
+.mi-body {
+  flex: 1;
+  padding: 14px 10px;
+}
+
+.mi-round {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(200,170,80,0.6);
+}
+
+.mi-title {
+  font-size: 18px;
+}
+
+/* ================= FOOTER ================= */
+.menu-footer {
+  margin-top: 40px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(200,170,80,0.25);
 }
 
 </style>
@@ -107,87 +232,113 @@ h2, h3 {
 
 <body>
 
-<!-- ================= HOME ================= -->
-<div id="home" class="view active">
+<div class="bg-layer bg-stars"></div>
+<div class="bg-layer bg-glow-blue"></div>
+<div class="bg-layer bg-glow-gold"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
 
-<h2>Lecture Stream</h2>
+<div id="menu-page">
 
-<input id="search" class="search" placeholder="検索（力学・統計・実験・講義）">
+  <div class="menu-header">
+    <div class="menu-eyebrow">Physics Hub</div>
+    <div class="menu-title-main">Select Field</div>
+  </div>
 
-<div class="menu" onclick="show('mechanics')">
-⚙️ 力学演習
-</div>
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input id="search" class="search-box" type="text" placeholder="Search topics...">
+    <div id="suggest" class="suggest-box"></div>
+  </div>
 
-<div class="menu" onclick="show('statmech')">
-📊 統計力学
-</div>
+  <!-- MENU -->
+  <div class="menu-list">
 
-<div class="menu" onclick="location.href='lectures/experiments/index.html'">
-🧪 実験
-</div>
+    <div class="menu-item" onclick="location.href='mechanics/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">01</div>
+      <div class="mi-body">
+        <div class="mi-round">MECHANICS</div>
+        <div class="mi-title">力学</div>
+      </div>
+    </div>
 
-</div>
+    <div class="menu-item" onclick="location.href='statmech/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">02</div>
+      <div class="mi-body">
+        <div class="mi-round">STAT MECH</div>
+        <div class="mi-title">統計力学</div>
+      </div>
+    </div>
 
-<!-- ================= mechanics ================= -->
-<div id="mechanics" class="view">
+    <div class="menu-item" onclick="location.href='experiments/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">03</div>
+      <div class="mi-body">
+        <div class="mi-round">EXPERIMENT</div>
+        <div class="mi-title">実験</div>
+      </div>
+    </div>
 
-<div class="back" onclick="show('home')">← ホーム</div>
-<h3>力学演習</h3>
+  </div>
 
-<div class="lecture" onclick="openLecture('mechanics/lecture1.html')">講義1</div>
-<div class="lecture" onclick="openLecture('mechanics/lecture2.html')">講義2</div>
-<div class="lecture" onclick="openLecture('mechanics/lecture3.html')">講義3</div>
-<div class="lecture" onclick="openLecture('mechanics/lecture4.html')">講義4</div>
-<div class="lecture" onclick="openLecture('mechanics/lecture5.html')">講義5</div>
-<div class="lecture" onclick="openLecture('mechanics/lecture6.html')">講義6</div>
-
-</div>
-
-<!-- ================= statmech ================= -->
-<div id="statmech" class="view">
-
-<div class="back" onclick="show('home')">← ホーム</div>
-<h3>統計力学</h3>
-
-<div class="lecture" onclick="openLecture('statmech/lecture1.html')">講義1</div>
-<div class="lecture" onclick="openLecture('statmech/lecture2.html')">講義2</div>
-<div class="lecture" onclick="openLecture('statmech/lecture3.html')">講義3</div>
-<div class="lecture" onclick="openLecture('statmech/lecture4.html')">講義4</div>
-<div class="lecture" onclick="openLecture('statmech/lecture5.html')">講義5</div>
-<div class="lecture" onclick="openLecture('statmech/lecture6.html')">講義6</div>
+  <div class="menu-footer">Physics Navigation System</div>
 
 </div>
 
 <script>
+const data = [
+  { key: "力学", link: "mechanics/index.html" },
+  { key: "運動", link: "mechanics/index.html" },
+  { key: "ニュートン", link: "mechanics/index.html" },
+  { key: "統計", link: "statmech/index.html" },
+  { key: "エントロピー", link: "statmech/index.html" },
+  { key: "分布", link: "statmech/index.html" },
+  { key: "実験", link: "experiments/index.html" },
+  { key: "誤差", link: "experiments/index.html" },
+  { key: "データ", link: "experiments/index.html" }
+];
 
-/* ===== 画面切替 ===== */
-function show(id){
-    document.querySelectorAll('.view').forEach(v=>{
-        v.classList.remove('active');
-    });
-    document.getElementById(id).classList.add('active');
-}
+const input = document.getElementById("search");
+const suggest = document.getElementById("suggest");
 
-/* ===== 講義遷移 ===== */
-function openLecture(path){
-    location.href = "lectures/" + path;
-}
+input.addEventListener("input", () => {
+  const q = input.value.trim();
+  suggest.innerHTML = "";
 
-/* ===== 検索 ===== */
-document.getElementById("search").addEventListener("input", function(){
+  if (!q) {
+    suggest.style.display = "none";
+    return;
+  }
 
-    const v = this.value.toLowerCase();
+  const results = data.filter(d => d.key.includes(q));
 
-    document.querySelectorAll(".menu, .lecture").forEach(el=>{
+  if (results.length === 0) {
+    suggest.style.display = "none";
+    return;
+  }
 
-        const text = el.textContent.toLowerCase();
+  results.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "suggest-item";
+    div.textContent = r.key;
 
-        el.style.display = text.includes(v) ? "block" : "none";
+    div.onclick = () => {
+      location.href = r.link;
+    };
 
-    });
+    suggest.appendChild(div);
+  });
 
+  suggest.style.display = "flex";
 });
 
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".search-wrap")) {
+    suggest.style.display = "none";
+  }
+});
 </script>
 
 </body>
