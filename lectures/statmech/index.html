@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistical Mechanics</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#000;
+  color:#e8dfc8;
+  font-family:'Noto Sans JP',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ===== BACKGROUND ===== */
+.bg-layer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.bg-stars{
+  background:
+  radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6), transparent 100%),
+  radial-gradient(1px 1px at 40% 8%, rgba(255,255,255,0.7), transparent 100%),
+  radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,0.4), transparent 100%);
+  background-color:#000010;
+}
+
+.bg-glow-blue{
+  background: radial-gradient(ellipse at bottom, rgba(20,60,160,0.35), transparent 70%);
+}
+
+.bg-glow-gold{
+  background: radial-gradient(ellipse at top, rgba(180,130,40,0.12), transparent 70%);
+}
+
+/* ===== LAYOUT ===== */
+.container{
+  position:relative;
+  z-index:10;
+  padding:40px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* ===== HEADER ===== */
+h1{
+  font-family:'Cinzel',serif;
+  letter-spacing:0.2em;
+  margin-bottom:30px;
+  background:linear-gradient(180deg,#fff8e8,#c8aa50,#8a6e20);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ===== SEARCH ===== */
+.search{
+  width:100%;
+  max-width:420px;
+  margin-bottom:20px;
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  padding:12px;
+  background:rgba(0,0,0,0.4);
+  border:1px solid rgba(200,170,80,0.3);
+  color:#fff;
+  outline:none;
+}
+
+.suggest{
+  position:absolute;
+  width:100%;
+  background:#0a0a14;
+  border:1px solid rgba(200,170,80,0.2);
+  display:none;
+}
+
+.suggest div{
+  padding:10px;
+  cursor:pointer;
+}
+
+.suggest div:hover{
+  background:rgba(80,150,255,0.2);
+}
+
+/* ===== ITEM ===== */
+.item{
+  width:100%;
+  max-width:520px;
+  padding:16px;
+  margin:6px 0;
+  border:1px solid rgba(200,170,80,0.15);
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.item:hover{
+  background:rgba(80,150,255,0.1);
+  transform:translateX(6px);
+}
+
+/* ===== BACK ===== */
+.back{
+  margin-bottom:20px;
+  cursor:pointer;
+  opacity:0.7;
+}
+.back:hover{
+  color:#ffd700;
+  opacity:1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-layer bg-stars"></div>
+<div class="bg-layer bg-glow-blue"></div>
+<div class="bg-layer bg-glow-gold"></div>
+
+<div class="container">
+
+<div class="back" onclick="location.href='../index.html'">← HOME</div>
+
+<h1>STATISTICAL MECHANICS</h1>
+
+<!-- SEARCH -->
+<div class="search">
+  <input id="q" placeholder="search lectures...">
+  <div id="s" class="suggest"></div>
+</div>
+
+<!-- LECTURES -->
+<div class="item" onclick="location.href='../lectures/statmech/lecture1.html'">講義1</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture2.html'">講義2</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture3.html'">講義3</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture4.html'">講義4</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture5.html'">講義5</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture6.html'">講義6</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture7.html'">講義7</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture8.html'">講義8</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture9.html'">講義9</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture10.html'">講義10</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture11.html'">講義11</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture12.html'">講義12</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture13.html'">講義13</div>
+<div class="item" onclick="location.href='../lectures/statmech/lecture14.html'">講義14</div>
+
+</div>
+
+<script>
+const data = [
+  {k:"講義1",l:"../lectures/statmech/lecture1.html"},
+  {k:"講義2",l:"../lectures/statmech/lecture2.html"},
+  {k:"講義3",l:"../lectures/statmech/lecture3.html"},
+  {k:"講義4",l:"../lectures/statmech/lecture4.html"},
+  {k:"講義5",l:"../lectures/statmech/lecture5.html"},
+  {k:"講義6",l:"../lectures/statmech/lecture6.html"},
+  {k:"講義7",l:"../lectures/statmech/lecture7.html"},
+  {k:"講義8",l:"../lectures/statmech/lecture8.html"},
+  {k:"講義9",l:"../lectures/statmech/lecture9.html"},
+  {k:"講義10",l:"../lectures/statmech/lecture10.html"},
+  {k:"講義11",l:"../lectures/statmech/lecture11.html"},
+  {k:"講義12",l:"../lectures/statmech/lecture12.html"},
+  {k:"講義13",l:"../lectures/statmech/lecture13.html"},
+  {k:"講義14",l:"../lectures/statmech/lecture14.html"}
+];
+
+const q=document.getElementById("q");
+const s=document.getElementById("s");
+
+q.oninput=()=>{
+  let v=q.value.trim();
+  s.innerHTML="";
+  if(!v){s.style.display="none";return;}
+
+  let r=data.filter(d=>d.k.includes(v));
+  if(r.length===0){s.style.display="none";return;}
+
+  r.forEach(x=>{
+    let d=document.createElement("div");
+    d.textContent=x.k;
+    d.onclick=()=>location.href=x.l;
+    s.appendChild(d);
+  });
+
+  s.style.display="block";
+};
+</script>
+
+</body>
+</html>
