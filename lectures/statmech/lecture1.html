@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統計力学１ 復習ノート</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    tags: 'none'
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500&family=JetBrains+Mono&display=swap');
+
+  :root {
+    --ink:        #1a1a2e;
+    --ink-soft:   #3d3d5c;
+    --paper:      #f7f6f2;
+    --paper-dark: #eeece5;
+    --rule:       #c8c4b4;
+    --accent:     #2e5fa3;
+    --accent-lt:  #dce8f7;
+    --red:        #b03a2e;
+    --red-lt:     #faeae8;
+    --green:      #1e6b4a;
+    --green-lt:   #e4f4ed;
+    --gold:       #8a6d1e;
+    --gold-lt:    #fdf3d8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.85;
+    font-size: 15px;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 59px,
+      rgba(255,255,255,.04) 60px
+    );
+  }
+  header .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+    margin-bottom: .75rem;
+  }
+  header h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    position: relative;
+  }
+  header .subtitle {
+    margin-top: .5rem;
+    font-size: .88rem;
+    color: rgba(255,255,255,.55);
+    position: relative;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    background: var(--paper-dark);
+    border-bottom: 1px solid var(--rule);
+    padding: .6rem 2rem;
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  nav a {
+    font-size: .8rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+  nav a:hover { text-decoration: underline; }
+
+  /* ─── LAYOUT ─── */
+  main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 5rem;
+  }
+
+  /* ─── PARTS ─── */
+  .part-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 3.5rem;
+    margin-bottom: .3rem;
+  }
+  .part-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: .4rem;
+    margin-bottom: 2rem;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    margin-bottom: 2.8rem;
+  }
+  .section-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink);
+    padding: .35rem 0 .35rem .75rem;
+    border-left: 3px solid var(--accent);
+    margin-bottom: 1rem;
+  }
+  .subsection-title {
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin: 1.4rem 0 .5rem;
+    font-size: .95rem;
+  }
+  p { margin-bottom: .85rem; }
+
+  /* ─── CALLOUT BOXES ─── */
+  .box {
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: .93rem;
+  }
+  .box-def {
+    background: var(--accent-lt);
+    border-left: 4px solid var(--accent);
+  }
+  .box-example {
+    background: var(--gold-lt);
+    border-left: 4px solid var(--gold);
+  }
+  .box-answer {
+    background: var(--green-lt);
+    border-left: 4px solid var(--green);
+  }
+  .box-warn {
+    background: var(--red-lt);
+    border-left: 4px solid var(--red);
+  }
+  .box-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: .4rem;
+    opacity: .7;
+  }
+
+  /* ─── MATH DISPLAY ─── */
+  .math-block {
+    overflow-x: auto;
+    padding: .6rem 0;
+    text-align: center;
+  }
+
+  /* ─── TABLE ─── */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: .8rem 0;
+    font-size: .9rem;
+  }
+  th {
+    background: var(--ink);
+    color: #fff;
+    padding: .45rem .8rem;
+    text-align: center;
+    font-weight: 500;
+  }
+  td {
+    padding: .4rem .8rem;
+    border: 1px solid var(--rule);
+    text-align: center;
+  }
+  tr:nth-child(even) td { background: var(--paper-dark); }
+
+  /* ─── STEP BLOCKS ─── */
+  .steps { counter-reset: step; margin: .5rem 0; }
+  .step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    counter-increment: step;
+    flex-shrink: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    margin-top: .1rem;
+  }
+  .step-num::before { content: counter(step); }
+  .step-body { flex: 1; }
+
+  /* ─── CHECK MARK ─── */
+  .check { color: var(--green); font-weight: bold; }
+
+  /* ─── INLINE HIGHLIGHT ─── */
+  mark {
+    background: var(--gold-lt);
+    padding: 0 .2em;
+    border-radius: 2px;
+  }
+
+  /* ─── KEY TERM ─── */
+  .term {
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* ─── DIVIDER ─── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 2.5rem 0;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    font-size: .78rem;
+    color: var(--rule);
+    padding: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.4rem; }
+    .part-title { font-size: 1.2rem; }
+    main { padding: 1.5rem 1rem 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">統計力学１ ── 復習ノート</div>
+  <h1>確率・統計と統計力学の基礎</h1>
+  <div class="subtitle">授業ノート（16 Apr 2026）＋ 復習問題１ 解説</div>
+</header>
+
+<nav>
+  <a href="#part1">第1部：授業内容</a>
+  <a href="#sec-what">統計力学とは</a>
+  <a href="#sec-prob">確率と統計</a>
+  <a href="#sec-expect">期待値</a>
+  <a href="#part2">第2部：復習問題</a>
+  <a href="#q1">問題1</a>
+  <a href="#q2-1">問題2(1)</a>
+  <a href="#q2-2">問題2(2)</a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════ -->
+<div class="part-label">Part 01</div>
+<div class="part-title" id="part1">授業ノートの内容説明</div>
+
+<!-- ─ セクション1 ─ -->
+<div class="section" id="sec-what">
+  <div class="section-title">1. 統計力学とは何か</div>
+
+  <div class="subsection-title">なぜ統計力学が必要か？</div>
+  <p>日常で扱う物質（気体・液体・固体など）は、非常に大量の粒子からできています。</p>
+
+  <div class="box box-example">
+    <div class="box-title">例：アボガドロ定数</div>
+    <div class="math-block">$$N_A \approx 6.02 \times 10^{23} \text{ 個/mol}$$</div>
+    <p>1秒間に100万個ずつ数えたとしても、数え終わるのに約 $2 \times 10^{10}$ 年（200億年）かかります。<br>
+    ちなみに宇宙の年齢は約138億年。つまり、宇宙が始まってから今まで数え続けても終わらない！</p>
+  </div>
+
+  <div class="subsection-title">方程式は書けるが解けない</div>
+  <p>$N$個の粒子からなる系のラグランジアンは次のように書けます。</p>
+  <div class="math-block">
+    $$\mathcal{L} = \sum_{a=1}^{N} \frac{m}{2}|\dot{r}_a|^2 - \sum_{a < k} V(|r_a - r_k|)$$
+  </div>
+  <p>第1項が全粒子の<span class="term">運動エネルギー</span>の合計、第2項が粒子間の<span class="term">ポテンシャルエネルギー</span>（分子間ポテンシャル）です。これからラグランジュの運動方程式</p>
+  <div class="math-block">
+    $$\frac{d}{dt}\!\left(\frac{\partial \mathcal{L}}{\partial \dot{r}_a}\right) = \frac{\partial \mathcal{L}}{\partial r_a} \quad (a = 1, 2, \cdots, N)$$
+  </div>
+  <p>が導けます。方程式の形自体は書けますが、$N \sim 10^{23}$ 個の連立方程式を解くのは<mark>スーパーコンピュータでも不可能</mark>です。解析的に解けるのは $N=2$ の2体問題のみです。</p>
+
+  <div class="subsection-title">では、どうするのか？</div>
+  <p>ここが統計力学の核心的なアイデアです。「膨大さ」を<strong>逆に利用</strong>します。粒子数が多ければ多いほど、<span class="term">平均的な性質が安定して決まってくる</span>という事実を使います。</p>
+
+  <div class="box box-example">
+    <div class="box-title">直感的な例</div>
+    <p>サイコロを $N$ 回振ると、$N \to \infty$ で出た目の平均値は必ず $\dfrac{7}{2} = 3.5$ に収束します。一つ一つの目はバラバラでも、平均は決定論的に定まります。</p>
+  </div>
+
+  <div class="box box-def">
+    <div class="box-title">統計力学の基本方針</div>
+    <p style="text-align:center; font-size:1rem;">「膨大さ」 $\Rightarrow$ 「確率」を用いて物理量を「決定論的」に決められる</p>
+    <p style="margin-top:.5rem; font-size:.88rem; color:var(--ink-soft);">
+      一見「確率」と「決定論」は矛盾しているように見えますが、大数の法則によりこれが成立します。これが統計力学の出発点です。
+    </p>
+  </div>
+</div>
+
+<!-- ─ セクション2 ─ -->
+<div class="section" id="sec-prob">
+  <div class="section-title">2. 確率と統計の基礎知識</div>
+
+  <div class="subsection-title">用語の定義</div>
+
+  <div class="box box-def">
+    <div class="box-title">試行・事象・根元事象</div>
+    <p><span class="term">試行</span>：実験や観測を行う1回の操作</p>
+    <p><span class="term">根元事象</span>：1回の試行の結果（それ以上分割できない最小の結果）</p>
+    <p><span class="term">事象</span>：試行によって起こりうる結果をいくつか集めた集合（起こりえない結果を含んでいてもよい）</p>
+  </div>
+
+  <div class="box box-example">
+    <div class="box-title">例：サイコロを2回振る</div>
+    <p>$E_j$ を「$j$ の目が出ること」として、$(E_j, E_k)$ は「1回目に $j$、2回目に $k$ が出ること」を表します。根元事象は $(E_1,E_1),\,(E_1,E_2),\,\ldots,\,(E_6,E_6)$ の36通りです。</p>
+  </div>
+
+  <div class="subsection-title">標本空間と確率</div>
+
+  <div class="box box-def">
+    <div class="box-title">標本空間 Ω</div>
+    <p>すべての根元事象を集めた集合。</p>
+    <ul style="margin: .4rem 0 0 1.2rem; font-size:.92rem;">
+      <li>サイコロ1回：$\Omega = \{E_1, E_2, E_3, E_4, E_5, E_6\}$</li>
+      <li>サイコロ2回：$\Omega = \{(E_1,E_1),(E_1,E_2),\ldots,(E_6,E_6)\}$、$|\Omega| = 36$</li>
+    </ul>
+  </div>
+
+  <p>$\Omega$ 内のどの根元事象も同様に確からしいとき、事象 $A \subset \Omega$ の確率を</p>
+  <div class="math-block">$$P(A) := \frac{|A|}{|\Omega|}$$</div>
+  <p>と定義します（$|X|$ は集合 $X$ の元の数）。</p>
+
+  <div class="box box-example">
+    <div class="box-title">例：サイコロ2回投げ</div>
+    <p>$A$：「1回目も2回目も5以上が出る」事象</p>
+    <div class="math-block">$$A = \{(E_5,E_5),\,(E_5,E_6),\,(E_6,E_5),\,(E_6,E_6)\}, \quad |A|=4$$</div>
+    <div class="math-block">$$P(A) = \frac{|A|}{|\Omega|} = \frac{4}{36} = \frac{1}{9}$$</div>
+  </div>
+
+  <div class="subsection-title">確率変数と確率分布</div>
+
+  <div class="box box-def">
+    <div class="box-title">定義</div>
+    <p><span class="term">確率変数</span>：変数 $X$ の各値に確率が付随しているとき、$X$ を確率変数と呼ぶ</p>
+    <p><span class="term">確率分布</span>：確率変数の取る値とその確率の対応関係の全体</p>
+  </div>
+
+  <div class="box box-example">
+    <div class="box-title">例：サイコロ1回投げ（X = 出た目）</div>
+    <table>
+      <tr>
+        <th>$X$</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th>
+      </tr>
+      <tr>
+        <td>確率</td>
+        <td>$\frac{1}{6}$</td><td>$\frac{1}{6}$</td><td>$\frac{1}{6}$</td>
+        <td>$\frac{1}{6}$</td><td>$\frac{1}{6}$</td><td>$\frac{1}{6}$</td>
+      </tr>
+    </table>
+  </div>
+
+  <p>確率変数 $X$ が値 $x$ をとる確率を $x$ の関数として</p>
+  <div class="math-block">$$P(X=x) = f(x) \quad \text{（}X\text{ が離散的な場合）}$$</div>
+  <p>と書きます。この $f(x)$ を<span class="term">確率質量関数</span>と呼び、次の2条件を満たします。</p>
+  <div class="math-block">$$\text{(i)}\; f(x) \geq 0 \qquad \text{(ii)}\; \sum_x f(x) = 1$$</div>
+
+  <div class="subsection-title">連続変数の場合</div>
+  <p>$X$ が連続的な値をとるとき、確率は</p>
+  <div class="math-block">$$P(a \leq X \leq b) = \int_a^b f(x)dx$$</div>
+  <p>で与えられます。$f(x)$ は<span class="term">確率密度関数</span>と呼ばれ、次を満たします。</p>
+  <div class="math-block">$$\text{(i)}\; f(x) \geq 0 \qquad \text{(ii)}\; \int_{-\infty}^{\infty} f(x)dx = 1$$</div>
+
+  <div class="subsection-title">ガウス分布（正規分布）</div>
+  <div class="math-block">
+    $$f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$$
+  </div>
+  <ul style="margin: 0 0 .8rem 1.4rem; font-size:.93rem; line-height:2;">
+    <li>$\mu$：分布の中心（平均）</li>
+    <li>$\sigma$：分布の広がりの目安（標準偏差）</li>
+    <li>$\mu \pm \sigma$ の範囲に入る確率 $\approx 0.683$（約68.3%）</li>
+  </ul>
+</div>
+
+<!-- ─ セクション3 ─ -->
+<div class="section" id="sec-expect">
+  <div class="section-title">3. 期待値（平均値）</div>
+
+  <div class="box box-def">
+    <div class="box-title">期待値の定義</div>
+    <p><strong>離散の場合：</strong></p>
+    <div class="math-block">$$E(X) = \sum_x x \cdot f(x) =: \mu$$</div>
+    <p><strong>連続の場合：</strong></p>
+    <div class="math-block">$$E(X) := \int_{-\infty}^{\infty} x \cdot f(x)dx =: \mu$$</div>
+    <p style="font-size:.9rem; margin-top:.4rem;">「各値 × その値が出る確率」をすべて足し合わせたもの。長い目で見たときの<span class="term">平均的な値</span>を表します。期待値のことを<span class="term">平均値</span>とも呼びます。</p>
+  </div>
+
+  <div class="box box-example">
+    <div class="box-title">例：宝くじ</div>
+    <p>$E(X) \approx 150$ 円（年末ジャンボの場合）。1枚300円なので、統計的には買えば買うほど損だとわかります。</p>
+  </div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════ -->
+<div class="part-label">Part 02</div>
+<div class="part-title" id="part2">復習問題の詳細解説</div>
+
+<!-- ─ 問題1 ─ -->
+<div class="section" id="q1">
+  <div class="section-title">問題1：穴埋め問題</div>
+
+  <div class="box box-warn">
+    <div class="box-title">問題文</div>
+    <p>熱力学とは，[ (1-1) ] な物理量の間に成立する普遍的な関係式を現象論的に考察する学問である．これに対し統計力学とは，力学や量子力学など系を構成する要素に成立する [ (1-2) ] な法則に基づき，系の [ (1-3) ] な性質を論ずる学問である．</p>
+    <p style="margin-top:.6rem; font-size:.88rem;">選択肢：(a) 巨視的　(b) 微視的</p>
+  </div>
+
+  <div class="subsection-title">解説</div>
+  <p>「<span class="term">巨視的（マクロ）</span>」と「<span class="term">微視的（ミクロ）</span>」の違いを理解することが鍵です。</p>
+  <ul style="margin: .3rem 0 .8rem 1.4rem; line-height:2.1; font-size:.93rem;">
+    <li><strong>巨視的（マクロ）</strong>：温度・圧力・体積・エントロピーなど、人間が直接測定・観測できるスケールの量</li>
+    <li><strong>微視的（ミクロ）</strong>：原子・分子1個1個の位置・速度・エネルギーなど、目に見えないスケールの量</li>
+  </ul>
+  <p>熱力学は「温度が上がれば体積が増える」といったマクロな量同士の関係式を、その背後にある原子の動きを考えずに（現象論的に）扱います。一方、統計力学はミクロな力学法則から出発し、多数の粒子が集まったときにマクロな性質がどう現れるかを導く学問です。</p>
+
+  <div class="box box-answer">
+    <div class="box-title">解答</div>
+    <p><strong>(1-1) 巨視的</strong>　　<strong>(1-2) 微視的</strong>　　<strong>(1-3) 巨視的</strong></p>
+  </div>
+</div>
+
+<!-- ─ 問題2(1) ─ -->
+<div class="section" id="q2-1">
+  <div class="section-title">問題2(1)：玉の取り出し問題</div>
+
+  <div class="box box-warn">
+    <div class="box-title">問題文</div>
+    <p>袋の中に赤玉3個・白玉2個が入っている。戻さずに2個取り出す。赤玉1個につき2点。総得点 $X$ の期待値 $E(X)$ を求めよ。</p>
+  </div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-body">
+        <strong>$X$ のとりうる値を列挙する</strong>
+        <p style="margin-top:.4rem;">2個取り出すとき、赤玉の個数は 0, 1, 2 個のいずれかなので、</p>
+        <div class="math-block">$$X = 0 \quad \text{または} \quad X = 2 \quad \text{または} \quad X = 4$$</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-body">
+        <strong>それぞれの確率を求める</strong>
+        <p style="margin-top:.4rem;">「戻さずに取り出す」ので、1回目に取り出した玉は袋に戻しません。最初に袋の中には計5個あります。</p>
+
+        <p><strong>$P(X=0)$：赤玉0個 = 白玉2個を取り出す確率</strong></p>
+        <ul style="margin: 0 0 .6rem 1.4rem; font-size:.92rem;">
+          <li>1回目に白玉を取る確率：$\dfrac{2}{5}$（5個中白が2個）</li>
+          <li>2回目に白玉を取る確率：$\dfrac{1}{4}$（残り4個中白が1個）</li>
+        </ul>
+        <div class="math-block">$$P(X=0) = \frac{2}{5} \times \frac{1}{4} = \frac{2}{20} = \frac{1}{10}$$</div>
+
+        <p><strong>$P(X=4)$：赤玉2個を取り出す確率</strong></p>
+        <ul style="margin: 0 0 .6rem 1.4rem; font-size:.92rem;">
+          <li>1回目に赤玉を取る確率：$\dfrac{3}{5}$（5個中赤が3個）</li>
+          <li>2回目に赤玉を取る確率：$\dfrac{2}{4}$（残り4個中赤が2個）</li>
+        </ul>
+        <div class="math-block">$$P(X=4) = \frac{3}{5} \times \frac{2}{4} = \frac{6}{20} = \frac{3}{10}$$</div>
+
+        <p><strong>$P(X=2)$：赤玉1個を取り出す確率</strong></p>
+        <p style="font-size:.92rem;">赤玉1個・白玉1個を取り出すパターンは2通りあります：</p>
+        <ul style="margin: 0 0 .6rem 1.4rem; font-size:.92rem;">
+          <li>パターンA：1回目が赤、2回目が白 $\to \dfrac{3}{5} \times \dfrac{2}{4} = \dfrac{6}{20}$</li>
+          <li>パターンB：1回目が白、2回目が赤 $\to \dfrac{2}{5} \times \dfrac{3}{4} = \dfrac{6}{20}$</li>
+        </ul>
+        <div class="math-block">$$P(X=2) = \frac{6}{20} + \frac{6}{20} = \frac{12}{20} = \frac{3}{5}$$</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-body">
+        <strong>確率の和を確認する</strong>
+        <div class="math-block">$$\frac{1}{10} + \frac{3}{5} + \frac{3}{10} = \frac{1}{10} + \frac{6}{10} + \frac{3}{10} = \frac{10}{10} = 1 \quad \checkmark$$</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-body">
+        <strong>期待値を計算する</strong>
+        <div class="math-block">
+          $$E(X) = \sum_X X \cdot P(X) = 0 \times \frac{1}{10} + 2 \times \frac{3}{5} + 4 \times \frac{3}{10}$$
+        </div>
+        <div class="math-block">
+          $$= 0 + \frac{6}{5} + \frac{12}{10} = \frac{12}{10} + \frac{12}{10} = \frac{24}{10}$$
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="box box-answer">
+    <div class="box-title">解答</div>
+    <div class="math-block">$$E(X) = \frac{12}{5} = 2.4$$</div>
+  </div>
+</div>
+
+<!-- ─ 問題2(2) ─ -->
+<div class="section" id="q2-2">
+  <div class="section-title">問題2(2)：ガウス分布の期待値</div>
+
+  <div class="box box-warn">
+    <div class="box-title">問題文</div>
+    <div class="math-block">$$f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$$</div>
+    <p>のとき、$E(X)$ を求めよ。</p>
+    <p style="margin-top:.5rem; font-size:.88rem;">ヒント：$\displaystyle\int_{-\infty}^{\infty} e^{-ax^2}dx = \sqrt{\dfrac{\pi}{a}}\;(a>0)$</p>
+  </div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-body">
+        <strong>期待値の定義式を書く</strong>
+        <div class="math-block">
+          $$E(X) = \int_{-\infty}^{\infty} x \cdot f(x)dx = \frac{1}{\sqrt{2\pi\sigma^2}} \int_{-\infty}^{\infty} x \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)dx$$
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-body">
+        <strong>置換する</strong>
+        <p style="margin-top:.4rem;">$y = x - \mu$（つまり $x = y + \mu$）とおくと、$dx = dy$、積分範囲は変わらず $-\infty$ から $\infty$ です。</p>
+        <div class="math-block">
+          $$E(X) = \frac{1}{\sqrt{2\pi\sigma^2}} \int_{-\infty}^{\infty} (y + \mu) \exp\!\left(-\frac{y^2}{2\sigma^2}\right)dy$$
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-body">
+        <strong>積分を2つに分割する</strong>
+        <div class="math-block">
+          $$E(X) = \underbrace{\frac{1}{\sqrt{2\pi\sigma^2}} \int_{-\infty}^{\infty} y \exp\!\left(-\frac{y^2}{2\sigma^2}\right)dy}_{\text{第1項}} + \underbrace{\frac{\mu}{\sqrt{2\pi\sigma^2}} \int_{-\infty}^{\infty} \exp\!\left(-\frac{y^2}{2\sigma^2}\right)dy}_{\text{第2項}}$$
+        </div>
+
+        <p><strong>第1項について：</strong></p>
+        <p>被積分関数 $y \exp\!\left(-\dfrac{y^2}{2\sigma^2}\right)$ は<span class="term">奇関数</span>です（$y$ を $-y$ に変えると符号が反転する）。奇関数を $-\infty$ から $\infty$ まで積分すると必ず0になります。</p>
+        <div class="math-block">$$\int_{-\infty}^{\infty} y \exp\!\left(-\frac{y^2}{2\sigma^2}\right)dy = 0$$</div>
+
+        <p><strong>第2項について：</strong></p>
+        <p>$a = \dfrac{1}{2\sigma^2}$ とおくと、ヒントの公式より</p>
+        <div class="math-block">$$\int_{-\infty}^{\infty} \exp\!\left(-\frac{y^2}{2\sigma^2}\right)dy = \sqrt{\frac{\pi}{1/(2\sigma^2)}} = \sqrt{2\pi\sigma^2}$$</div>
+        <div class="math-block">$$\text{第2項} = \frac{\mu}{\sqrt{2\pi\sigma^2}} \times \sqrt{2\pi\sigma^2} = \mu$$</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-body">
+        <strong>まとめる</strong>
+        <div class="math-block">$$E(X) = 0 + \mu$$</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="box box-answer">
+    <div class="box-title">解答</div>
+    <div class="math-block">$$E(X) = \mu$$</div>
+  </div>
+
+  <div class="box box-def">
+    <div class="box-title">この結果の意味</div>
+    <p>ガウス分布のパラメータ $\mu$ は、そのまま<span class="term">分布の期待値（平均値）</span>になっています。グラフで見てもガウス分布は $x = \mu$ を中心に左右対称なので、平均が $\mu$ になるのは直感的にも自然です。</p>
+  </div>
+
+</div>
+
+</main>
+
+<footer>統計力学１ 復習ノート ── generated from lecture notes &amp; 復習問題１</footer>
+
+</body>
+</html>

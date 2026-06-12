@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統計力学１ — 復習問題２ 解説ノート</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+// MathJax configuration
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    packages: {'[+]': ['boldsymbol']}
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-cml.js" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --ink:       #1a1a2e;
+    --ink-soft:  #3d3d5c;
+    --paper:     #f7f6f2;
+    --paper-2:   #eeecea;
+    --rule:      #d4d0c8;
+    --accent-1:  #2e5fa3;   /* deep blue — theory */
+    --accent-2:  #b5451b;   /* red — important box */
+    --accent-3:  #2a7a4b;   /* green — solved result */
+    --accent-4:  #6b3fa0;   /* purple — definition */
+    --highlight: #fff3cd;
+    --mono:      'JetBrains Mono', monospace;
+    --serif:     'Noto Serif JP', serif;
+    --sans:      'Noto Sans JP', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 17px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.85;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 2rem;
+    height: 52px;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    border-bottom: 3px solid var(--accent-1);
+  }
+  nav .brand {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    margin-right: auto;
+    white-space: nowrap;
+  }
+  nav a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    padding: 0 0.9rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s, background 0.15s;
+  }
+  nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    color: #fff;
+    padding: 4rem 2rem 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(46,95,163,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    margin-bottom: 1.1rem;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.8rem;
+  }
+  .hero p {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* ── LAYOUT ── */
+  .page-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+
+  /* ── PART DIVIDER ── */
+  .part-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3.5rem 0 2rem;
+  }
+  .part-divider .part-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent-1);
+    padding: 0.25em 0.8em;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .part-divider h2 {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .part-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 2.8rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--rule);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--accent-1);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .section p { margin-bottom: 0.9rem; color: var(--ink-soft); }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── KEY BOX ── */
+  .key-box {
+    border-left: 4px solid var(--accent-2);
+    background: #fdf4f1;
+    padding: 1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1.2rem 0;
+    font-size: 0.95rem;
+  }
+  .key-box .key-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 0.4rem;
+  }
+  .key-box p { color: var(--ink); margin-bottom: 0; }
+
+  /* definition box */
+  .def-box {
+    border-left: 4px solid var(--accent-4);
+    background: #f5f0fb;
+    padding: 1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1.2rem 0;
+    font-size: 0.95rem;
+  }
+  .def-box .def-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-4);
+    margin-bottom: 0.4rem;
+  }
+
+  /* result box */
+  .result-box {
+    border: 2px solid var(--accent-3);
+    background: #f0faf5;
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    margin: 1.2rem 0;
+    font-size: 0.95rem;
+  }
+  .result-box .result-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-3);
+    margin-bottom: 0.4rem;
+  }
+
+  /* formula box */
+  .formula-box {
+    background: var(--ink);
+    color: #e8e8f0;
+    padding: 1.1rem 1.4rem;
+    border-radius: 6px;
+    margin: 1.2rem 0;
+    overflow-x: auto;
+    font-size: 1.05rem;
+    text-align: center;
+  }
+  .formula-box .MathJax { color: #e8e8f0 !important; }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 0.15em 0.55em;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 0.3em;
+  }
+  .tag-blue  { background: #dbeafe; color: var(--accent-1); }
+  .tag-red   { background: #fee2d5; color: var(--accent-2); }
+  .tag-green { background: #d1fae5; color: var(--accent-3); }
+
+  /* ── TWO-COL TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: 0.9rem;
+  }
+  .compare-table th {
+    background: var(--ink);
+    color: #fff;
+    padding: 0.6rem 1rem;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-align: center;
+  }
+  .compare-table td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .compare-table tr:nth-child(even) td { background: var(--paper-2); }
+
+  /* ── STEP LIST ── */
+  .step-list { list-style: none; margin: 1rem 0; }
+  .step-list li {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 2em;
+    height: 2em;
+    background: var(--accent-1);
+    color: #fff;
+    border-radius: 50%;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.1em;
+  }
+  .step-body { flex: 1; color: var(--ink-soft); }
+  .step-body strong { color: var(--ink); }
+
+  /* ── Q&A CARD ── */
+  .qa-card {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  .qa-question {
+    background: var(--paper-2);
+    padding: 1rem 1.25rem;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .qa-question .q-badge {
+    flex-shrink: 0;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    background: var(--accent-1);
+    color: #fff;
+    padding: 0.2em 0.55em;
+    border-radius: 3px;
+    margin-top: 0.15em;
+  }
+  .qa-answer {
+    padding: 1.25rem;
+    background: #fff;
+  }
+  .qa-answer p { color: var(--ink-soft); margin-bottom: 0.8rem; }
+  .qa-answer p:last-child { margin-bottom: 0; }
+
+  /* ── NOTE ── */
+  .note {
+    background: var(--highlight);
+    border-left: 3px solid #e6a817;
+    padding: 0.75rem 1rem;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.87rem;
+    color: #5a4a00;
+    margin: 1rem 0;
+  }
+  .note strong { color: #3d3300; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    font-size: 0.78rem;
+    color: rgba(0,0,0,0.35);
+    padding: 2rem 1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    nav a { display: none; }
+    nav a.mobile-show { display: flex; }
+    .hero { padding: 2.5rem 1.2rem 2rem; }
+    .page-wrap { padding: 0 1rem 4rem; }
+    .formula-box { font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">統計力学１</span>
+  <a href="#knowledge">基礎知識</a>
+  <a href="#problems">復習問題</a>
+  <a href="#q1">問題１</a>
+  <a href="#q2">問題２</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Statistical Mechanics I — 復習問題２</div>
+  <h1>基礎知識 &amp; 解説ノート</h1>
+  <p>相空間・典型状態・小正準分布・調和振動子を初学者向けに丁寧に解説します。</p>
+</div>
+
+<div class="page-wrap">
+
+  <!-- ══════════════ PART 1 ══════════════ -->
+  <div class="part-divider" id="knowledge">
+    <span class="part-label">Part 1</span>
+    <h2>復習問題に必要な基礎知識</h2>
+  </div>
+
+  <!-- §1 ミクロ・マクロ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">§ 1</span>
+      <span class="section-title">微視的状態と巨視的状態</span>
+    </div>
+    <p>統計力学を理解するための出発点として、<strong>ミクロな状態</strong>と<strong>マクロな状態</strong>の違いを押さえましょう。気体を例に考えます。</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>種類</th>
+          <th>内容</th>
+          <th>例（気体）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-blue">ミクロ</span>微視的状態</td>
+          <td>全粒子の位置 $\mathbf{r}_j$ と運動量 $\mathbf{p}_j$ を完全に記述した状態</td>
+          <td>各分子がどこにいて、どの速度で飛んでいるかを全て指定</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-red">マクロ</span>巨視的状態</td>
+          <td>温度・圧力・体積・粒子数など人間が測れる量で記述した状態</td>
+          <td>$(T, V, N)$ や $(E, V, N)$ で指定</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-box">
+      <div class="key-label">重要</div>
+      <p>同じマクロな状態 $(E, V, N)$ に対して、それを実現するミクロな状態は<strong>膨大な数</strong>だけ存在します。しかし私たちにはどのミクロな状態にあるかは区別できません。</p>
+    </div>
+  </div>
+
+  <!-- §2 典型・非典型 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">§ 2</span>
+      <span class="section-title">典型状態と非典型状態</span>
+    </div>
+    <p>エネルギーが $[E, E+\delta E]$、体積 $V$、粒子数 $N$ で指定される系の、ミクロな状態の総数を $W(E,V,N)$ とします。これらを2種類に分けます。</p>
+
+    <div class="def-box">
+      <div class="def-label">定義：典型状態（Typical State）</div>
+      <p><strong>平衡状態とマクロ量から区別できない</strong>状態のことです。その状態を見ても「これは平衡状態だ」と判断できます。数を $W_{eq}(E,V,N)$ と書きます。</p>
+      <p style="margin-top:0.4rem; font-size:0.88rem; color:#4a3f6b;">例：分子が容器全体にほぼ均一に広がっている状態。</p>
+    </div>
+
+    <div class="def-box">
+      <div class="def-label">定義：非典型状態 / 例外状態（Atypical State）</div>
+      <p><strong>平衡状態とマクロ量から区別できる</strong>状態のことです。明らかに平衡状態ではないと分かります。数を $W_{neq}(E,V,N)$ と書きます。</p>
+      <p style="margin-top:0.4rem; font-size:0.88rem; color:#4a3f6b;">例：気体の全分子が容器の左半分だけに集まっている状態。</p>
+    </div>
+
+    <p>全状態数は典型状態と非典型状態に分けられるので：</p>
+    <div class="formula-box">
+      $$W(E,V,N) = W_{eq}(E,V,N) + W_{neq}(E,V,N)$$
+    </div>
+
+    <div class="key-box">
+      <div class="key-label">最重要事実</div>
+      <p>巨視的な系（$N \sim 10^{23}$）では：</p>
+      <div style="text-align:center; font-size:1.1rem; margin:0.6rem 0;">$$W_{eq} \gg W_{neq}$$</div>
+      <p>典型状態の数は非典型状態の数と比べて<strong>圧倒的に多い</strong>です。<br>
+      例えば、全粒子が左半分に集まる確率は $\dfrac{1}{2^N} \approx \dfrac{1}{2^{10^{23}}} \approx 0$ です。宇宙中の物質を集めてサンプルをいくら作っても、こんな状態は実現しないほど小さい確率です。</p>
+    </div>
+  </div>
+
+  <!-- §3 小正準分布 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">§ 3</span>
+      <span class="section-title">小正準分布（等重率の原理）</span>
+    </div>
+    <p>系は実際にどのミクロな状態にあるのでしょうか？ここで<strong>小正準分布</strong>の仮定を導入します。</p>
+
+    <div class="def-box">
+      <div class="def-label">定義：小正準分布</div>
+      <p>$(E, E+\delta E, V, N)$ で指定されるすべてのミクロな状態 $j$ が<strong>等しい確率</strong>で現れるという仮定（等重率の原理）：</p>
+      <div style="text-align:center; font-size:1.05rem; margin-top:0.6rem;">$$P_j = \frac{1}{W(E,V,N)}$$</div>
+    </div>
+
+    <p><strong>なぜこれでよいか？</strong><br>
+    私たちが知りたいのは「圧力・温度などの平均的な性質」です。$W_{eq} \gg W_{neq}$ なので $W \approx W_{eq}$ とみなせます。つまり状態をランダムに1つ選ぶと、ほぼ確実に典型状態（＝平衡状態と区別できない状態）が選ばれます。だから各状態の確率を $\frac{1}{W}$ として計算しても、平均的性質が正しく得られるのです。</p>
+  </div>
+
+  <!-- §4 相空間 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">§ 4</span>
+      <span class="section-title">相空間（Phase Space）</span>
+    </div>
+    <p>問題２に必要な概念です。質量 $m$ の $N$ 個の粒子からなる系のハミルトニアンは：</p>
+    <div class="formula-box">
+      $$\mathcal{H} = \sum_{j=1}^{N} \frac{|\mathbf{p}_j|^2}{2m} + V(\mathbf{r}_1, \mathbf{r}_2, \ldots, \mathbf{r}_N)$$
+    </div>
+
+    <p>ここで $\mathbf{r}_j$ は粒子 $j$ の位置（3成分）、$\mathbf{p}_j$ は運動量（3成分）です。</p>
+
+    <div class="def-box">
+      <div class="def-label">定義：相空間（Phase Space）</div>
+      <p>全粒子の位置と運動量を座標軸にした空間です。</p>
+      <ul style="margin-top:0.5rem; padding-left:1.5rem; color:#3d3d5c;">
+        <li>位置のパラメータ：$3N$ 個</li>
+        <li>運動量のパラメータ：$3N$ 個</li>
+        <li>合計：<strong>$6N$ 次元空間</strong></li>
+      </ul>
+      <p style="margin-top:0.5rem;">系のある瞬間のミクロな状態は、この $6N$ 次元空間の<strong>1点</strong>に対応します。</p>
+    </div>
+
+    <p>孤立系ではエネルギーが一定なので、系の状態はこの相空間の中の「等エネルギー面（$\mathcal{H} = E$ という $(6N-1)$ 次元の超曲面）」上の点として表されます。</p>
+
+    <div class="note">
+      <strong>古典統計力学での状態数：</strong>古典力学では、状態数は相空間の体積（面積・超体積）に比例すると考えます。
+    </div>
+  </div>
+
+  <!-- §5 緩和 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">§ 5</span>
+      <span class="section-title">平衡状態への緩和（熱化）</span>
+    </div>
+    <p>非典型状態（例：全分子が左半分に集まった状態）から出発しても、時間が経てば典型状態の「海」に入り込み、2度と初期状態には戻りません。これを<strong>平衡状態への緩和（熱化）</strong>と言います。</p>
+    <p>なぜか？相空間の等エネルギー面のほぼ全てが典型状態で占められているからです。系は時間発展とともに等エネルギー面上を動き回りますが、どこへ行っても典型状態ばかりなので、結果的に平衡状態に落ち着きます。</p>
+
+    <div class="key-box">
+      <div class="key-label">まとめイメージ</div>
+      <p style="font-family: var(--mono); font-size:0.82rem; line-height:2; background: #1a1a2e; color: #e0e0f0; padding: 0.8rem 1rem; border-radius: 4px; margin-top:0.5rem;">
+        相空間の等エネルギー面<br>
+        ┌────────────────────────────────────┐<br>
+        │  ×  ×  ×  ×  ×  ×  ×  ×  ×  ×   │ ← 典型状態（圧倒的多数）<br>
+        │  ×  ×  ×  ×  ×  ×  ×  ×  ×  ×   │<br>
+        │  ×  ×  <span style="color:#f87171;">○  ○</span>  ×  ×  ×  ×  ×  ×   │ ← <span style="color:#f87171;">○ 非典型状態（ごく少数）</span><br>
+        │  ×  ×  ×  ×  ×  ×  ×  ×  ×  ×   │<br>
+        └────────────────────────────────────┘<br>
+        　初期状態が○でも → すぐに × の海に入り込む
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════ PART 2 ══════════════ -->
+  <div class="part-divider" id="problems">
+    <span class="part-label">Part 2</span>
+    <h2>復習問題の詳しい解説</h2>
+  </div>
+
+  <!-- 問題1 -->
+  <div class="section" id="q1">
+    <div class="section-header">
+      <span class="section-num">問題 1</span>
+      <span class="section-title">小正準分布と典型状態</span>
+    </div>
+
+    <!-- Q1(1) -->
+    <div class="qa-card">
+      <div class="qa-question">
+        <span class="q-badge">問 1</span>
+        <span>$W(E, V, N)$ を $W_{eq}(E,V,N)$ と $W_{neq}(E,V,N)$ を用いて表わせ。</span>
+      </div>
+      <div class="qa-answer">
+        <p><strong>考え方：</strong>全てのミクロな状態は、典型状態と非典型状態のどちらか一方です。この2つは重複なく（排他的）、かつ全体を覆います（網羅的）。</p>
+        <p>したがって、全状態数＝典型状態数＋非典型状態数という単純な足し算が成り立ちます：</p>
+        <div class="result-box">
+          <div class="result-label">解答</div>
+          $$W(E,V,N) = W_{eq}(E,V,N) + W_{neq}(E,V,N)$$
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1(2) -->
+    <div class="qa-card">
+      <div class="qa-question">
+        <span class="q-badge">問 2</span>
+        <span>小正準分布における確率 $P_j$ を $W(E,V,N)$ を用いて表わせ。</span>
+      </div>
+      <div class="qa-answer">
+        <p><strong>考え方：</strong>小正準分布の定義そのものです。全状態が等確率で現れるので、全状態数 $W(E,V,N)$ 個の状態それぞれに確率 $P_j$ を割り当てると、確率の総和が1でなければなりません：</p>
+        <div class="formula-box">
+          $$\sum_j P_j = W(E,V,N) \times P_j = 1$$
+        </div>
+        <div class="result-box">
+          <div class="result-label">解答</div>
+          $$P_j = \frac{1}{W(E,V,N)}$$
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1(3) -->
+    <div class="qa-card">
+      <div class="qa-question">
+        <span class="q-badge">問 3</span>
+        <span>選ばれた状態が典型状態である確率を求め、その確率がほとんど１となることを説明せよ。</span>
+      </div>
+      <div class="qa-answer">
+        <p><strong>ステップ１：確率の計算</strong></p>
+        <p>典型状態は $W_{eq}(E,V,N)$ 個あり、それぞれの確率は $P_j = \frac{1}{W(E,V,N)}$ です。典型状態である確率 $P_{eq}$ は、典型状態の数 × 各状態の確率なので：</p>
+        <div class="formula-box">
+          $$P_{eq} = W_{eq}(E,V,N) \times \frac{1}{W(E,V,N)} = \frac{W_{eq}(E,V,N)}{W(E,V,N)}$$
+        </div>
+        <p>問(1)の結果を分母に代入すると：</p>
+        <div class="formula-box">
+          $$P_{eq} = \frac{W_{eq}(E,V,N)}{W_{eq}(E,V,N) + W_{neq}(E,V,N)}$$
+        </div>
+
+        <p style="margin-top:1rem;"><strong>ステップ２：ほぼ１であることの説明</strong></p>
+        <p>巨視的な系（$N \sim 10^{23}$）では $W_{neq} \ll W_{eq}$ が成り立ちます。これを利用すると：</p>
+        <div class="formula-box">
+          $$P_{eq} = \frac{W_{eq}}{W_{eq} + W_{neq}} = \frac{1}{1 + \dfrac{W_{neq}}{W_{eq}}} \approx \frac{1}{1 + 0} = 1$$
+        </div>
+        <div class="result-box">
+          <div class="result-label">解答</div>
+          $$P_{eq} \simeq 1$$
+          <p style="margin-top:0.5rem;">「小正準分布にしたがってランダムにミクロな状態を１つ選んだとき、それはほぼ確実に典型状態である」ということです。これが統計力学の基礎となる重要な事実です。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 問題2 -->
+  <div class="section" id="q2">
+    <div class="section-header">
+      <span class="section-num">問題 2</span>
+      <span class="section-title">１次元調和振動子の相空間</span>
+    </div>
+
+    <p>1次元調和振動子のハミルトニアン：</p>
+    <div class="formula-box">
+      $$H(x, p) = \frac{p^2}{2m} + \frac{1}{2}kx^2$$
+    </div>
+
+    <!-- Q2(1) -->
+    <div class="qa-card">
+      <div class="qa-question">
+        <span class="q-badge">問 1</span>
+        <span>エネルギーが $[E, E + \delta E]$ の範囲にあるとき、対応する相空間の体積（面積）を求めよ。</span>
+      </div>
+      <div class="qa-answer">
+        <ul class="step-list">
+          <li>
+            <span class="step-num">1</span>
+            <div class="step-body">
+              <strong>等エネルギー曲線の形を調べる</strong><br>
+              エネルギーが $E$ 以下の領域は $H \leq E$：
+              $$\frac{p^2}{2m} + \frac{1}{2}kx^2 \leq E$$
+              標準形に書き直すと：
+              $$\frac{x^2}{\dfrac{2E}{k}} + \frac{p^2}{2mE} \leq 1$$
+              これは $(x, p)$ 平面（2次元相空間）上の<strong>楕円</strong>です！
+            </div>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <div class="step-body">
+              <strong>楕円の半軸を求める</strong><br>
+              $x$ 方向の半軸：$\displaystyle a = \sqrt{\frac{2E}{k}}$<br>
+              $p$ 方向の半軸：$b = \sqrt{2mE}$
+            </div>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <div class="step-body">
+              <strong>エネルギー $E$ 以下の面積 $\Gamma(E)$ を求める</strong><br>
+              楕円 $\dfrac{x^2}{a^2} + \dfrac{p^2}{b^2} = 1$ の面積は $\pi ab$ なので：
+              $$\Gamma(E) = \pi ab = \pi \sqrt{\frac{2E}{k}} \cdot \sqrt{2mE} = 2\pi E\sqrt{\frac{m}{k}}$$
+            </div>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <div class="step-body">
+              <strong>エネルギーシェル $[E, E+\delta E]$ の面積を求める</strong><br>
+              求める面積は $\Gamma(E+\delta E) - \Gamma(E)$ です。<br>
+              $\delta E$ が十分小さいとき、微分で近似できます：
+              $$\Gamma(E+\delta E) - \Gamma(E) \approx \frac{d\Gamma}{dE} \cdot \delta E = \frac{d}{dE}\left(2\pi E\sqrt{\frac{m}{k}}\right) \cdot \delta E$$
+            </div>
+          </li>
+        </ul>
+        <div class="result-box">
+          <div class="result-label">解答</div>
+          $$\Gamma(E+\delta E) - \Gamma(E) = 2\pi\sqrt{\frac{m}{k}}\,\delta E$$
+          <p style="margin-top:0.5rem;">この結果は $E$ に依存しない定数（×$\delta E$）です。つまり、エネルギーがどこにあっても同じ幅 $\delta E$ のシェルの面積は一定です。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2(2) -->
+    <div class="qa-card">
+      <div class="qa-question">
+        <span class="q-badge">問 2</span>
+        <span>エネルギーが $[0, E]$ の状態数と $[0, 2E]$ の状態数では、どちらが何倍大きいか。</span>
+      </div>
+      <div class="qa-answer">
+        <p><strong>考え方：</strong>古典力学では「状態数は相空間の体積（面積）に比例する」という仮定を使います。</p>
+
+        <p>$[0, E]$ の面積：</p>
+        <div class="formula-box">
+          $$\Gamma(E) = 2\pi E\sqrt{\frac{m}{k}}$$
+        </div>
+        <p>$[0, 2E]$ の面積：$E$ を $2E$ に置き換えるだけ：</p>
+        <div class="formula-box">
+          $$\Gamma(2E) = 2\pi (2E)\sqrt{\frac{m}{k}} = 2 \times 2\pi E\sqrt{\frac{m}{k}} = 2\Gamma(E)$$
+        </div>
+        <p>状態数は面積に比例するので：</p>
+        <div class="formula-box">
+          $$\frac{W_{[0,2E]}}{W_{[0,E]}} = \frac{\Gamma(2E)}{\Gamma(E)} = 2$$
+        </div>
+        <div class="result-box">
+          <div class="result-label">解答</div>
+          <p>エネルギーが $[0, 2E]$ の範囲にあるときの状態数は、$[0, E]$ の範囲にあるときの状態数の <strong>2倍</strong>大きい。</p>
+        </div>
+        <div class="note" style="margin-top:1rem;">
+          <strong>直感的な理解：</strong>$\Gamma(E) \propto E$ という線形の関係があるため、エネルギー範囲を2倍にすれば状態数もちょうど2倍になります。なお、3次元の理想気体では $\Gamma(E) \propto E^{3N/2}$ となり、もっと急激に増えます。1次元調和振動子は特別にシンプルな場合です。
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  統計力学１ 復習問題２ 解説ノート — 2026年4月
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" crossorigin="anonymous"></script>
+</body>
+</html>

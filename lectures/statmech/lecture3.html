@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統計力学１ 復習問題３ 完全解説</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink:       #1a1a2e;
+    --paper:     #f8f6f0;
+    --rule:      #d4cfc4;
+    --accent:    #2d5a8e;
+    --accent2:   #8e2d5a;
+    --highlight: #e8f0f8;
+    --formula-bg:#eef4fb;
+    --answer-bg: #f0faf2;
+    --answer-border: #3a8a55;
+    --note:      #7a6a50;
+    --serif:     'Noto Serif JP', serif;
+    --sans:      'Noto Sans JP', sans-serif;
+    --mono:      'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.9;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(255,255,255,0.03) 60px,
+      rgba(255,255,255,0.03) 61px
+    );
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .header-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: var(--serif);
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  header h1 span {
+    color: #7fb3e0;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    font-family: var(--sans);
+    font-weight: 300;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: #fff;
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  nav a {
+    display: block;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--note);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    font-family: var(--sans);
+  }
+  nav a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── LAYOUT ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .part-title {
+    font-family: var(--serif);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    margin-top: 72px;
+  }
+  .part-title:first-child { margin-top: 0; }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+    margin-bottom: 40px;
+    line-height: 1.4;
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 48px 0 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  h3::before {
+    content: attr(data-n);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--rule);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  h4 {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 28px 0 10px;
+  }
+
+  p {
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+
+  /* ── ANSWER BOX ── */
+  .answer-box {
+    background: var(--answer-bg);
+    border-left: 3px solid var(--answer-border);
+    padding: 18px 22px;
+    margin: 20px 0 28px;
+    border-radius: 0 6px 6px 0;
+  }
+  .answer-box .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--answer-border);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* ── FORMULA BOX ── */
+  .formula-box {
+    background: var(--formula-bg);
+    border: 1px solid #c0d8ef;
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .formula-box.key {
+    border-color: var(--accent);
+    border-width: 2px;
+  }
+  .formula-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* ── NOTE ── */
+  .note {
+    background: #fdf8ee;
+    border-left: 3px solid #d4a843;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #5a4a2a;
+    border-radius: 0 6px 6px 0;
+  }
+  .note strong { color: #8a6a1a; }
+
+  /* ── STEP LIST ── */
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 16px 0 24px;
+  }
+  .steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+    align-items: start;
+  }
+  .steps li::before {
+    content: counter(step);
+    background: var(--accent);
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* ── QUESTION BLOCK ── */
+  .question-block {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 40px 0;
+  }
+  .question-header {
+    background: var(--ink);
+    color: #fff;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .question-num {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 600;
+    color: #7fb3e0;
+    line-height: 1;
+  }
+  .question-title {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: rgba(255,255,255,0.9);
+  }
+  .question-body {
+    padding: 24px 28px;
+    background: #fff;
+  }
+  .question-text {
+    background: var(--highlight);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 14.5px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* ── DIVIDER ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 56px 0;
+  }
+
+  /* ── SUMMARY TABLE ── */
+  .summary {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 10px;
+    padding: 36px 40px;
+    margin-top: 60px;
+  }
+  .summary h2 {
+    color: #7fb3e0;
+    border-color: rgba(127,179,224,0.4);
+    font-size: 18px;
+    margin-bottom: 24px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .summary-item {
+    background: rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .summary-item .key {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #7fb3e0;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .summary-item p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    main { padding: 40px 20px 80px; }
+    header { padding: 40px 20px; }
+    .nav-inner { padding: 0 16px; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .question-body { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-eyebrow">統計力学１ &nbsp;／&nbsp; 2026年度</div>
+    <h1>復習問題３ <span>完全解説</span></h1>
+    <p class="header-sub">小正準集合・エントロピー・ボルツマンの原理 ── 初学者向け丁寧解説</p>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#part1">基礎知識</a>
+    <a href="#micro-macro">ミクロ・マクロ</a>
+    <a href="#microcanonical">小正準集合</a>
+    <a href="#lattice">格子系</a>
+    <a href="#boltzmann">ボルツマン原理</a>
+    <a href="#part2">問題解説</a>
+    <a href="#q1">問(1)</a>
+    <a href="#q2">問(2)</a>
+    <a href="#q3">問(3)</a>
+    <a href="#q4">問(4)</a>
+    <a href="#q5">問(5)</a>
+    <a href="#q6">問(6)</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════
+     PART 1: 基礎知識
+══════════════════════════════════ -->
+<p class="part-title" id="part1">第一部</p>
+<h2>必要な基礎知識</h2>
+
+<!-- 1. ミクロ・マクロ -->
+<h3 id="micro-macro" data-n="1.">ミクロな状態とマクロな状態</h3>
+
+<p>統計力学を理解する第一歩は、<strong>「ミクロ」と「マクロ」の違い</strong>を把握することです。</p>
+
+<p><strong>マクロな状態（巨視的状態）</strong>とは、私たちが日常的に観測できる量——温度・圧力・体積・エネルギー——で記述される状態です。例えば「この気体は 300 K で 1 気圧」というのがマクロな記述です。</p>
+
+<p><strong>ミクロな状態（微視的状態）</strong>とは、系を構成するすべての粒子一つ一つの位置・運動量（古典力学）や量子状態（量子力学）を完全に指定した状態です。同じマクロな状態でも、粒子の配置の仕方は無数にあります。</p>
+
+<div class="note">
+  <strong>統計力学の根本的な問い：</strong><br>
+  「同じマクロな状態に対応するミクロな状態は何通りあるか？」——これが \(W(E,V,N)\) です。
+</div>
+
+<!-- 2. 小正準集合 -->
+<h3 id="microcanonical" data-n="2.">小正準集合と等重率の原理</h3>
+
+<p>系のエネルギーが \([E,\, E+\delta E]\)（\(\delta E\) はごく小さな幅）、体積 \(V\)、粒子数 \(N\) に指定されたとき、その条件を満たすミクロな状態の総数を \(W(E,V,N)\) と書きます。</p>
+
+<div class="formula-box key">
+  <div class="formula-label">小正準分布（等重率の原理）</div>
+  $$P_j = \frac{1}{W(E,V,N)}$$
+  <p style="font-size:14px;color:#4a6a8a;margin-top:10px;margin-bottom:0;">
+    「許されるすべてのミクロな状態は等しい確率で実現する」という統計力学の根本仮定。<br>
+    「等重率の原理」「小正準集合」「ミクロカノニカルアンサンブル」とも呼ばれる。
+  </p>
+</div>
+
+<h4>なぜこれでよいのか？「典型状態」の概念</h4>
+
+<p>マクロな物理量 \(X\) の期待値（平均値）を計算してみましょう。</p>
+
+$$\langle X \rangle = \sum_j X_j P_j$$
+
+<p>ミクロな状態を <strong>典型状態</strong>（マクロな物理量がほぼ同じ値 \(X\) を示す圧倒的多数の状態）と <strong>非典型状態</strong>（数が圧倒的に少ない状態）に分けると：</p>
+
+$$\langle X \rangle = \sum_{j:\text{典型}} X_j P_j + \sum_{j:\text{非典型}} X_j P_j$$
+
+<p>非典型状態の数は圧倒的に少ないので第二項は無視でき：</p>
+
+$$\langle X \rangle \approx X \cdot \frac{W_\text{eq}(E,V,N)}{W(E,V,N)} \approx X$$
+
+<p>ここで \(W \approx W_\text{eq}\)（非典型状態の数は圧倒的少数）を使いました。つまり<strong>期待値はほぼ確実に典型値と一致</strong>します。これが統計力学がうまく機能する理由です。</p>
+
+<!-- 3. 格子系 -->
+<h3 id="lattice" data-n="3.">格子系：\(W\) の具体的な計算例</h3>
+
+<p>\(N\) 個のサイトがあり、各サイトには次のどちらかが置かれます：</p>
+<ul style="margin:10px 0 16px 24px;line-height:2;">
+  <li>○（エネルギー 0）</li>
+  <li>◎（エネルギー \(\varepsilon\)）</li>
+</ul>
+
+<p><strong>問い：</strong> 全系のエネルギーが \(E = n\varepsilon\) のとき、状態数 \(W(E,N)\) は？</p>
+
+<div class="answer-box">
+  <div class="label">答え</div>
+  <p>\(E = n\varepsilon\) ということは ◎ がちょうど \(n\) 個あるということ。\(N\) 個のサイトから \(n\) 個を選ぶ組合せの数だから：</p>
+  $$W(E=n\varepsilon,\, N) = \binom{N}{n} = \frac{N!}{(N-n)!\, n!}$$
+</div>
+
+<!-- 4. ボルツマン -->
+<h3 id="boltzmann" data-n="4.">エントロピーとボルツマンの原理</h3>
+
+<h4>エントロピーは状態数の関数</h4>
+
+<p>熱力学の第二法則は「孤立系で変化が起きると、エントロピー \(S\) は増大（または一定）する」と述べます。これを統計力学的に読むと：</p>
+
+<div class="note">
+  「孤立系で実現する平衡状態は \(S\) が最大となっている」<br>
+  ＝「平衡状態では \(W\) が最大」（問(2)の答え）<br>
+  ⇒ <strong>\(S\) と \(W\) は同じ方向に増減する。つまり \(S = f(W)\) と書けるはず。</strong>
+</div>
+
+<h4>関数形の決定：加法性から対数が導かれる</h4>
+
+<p>エントロピーは加法的でなければならない：\(S_{A+B} = S_A + S_B\)</p>
+<p>状態数は積になる：\(W_{A+B} = W_A \cdot W_B\)</p>
+<p>したがって \(f\) は次の関数方程式を満たす：</p>
+
+$$f(W_A \cdot W_B) = f(W_A) + f(W_B)$$
+
+<p>この方程式を \(x\)（\(=W_A\)）で偏微分すると \(y f'(xy) = f'(x)\)、\(y\)（\(=W_B\)）で偏微分すると \(x f'(xy) = f'(y)\)。これらから：</p>
+
+$$\frac{y}{x} = \frac{f'(x)}{f'(y)} \implies y f'(y) = x f'(x) = \text{const.} =: k_B$$
+
+$$\therefore\quad f'(x) = \frac{k_B}{x} \implies f(x) = k_B \log x$$
+
+<div class="formula-box key">
+  <div class="formula-label">ボルツマンの原理（統計力学の基本関係式）</div>
+  $$S = k_B \log W_\text{eq} \approx k_B \log W$$
+  <p style="font-size:14px;color:#4a6a8a;margin-top:10px;margin-bottom:0;">
+    マクロな量 \(S\) とミクロな量 \(W\) を結ぶ橋。\(k_B \approx 1.38 \times 10^{-23}\ \text{J K}^{-1}\) はボルツマン定数。
+  </p>
+</div>
+
+<h4>ボルツマン定数の値の決定</h4>
+
+<p>理想気体を断熱膨張（体積 \(V \to 2V\)）させたときのエントロピー差を２通りで計算します：</p>
+
+<p><strong>統計力学側：</strong> \(\Delta S = N k_B \log 2\)</p>
+<p><strong>熱力学側：</strong> \(\Delta S = nR\log 2\)（\(n\): モル数、\(R\): 気体定数）</p>
+
+<p>\(N = nN_A\) を使って比較すると：</p>
+
+$$k_B = \frac{R}{N_A} \approx 1.38 \times 10^{-23}\ \text{J K}^{-1}$$
+
+<hr>
+
+<!-- ══════════════════════════════════
+     PART 2: 問題解説
+══════════════════════════════════ -->
+<p class="part-title" id="part2">第二部</p>
+<h2>復習問題の完全解説</h2>
+
+<p style="margin-bottom:36px;">
+  断熱壁で囲まれた孤立系の中に、<strong>透熱壁で接触した系A・系B</strong>がある設定です。接触面はエネルギーのやり取りが自由にできますが、外界とのやり取りはありません。
+</p>
+
+<!-- 問(1) -->
+<div class="question-block" id="q1">
+  <div class="question-header">
+    <div class="question-num">(1)</div>
+    <div class="question-title">全系の状態数 \(W\) を \(W_A,\, W_B\) で表せ</div>
+  </div>
+  <div class="question-body">
+    <div class="question-text">
+      系A，Bのエネルギーがそれぞれ \(E_A,\, E_B\) のとき，全系が取ることが可能な状態数 \(W\) を \(W_A\), \(W_B\) で表わせ。
+    </div>
+
+    <h4>考え方</h4>
+    <p>系Aが取れるミクロ状態の数は \(W_A\) 通り、系Bが取れる数は \(W_B\) 通りです。系Aと系Bは独立なので、全系のミクロ状態数は各状態の<strong>組み合わせの数 = 積</strong>になります。</p>
+    <div class="note">
+      <strong>具体的なイメージ：</strong><br>
+      サイコロAが6通り、サイコロBが6通りなら、2つ同時に振ったときの全組み合わせは \(6 \times 6 = 36\) 通り。これと同じ論理。
+    </div>
+    <div class="answer-box">
+      <div class="label">答え</div>
+      $$W = W_A W_B$$
+    </div>
+  </div>
+</div>
+
+<!-- 問(2) -->
+<div class="question-block" id="q2">
+  <div class="question-header">
+    <div class="question-num">(2)</div>
+    <div class="question-title">平衡状態とは？</div>
+  </div>
+  <div class="question-body">
+    <div class="question-text">
+      平衡状態とは，\(W\) が <u>　(a)　</u> となる状態である。(a) に適切な言葉を入れよ。
+    </div>
+
+    <h4>考え方</h4>
+    <p>等重率の原理によれば、孤立系ではミクロには各状態が等確率で実現します。\(W\) が大きければ大きいほど、より多くのミクロ状態がその巨視的配分に対応するため、その状態に落ち着きやすくなります。系は時間発展とともに \(W\) が増大する方向に変化し、最終的に \(W\) が最大の状態——これが平衡状態——に達します。</p>
+    <div class="answer-box">
+      <div class="label">答え</div>
+      <p>(a) <strong>最大</strong></p>
+      <p style="font-size:14px;color:#3a6a4a;margin:0;">平衡状態とは \(W\) が最大となる状態。言い換えると、\(S = k_B \log W\) が最大の状態。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 問(3) -->
+<div class="question-block" id="q3">
+  <div class="question-header">
+    <div class="question-num">(3)</div>
+    <div class="question-title">エネルギーの関係式</div>
+  </div>
+  <div class="question-body">
+    <div class="question-text">
+      系Aのエネルギーを \(E_A\)，系Bのエネルギーを \(E_B\) とし，全系のエネルギーを \(E\) とする。これらに成立する関係式を書け。
+    </div>
+
+    <h4>考え方</h4>
+    <p>全系は<strong>孤立系</strong>なので、外界とのエネルギーのやり取りはありません。系Aと系Bの間でエネルギーのやり取りがあっても、その和は保存されます（エネルギー保存則）。</p>
+    <div class="answer-box">
+      <div class="label">答え</div>
+      $$E = E_A + E_B \quad (E \text{ は一定})$$
+    </div>
+  </div>
+</div>
+
+<!-- 問(4) -->
+<div class="question-block" id="q4">
+  <div class="question-header">
+    <div class="question-num">(4)</div>
+    <div class="question-title">平衡条件の導出</div>
+  </div>
+  <div class="question-body">
+    <div class="question-text">
+      平衡状態において \(S_A(E_A) := k_B \log W_A(E_A)\)，\(S_B(E_B) := k_B \log W_B(E_B)\) に成立する関係式を，(2) と (3) の条件より求めよ。
+    </div>
+
+    <h4>手順</h4>
+
+    <p><strong>ステップ1：</strong>全系のエントロピーを書く。</p>
+    <p>\(W = W_A W_B\) なので：</p>
+    $$S = k_B \log W = k_B \log(W_A W_B) = \underbrace{k_B \log W_A}_{S_A} + \underbrace{k_B \log W_B}_{S_B}$$
+
+    <p><strong>ステップ2：</strong>\(S\) を \(E_A\)（変数）の関数として微分する。</p>
+    $$dS = \frac{\partial S}{\partial E_A} dE_A + \frac{\partial S}{\partial E_B} dE_B$$
+
+    <p><strong>ステップ3：</strong>拘束条件 \(dE_A + dE_B = 0\)（つまり \(dE_B = -dE_A\)）を代入する。</p>
+    $$dS = \left(\frac{\partial S}{\partial E_A} - \frac{\partial S}{\partial E_B}\right) dE_A$$
+
+    <p><strong>ステップ4：</strong>(2) より「平衡状態では \(W\)（すなわち \(S\)）が最大」なので \(dS = 0\)。\(dE_A\) は任意なので：</p>
+
+    <div class="answer-box">
+      <div class="label">答え（平衡条件）</div>
+      $$\frac{\partial S}{\partial E_A} = \frac{\partial S}{\partial E_B}$$
+      <p style="font-size:14px;color:#3a6a4a;margin-top:8px;margin-bottom:0;">
+        これを \(S_A, S_B\) で書き直すと：
+      </p>
+      $$\frac{\partial}{\partial E_A}(k_B \log W_A) = \frac{\partial}{\partial E_B}(k_B \log W_B)$$
+    </div>
+
+    <div class="note">
+      この式は「平衡状態ではAとBのある量が等しくなる」ことを言っています。この量がまさに<strong>温度の逆数 \(1/T\)</strong> です（問(5)で定義します）。
+    </div>
+  </div>
+</div>
+
+<!-- 問(5) -->
+<div class="question-block" id="q5">
+  <div class="question-header">
+    <div class="question-num">(5)</div>
+    <div class="question-title">熱は高温から低温へ流れることの証明</div>
+  </div>
+  <div class="question-body">
+    <div class="question-text">
+      温度 \(T\) を \(\dfrac{1}{T} = \dfrac{\partial S(E)}{\partial E}\) として定義する。\(T_A > T_B\) のとき，系Aと系Bの接触後，エネルギーは系Aから系Bへ移動することを，(2) を用いて示せ。
+    </div>
+
+    <h4>温度の定義の確認</h4>
+    <p>温度の定義を系Aと系Bそれぞれに適用すると：</p>
+    $$\frac{1}{T_A} = \frac{\partial S_A}{\partial E_A}, \qquad \frac{1}{T_B} = \frac{\partial S_B}{\partial E_B}$$
+
+    <h4>証明の流れ</h4>
+
+    <ol class="steps">
+      <li>
+        <div>
+          仮定 \(T_A > T_B\) より、\(T\) が大きいほど \(1/T\) は小さいので：
+          $$\frac{1}{T_A} < \frac{1}{T_B} \quad \Longrightarrow \quad \frac{\partial S_A}{\partial E_A} < \frac{\partial S_B}{\partial E_B}$$
+        </div>
+      </li>
+      <li>
+        <div>
+          辺々引き算すると：
+          $$0 < \frac{\partial S_B}{\partial E_B} - \frac{\partial S_A}{\partial E_A} = \frac{\partial S}{\partial E_B} - \frac{\partial S}{\partial E_A}$$
+        </div>
+      </li>
+      <li>
+        <div>
+          問(4)の式変形（\(dS\) を \(dE_B\) で表したもの）を使うと：
+          $$dS = \left(-\frac{\partial S}{\partial E_A} + \frac{\partial S}{\partial E_B}\right) dE_B$$
+          $$\therefore \quad \frac{dS}{dE_B} = \frac{\partial S}{\partial E_B} - \frac{\partial S}{\partial E_A} > 0$$
+        </div>
+      </li>
+      <li>
+        <div>
+          これは \(S\) が \(E_B\) の<strong>増加関数</strong>であることを意味する。(2) より平衡状態は \(S\)（\(=k_B \log W\)）が最大になる方向に系は変化するので、<strong>\(E_B\) が増える方向に変化する</strong>。
+        </div>
+      </li>
+    </ol>
+
+    <div class="answer-box">
+      <div class="label">結論</div>
+      <p>\(E_B\) が増える = Bのエネルギーが増える = <strong>AからBへエネルギーが移動する</strong></p>
+      <p style="font-size:14px;color:#3a6a4a;margin-top:6px;margin-bottom:0;">
+        高温の系Aから低温の系Bへエネルギー（熱）が流れる。これが「熱は高温から低温へ流れる」ことの統計力学的証明。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- 問(6) -->
+<div class="question-block" id="q6">
+  <div class="question-header">
+    <div class="question-num">(6)</div>
+    <div class="question-title">\(k_B\) は系の種類によらない普遍定数</div>
+  </div>
+  <div class="question-body">
+    <div class="question-text">
+      ボルツマンの関係式 \(S = k_B \log W\) において，エントロピーが加法的であるとすると，\(k_B\) は系の種類によらないことを論ぜよ。
+    </div>
+
+    <h4>論証</h4>
+
+    <p>2つの<strong>異なる</strong>系AとBを考えます。比例定数が系によって異なる可能性を残して、それぞれ別の定数でエントロピーを書きます：</p>
+
+    $$S_A = k_1 \log W_A, \quad S_B = k_2 \log W_B, \quad S_{A+B} = k_3 \log W_{A+B}$$
+
+    <p><strong>条件①（エントロピーの加法性）：</strong></p>
+    $$S_{A+B} = S_A + S_B$$
+
+    <p><strong>条件②（状態数の積の法則、問(1)）：</strong></p>
+    $$W_{A+B} = W_A \cdot W_B$$
+
+    <p>これらを代入すると：</p>
+    $$k_3 \log(W_A W_B) = k_1 \log W_A + k_2 \log W_B$$
+
+    <p>左辺を展開すると：</p>
+    $$k_3 \log W_A + k_3 \log W_B = k_1 \log W_A + k_2 \log W_B$$
+
+    <p>この等式が<strong>任意の</strong> \(W_A,\, W_B\) に対して成り立つためには、\(\log W_A\) の係数と \(\log W_B\) の係数がそれぞれ等しくなければなりません：</p>
+
+    $$k_3 = k_1 \quad \text{かつ} \quad k_3 = k_2$$
+
+    <div class="answer-box">
+      <div class="label">結論</div>
+      $$k_1 = k_2 = k_3$$
+      <p style="font-size:14px;color:#3a6a4a;margin-top:8px;margin-bottom:0;">
+        比例定数は系の種類に依存しない<strong>普遍定数</strong>でなければならない。この定数を<strong>ボルツマン定数 \(k_B\)</strong> と呼ぶ。
+        $$k_B = \frac{R}{N_A} \approx 1.38 \times 10^{-23}\ \text{J K}^{-1}$$
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <h2>まとめ：この問題が伝えること</h2>
+  <p style="color:rgba(255,255,255,0.75);font-size:15px;margin-bottom:20px;">
+    問題全体を通じて示されたのは次の一点です：
+  </p>
+  <div class="formula-box" style="background:rgba(255,255,255,0.08);border-color:rgba(127,179,224,0.4);margin-bottom:24px;">
+    <p style="color:#7fb3e0;font-size:15px;text-align:center;margin:0;">
+      「平衡状態 ＝ 状態数 \(W\) が最大の状態」という<strong style="color:#fff;">等重率の原理</strong>だけから、<br>
+      熱力学の主要な結果がすべて導ける。
+    </p>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <div class="key">問(1)(3)</div>
+      <p>全系の状態数は積。エネルギーは保存。</p>
+    </div>
+    <div class="summary-item">
+      <div class="key">問(2)</div>
+      <p>平衡状態 ＝ \(W\)（エントロピー）が最大。</p>
+    </div>
+    <div class="summary-item">
+      <div class="key">問(4)</div>
+      <p>平衡条件：\(\partial S_A/\partial E_A = \partial S_B/\partial E_B\)（＝温度が等しい）。</p>
+    </div>
+    <div class="summary-item">
+      <div class="key">問(5)</div>
+      <p>熱は高温から低温へ流れる（熱力学第二法則の統計力学的導出）。</p>
+    </div>
+    <div class="summary-item">
+      <div class="key">問(6)</div>
+      <p>加法性から \(k_B\) は普遍定数。\(k_B = R/N_A\)。</p>
+    </div>
+    <div class="summary-item">
+      <div class="key">全体</div>
+      <p>ミクロ（等重率）⟷ マクロ（熱力学）の橋渡しが統計力学。</p>
+    </div>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

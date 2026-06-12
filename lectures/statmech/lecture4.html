@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統計力学１ 復習問題４ 完全解説</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    tags: 'none'
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink:       #1a1a2e;
+    --mid:       #2e3a5c;
+    --soft:      #4a5980;
+    --rule:      #c8d0e0;
+    --bg:        #f7f8fc;
+    --paper:     #ffffff;
+    --accent:    #2563a8;
+    --accent2:   #c0392b;
+    --accent3:   #1a7a4a;
+    --highlight: #eef3fb;
+    --boxbg:     #f0f4ff;
+    --mono:      'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.9;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 3.5rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -55deg,
+      transparent,
+      transparent 18px,
+      rgba(255,255,255,.03) 18px,
+      rgba(255,255,255,.03) 19px
+    );
+  }
+  header .label {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .2em;
+    color: #8899cc;
+    text-transform: uppercase;
+    margin-bottom: .6rem;
+  }
+  header h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    line-height: 1.35;
+    color: #fff;
+  }
+  header .sub {
+    margin-top: .8rem;
+    font-size: .88rem;
+    color: #8899cc;
+    font-family: var(--mono);
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: .6rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem .8rem;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav a {
+    font-size: .78rem;
+    font-family: var(--mono);
+    color: var(--accent);
+    text-decoration: none;
+    padding: .2rem .5rem;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  nav a:hover { background: var(--highlight); }
+
+  /* ── LAYOUT ── */
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.4rem 4rem;
+  }
+
+  /* ── PARTS ── */
+  .part {
+    margin-top: 3.5rem;
+  }
+  .part-title {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: .12em;
+    color: var(--soft);
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--rule);
+    padding-bottom: .5rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 2.8rem;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--accent);
+    letter-spacing: .15em;
+    display: block;
+    margin-bottom: .25rem;
+  }
+  h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    padding-left: .8rem;
+    border-left: 3px solid var(--accent);
+  }
+  h3 {
+    font-size: .95rem;
+    font-weight: 500;
+    color: var(--mid);
+    margin: 1.4rem 0 .5rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  h3::before {
+    content: '▸';
+    color: var(--accent);
+    font-size: .8rem;
+  }
+  h4 {
+    font-size: .9rem;
+    font-weight: 500;
+    color: var(--soft);
+    margin: 1rem 0 .4rem;
+    padding-left: .6rem;
+    border-left: 2px solid var(--rule);
+  }
+
+  p { margin-bottom: .85rem; }
+
+  /* ── CALLOUTS ── */
+  .box {
+    background: var(--boxbg);
+    border: 1px solid #c5d3f0;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+  }
+  .box.green {
+    background: #f0faf4;
+    border-color: #a8d5b5;
+    border-left-color: var(--accent3);
+  }
+  .box.red {
+    background: #fdf1f0;
+    border-color: #e8b4b0;
+    border-left-color: var(--accent2);
+  }
+  .box.yellow {
+    background: #fdfaf0;
+    border-color: #e0d8a0;
+    border-left-color: #b8960c;
+  }
+  .box-label {
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .12em;
+    color: var(--soft);
+    margin-bottom: .4rem;
+    display: block;
+  }
+
+  /* ── RESULT ── */
+  .result {
+    background: var(--ink);
+    color: #e8edf8;
+    border-radius: 6px;
+    padding: 1rem 1.4rem;
+    margin: 1.2rem 0;
+    font-size: .95rem;
+  }
+  .result .result-label {
+    font-family: var(--mono);
+    font-size: .68rem;
+    color: #8899cc;
+    letter-spacing: .15em;
+    display: block;
+    margin-bottom: .5rem;
+  }
+
+  /* ── VERDICT ── */
+  .verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    font-family: var(--mono);
+    font-size: .8rem;
+    padding: .2rem .6rem;
+    border-radius: 4px;
+    margin: .3rem 0;
+  }
+  .verdict.ok  { background: #e0f7ea; color: var(--accent3); }
+  .verdict.ng  { background: #fde8e8; color: var(--accent2); }
+  .verdict.ok::before { content: '✓'; font-weight: 700; }
+  .verdict.ng::before { content: '✗'; font-weight: 700; }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; margin: 1.2rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+  }
+  th {
+    background: var(--ink);
+    color: #e8edf8;
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    padding: .6rem .9rem;
+    text-align: center;
+  }
+  td {
+    border: 1px solid var(--rule);
+    padding: .55rem .9rem;
+    text-align: center;
+  }
+  tr:nth-child(even) td { background: var(--highlight); }
+
+  /* ── STEP ── */
+  .steps { counter-reset: step; }
+  .step {
+    counter-increment: step;
+    padding-left: 2.2rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .step::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: .1rem;
+    width: 1.5rem; height: 1.5rem;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: .72rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── SUBQ ── */
+  .subq {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 2rem;
+  }
+  .subq-label {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--accent);
+    letter-spacing: .12em;
+    margin-bottom: .6rem;
+    display: block;
+  }
+
+  /* ── SEPARATOR ── */
+  hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+  /* ── MATH DISPLAY ── */
+  .MJX-TEX { font-size: 1em !important; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    h2 { font-size: 1.05rem; }
+    .result { padding: .8rem 1rem; }
+    .box    { padding: .8rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="label">Statistical Mechanics I</div>
+  <h1>統計力学１<br>復習問題４　完全解説</h1>
+  <div class="sub">基礎知識 + 全問題解説（初学者向け）</div>
+</header>
+
+<nav>
+  <a href="#basics">基礎知識</a>
+  <a href="#q1">問題１</a>
+  <a href="#q1-1">1-(1)</a>
+  <a href="#q1-2">1-(2)</a>
+  <a href="#q1-3">1-(3)</a>
+  <a href="#q2">問題２</a>
+  <a href="#q3">問題３</a>
+  <a href="#summary">まとめ</a>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════
+     PART 1  基礎知識
+════════════════════════════════════════ -->
+<div class="part" id="basics">
+<div class="part-title">Part 1 ── 必要な基礎知識</div>
+
+<!-- §1 ボルツマン -->
+<div class="section">
+  <span class="section-num">§ 1</span>
+  <h2>ボルツマンの原理（マクロとミクロの橋渡し）</h2>
+  <p>統計力学の根本となる関係式です。</p>
+  <div class="result">
+    <span class="result-label">BOLTZMANN'S PRINCIPLE</span>
+    $$S(E, V, N) = k_B \log W(E, V, N)$$
+  </div>
+  <p>各記号の意味：</p>
+  <ul style="padding-left:1.4rem; margin-bottom:.8rem;">
+    <li style="margin-bottom:.3rem;">$S$：エントロピー（マクロな熱力学量）</li>
+    <li style="margin-bottom:.3rem;">$W(E,V,N)$：エネルギー $[E, E+\delta E]$、体積 $V$、粒子数 $N$ の系が取れる<strong>状態数</strong>（ミクロな量）</li>
+    <li>$k_B \approx 1.38\times10^{-23}\ \text{J/K}$：ボルツマン定数</li>
+  </ul>
+  <div class="box yellow">
+    <span class="box-label">なぜ対数なのか？</span>
+    系を2つ合わせると状態数は<strong>掛け算</strong>になります（$W_{\rm 全} = W_1 \times W_2$）。一方、エントロピーは<strong>足し算</strong>になるべきです（$S_{\rm 全} = S_1 + S_2$）。対数を取ることで「積 → 和」に変換でき、この性質が両立します。
+  </div>
+</div>
+
+<!-- §2 理想系 -->
+<div class="section">
+  <span class="section-num">§ 2</span>
+  <h2>理想系とは</h2>
+  <p>構成要素（原子・分子）の<strong>相互作用が無視できる系</strong>です。理想気体がその代表例です。</p>
+  <p>相互作用がないとき、全エネルギーは各粒子のエネルギーの単純な和になります：</p>
+  $$E = \sum_{i=1}^{N} \varepsilon^{(i)}$$
+  <p>各粒子が<strong>独立</strong>に運動するためこのような形になります。相互作用があると粒子間ポテンシャルが加わり、このように書けません。</p>
+</div>
+
+<!-- §3 ハミルトニアン -->
+<div class="section">
+  <span class="section-num">§ 3</span>
+  <h2>単原子分子理想気体のハミルトニアン</h2>
+  <p>単原子分子の場合、各粒子のエネルギーは純粋な運動エネルギーです（重力ポテンシャルは無視）：</p>
+  $$\varepsilon^{(i)} = \frac{|\mathbf{p}^{(i)}|^2}{2m} = \frac{(p_x^{(i)})^2 + (p_y^{(i)})^2 + (p_z^{(i)})^2}{2m}$$
+  <p>全系のハミルトニアン（全エネルギー）：</p>
+  $$\mathcal{H} = \sum_{i=1}^{N} \frac{|\mathbf{p}^{(i)}|^2}{2m} = E$$
+</div>
+
+<!-- §4 相空間 -->
+<div class="section">
+  <span class="section-num">§ 4</span>
+  <h2>相空間とは</h2>
+  <p><strong>相空間</strong>とは、系の状態を表す抽象的な空間です。</p>
+  <ul style="padding-left:1.4rem; margin-bottom:.8rem;">
+    <li style="margin-bottom:.3rem;">1粒子の状態は <strong>位置</strong> $(x, y, z)$ と <strong>運動量</strong> $(p_x, p_y, p_z)$ の6個の数で決まる → 6次元相空間</li>
+    <li>$N$ 粒子系では $6N$ 次元の相空間</li>
+  </ul>
+  <div class="box">
+    <span class="box-label">KEY IDEA</span>
+    「どれだけ多くの状態が存在するか」＝「相空間のどれだけ広い領域に対応するか」。<br>
+    したがって <strong>状態数 $W$ は相空間の体積に比例</strong> します。
+  </div>
+</div>
+
+<!-- §5 相空間体積の計算 -->
+<div class="section">
+  <span class="section-num">§ 5</span>
+  <h2>相空間の体積の計算（3次元理想気体）</h2>
+
+  <div class="steps">
+
+  <div class="step">
+    <h3>1粒子の相空間体積 $\tilde{f}(\varepsilon)$</h3>
+    <p>$i$ 番目の粒子のエネルギーが $\varepsilon^{(i)} \leq \varepsilon$ という条件での相空間体積：</p>
+    $$\tilde{f}(\varepsilon) = \int_V d^3r^{(i)} \int_{\varepsilon^{(i)}\leq\varepsilon} d^3p^{(i)}$$
+    <p>位置の積分 → 容器の体積 $V$。<br>
+    運動量の条件 $|\mathbf{p}^{(i)}|^2 \leq 2m\varepsilon$ は、<strong>半径 $\sqrt{2m\varepsilon}$ の3次元球の内部</strong>という条件です。3次元球の体積は $\tfrac{4}{3}\pi r^3$ なので：</p>
+    $$\tilde{f}(\varepsilon) = V \cdot \frac{4}{3}\pi (2m\varepsilon)^{3/2}$$
+  </div>
+
+  <div class="step">
+    <h3>$N$ 粒子全体の相空間体積 $\tilde{\Gamma}(E)$</h3>
+    <p>全粒子のエネルギー合計が $E$ 以下という条件：</p>
+    $$\tilde{\Gamma}(E) = V^N \cdot \int_{\sum_i |\mathbf{p}^{(i)}|^2 \leq 2mE} d^{3N}p$$
+    <p>これは $3N$ 次元空間における<strong>半径 $\sqrt{2mE}$ の球の内部</strong>です。$n$ 次元球の体積の一般式：</p>
+    $$V_n(a) = \frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)} a^n$$
+    <p>（$\Gamma(x)$：ガンマ関数。整数では $\Gamma(n+1)=n!$）</p>
+    <p>$n=3N$、$a=\sqrt{2mE}$ を代入：</p>
+    $$\tilde{\Gamma}(E) = V^N \cdot \frac{(2\pi m E)^{3N/2}}{\Gamma\!\left(\frac{3N}{2}+1\right)}$$
+  </div>
+
+  <div class="step">
+    <h3>エネルギーシェルの体積 $\Omega$（問題文の式 (0.1)）</h3>
+    <p>エネルギーが $[E, E+\delta E]$ の薄いシェルの体積は $\tilde{\Gamma}(E)$ を $E$ で微分して $\delta E$ をかけたもの：</p>
+    <div class="result">
+      <span class="result-label">PHASE SPACE VOLUME  (式 0.1)</span>
+      $$\Omega = \tilde{\Gamma}'(E)\,\delta E = V^N \cdot \frac{\dfrac{3N}{2}\,(2\pi m)^{3N/2}\,E^{3N/2-1}}{\Gamma\!\left(\dfrac{3N}{2}+1\right)}\,\delta E$$
+    </div>
+  </div>
+
+  </div><!-- /steps -->
+</div>
+
+<!-- §6 比例係数 c -->
+<div class="section">
+  <span class="section-num">§ 6</span>
+  <h2>状態数 $W$ と比例係数 $c$ の意味</h2>
+  $$W(E, V, N) = c \times \Omega, \qquad c = \frac{1}{h^{3N} N!}$$
+
+  <h3>理由① $1/h^{3N}$（次元合わせ）</h3>
+  <p>$\Omega$ は（位置×運動量）$^{3N}$ の次元を持ちます。プランク定数 $h$ はまさに「位置×運動量」の次元（作用の次元）を持つので、$h^{3N}$ で割ることで<strong>無次元</strong>の状態数になります。</p>
+
+  <h3>理由② $1/N!$（同種粒子の過剰計算の補正）</h3>
+  <p>粒子に番号をつけると、番号の付け替え方は $N!$ 通りあります。「粒子1が右に、粒子2が左に」と「粒子2が右に、粒子1が左に」は相空間の別の点ですが、<strong>同種粒子である限り物理的に全く同じ状態</strong>です。</p>
+  <p>同じ状態を $N!$ 回数えてしまっているので、$N!$ で割って補正します。</p>
+  <div class="box yellow">
+    <span class="box-label">IMPORTANT</span>
+    区別できる粒子（赤い粒子と白い粒子など）の場合は $N!$ で割る<strong>必要はありません</strong>。問題１(3) でこの点が重要になります。
+  </div>
+</div>
+
+<!-- §7 エントロピー -->
+<div class="section">
+  <span class="section-num">§ 7</span>
+  <h2>エントロピーの導出（ザックール・テトローデの式）</h2>
+  <p>$S = k_B\log W$ にスターリングの公式</p>
+  $$\log n! \approx n\log n - n \quad (n\gg1), \qquad \log\Gamma(x) \approx x\log x - x \quad (x\gg1)$$
+  <p>を適用し、$N$ に比例しない対数的な項（$\log N$, $\log(\delta E/E)$ など）を熱力学極限では無視すると：</p>
+  <div class="result">
+    <span class="result-label">SACKUR–TETRODE EQUATION</span>
+    $$S(E, V, N) = Nk_B\!\left[\frac{3}{2}\log\frac{2\pi mE}{\frac{3}{2}Nh^2} + \log\frac{V}{N} + \frac{5}{2}\right]$$
+  </div>
+  <div class="box red">
+    <span class="box-label">CAUTION</span>
+    $1/N!$ がないと $\log(V/N)$ ではなく $\log V$ になり、後述のギブスのパラドックスが発生します。
+  </div>
+</div>
+
+<!-- §8 状態方程式 -->
+<div class="section">
+  <span class="section-num">§ 8</span>
+  <h2>状態方程式の導出</h2>
+  <p>熱力学の関係式 $dE = TdS - PdV$ より：</p>
+  $$\frac{1}{T} = \left(\frac{\partial S}{\partial E}\right)_{V,N}, \qquad \frac{P}{T} = \left(\frac{\partial S}{\partial V}\right)_{E,N}$$
+  <p>ザックール・テトローデの式を代入：</p>
+  <div class="result">
+    <span class="result-label">RESULTS</span>
+    $$\frac{1}{T} = \frac{3Nk_B}{2E} \implies E = \frac{3}{2}Nk_BT \quad \text{（内部エネルギー）}$$
+    $$\frac{P}{T} = \frac{Nk_B}{V} \implies PV = Nk_BT \quad \text{（理想気体の状態方程式）}$$
+  </div>
+</div>
+
+</div><!-- /part basics -->
+
+
+<!-- ═══════════════════════════════════════
+     PART 2  問題解説
+════════════════════════════════════════ -->
+<div class="part" id="q1">
+<div class="part-title">Part 2 ── 復習問題 解説</div>
+
+<!-- ─── 問題1 ─── -->
+<div class="section">
+  <span class="section-num">問題 1</span>
+  <h2>ギブスのパラドックスと $1/N!$ の必然性</h2>
+
+  <h3>問題の設定</h3>
+  <div class="box green">
+    <span class="box-label">正しいエントロピー（$1/N!$ あり）</span>
+    $$S(E,V,N) = Nk_B\!\left[\frac{3}{2}\log\frac{4\pi mE}{3Nh^2} + \log\frac{V}{N} + \frac{5}{2}\right]$$
+  </div>
+  <div class="box red">
+    <span class="box-label">誤ったエントロピー（$1/N!$ なし）</span>
+    $$S_e(E,V,N) = Nk_B\!\left[\frac{3}{2}\log\frac{4\pi mE}{3Nh^2} + \log V + \frac{3}{2}\right]$$
+  </div>
+  <p>違いは $\log(V/N)$ か $\log V$ か、定数項が $5/2$ か $3/2$ か、の2点です。</p>
+
+  <hr>
+
+  <!-- 1-(1) -->
+  <div class="subq" id="q1-1">
+    <span class="subq-label">PROBLEM 1-(1)</span>
+    <h3 style="margin-top:0">示量性の確認</h3>
+    <p><strong>示量性とは：</strong>系を $a$ 倍したとき（$E\to aE$, $V\to aV$, $N\to aN$）、その量も $a$ 倍になる性質。エントロピーは示量変数なので必ず成り立たなければなりません。</p>
+
+    <h4>$S$ の場合</h4>
+    <p>$S(aE, aV, aN)$ を計算します：</p>
+    $$S(aE, aV, aN) = aN\cdot k_B\!\left[\frac{3}{2}\log\frac{4\pi m(aE)}{3(aN)h^2} + \log\frac{aV}{aN} + \frac{5}{2}\right]$$
+    <p>$\dfrac{aE}{aN} = \dfrac{E}{N}$、$\dfrac{aV}{aN} = \dfrac{V}{N}$ と $a$ がキャンセルするので：</p>
+    $$= aN\cdot k_B\!\left[\frac{3}{2}\log\frac{4\pi mE}{3Nh^2} + \log\frac{V}{N} + \frac{5}{2}\right] = aS(E,V,N)$$
+    <div class="verdict ok">$S$ は示量性を持つ</div>
+
+    <h4>$S_e$ の場合</h4>
+    $$S_e(aE, aV, aN) = aN\cdot k_B\!\left[\frac{3}{2}\log\frac{4\pi m(aE)}{3(aN)h^2} + \log(aV) + \frac{3}{2}\right]$$
+    <p>$\log(aV) = \log a + \log V$ となり $a$ がキャンセルしません：</p>
+    $$= aS_e(E,V,N) + aNk_B\log a \neq aS_e(E,V,N)$$
+    <div class="verdict ng">$S_e$ は示量性を持たない</div>
+
+    <div class="box yellow">
+      <span class="box-label">直感的な説明</span>
+      $V/N$ は「1粒子あたりの体積」という<strong>示強変数</strong>で、系の大きさに依存しません。一方 $V$ は体積そのものなので、系を大きくすると増えてしまい、余分な $\log a$ の項が現れます。
+    </div>
+  </div>
+
+  <!-- 1-(2) -->
+  <div class="subq" id="q1-2">
+    <span class="subq-label">PROBLEM 1-(2)</span>
+    <h3 style="margin-top:0">同種粒子の混合（ギブスのパラドックス）</h3>
+    <p><strong>設定：</strong>体積 $V$、エネルギー $E$、粒子数 $N$ の<strong>同種</strong>気体を仕切りで分けた2区画を用意し、仕切りを外す。</p>
+    <p>断熱準静過程なので <strong>エントロピーは変化しないはず</strong>。</p>
+
+    <h4>混合前の全エントロピー（$S$, $S_e$ 共通）</h4>
+    $$S_{\rm 前} = S(E,V,N) + S(E,V,N) = 2S(E,V,N)$$
+
+    <h4>$S$ の場合（混合後）</h4>
+    <p>系全体は $(2E, 2V, 2N)$ になります。(1) の結果 $S(2E,2V,2N)=2S(E,V,N)$ より：</p>
+    $$S_{\rm 後} = 2S(E,V,N) = S_{\rm 前}$$
+    <div class="verdict ok">エントロピー変化なし（熱力学と一致）</div>
+
+    <h4>$S_e$ の場合（混合後）</h4>
+    $$(1)\text{ の結果より}\quad S_e(2E,2V,2N) = 2S_e(E,V,N) + 2Nk_B\log 2$$
+    $$\Delta S_e = 2Nk_B\log 2 > 0$$
+    <div class="verdict ng">断熱準静過程なのにエントロピーが増加（熱力学と矛盾）</div>
+
+    <div class="box red">
+      <span class="box-label">これがギブスのパラドックス</span>
+      同じ種類の気体を混ぜているのにエントロピーが増える、という熱力学的に許されない状況です。$1/N!$ を入れることでこの矛盾が解消されます。
+    </div>
+  </div>
+
+  <!-- 1-(3) -->
+  <div class="subq" id="q1-3">
+    <span class="subq-label">PROBLEM 1-(3)</span>
+    <h3 style="margin-top:0">異種粒子の混合（混合エントロピー）</h3>
+    <p><strong>設定：</strong>1区画目に<span style="color:#c0392b">赤</span>い粒子 $N$ 個、2区画目に白い粒子 $N$ 個を入れる。色以外の性質（質量など）は同じ。仕切りを外して混合する。</p>
+
+    <h4>方法①：状態数から計算する</h4>
+    <p>混合後は「赤粒子 $N$ 個＋白粒子 $N$ 個が体積 $2V$、全エネルギー $2E$ で運動している」2成分系です。</p>
+    <p><strong>比例係数 $c'$ の決定：</strong></p>
+    <ul style="padding-left:1.4rem; margin-bottom:.8rem;">
+      <li>赤粒子は互いに区別できない → 赤粒子同士で $N!$ で割る</li>
+      <li>白粒子も同様 → 白粒子同士で $N!$ で割る</li>
+      <li>赤と白は<strong>区別できる</strong> → $(2N)!$ で割るのは誤り</li>
+    </ul>
+    $$c' = \frac{1}{h^{6N}(N!)^2}$$
+    <p>スターリングの公式で主要項を取り出すと：</p>
+    $$S_{\rm 混合} = 2Nk_B\!\left[\frac{3}{2}\log\frac{4\pi mE}{3Nh^2} + \log\frac{2V}{N} + \frac{5}{2}\right]$$
+    $$= \underbrace{2Nk_B\!\left[\frac{3}{2}\log\frac{4\pi mE}{3Nh^2} + \log\frac{V}{N} + \frac{5}{2}\right]}_{= S(2E,2V,2N)} + 2Nk_B\log 2$$
+
+    <h4>方法②：熱力学的に考える</h4>
+    <p>赤と白は<strong>区別できる</strong>ので混合後も2成分系として扱います。<br>性質が同じなので対称性より、平衡状態では各成分にエネルギーが $E$ ずつ分配されます。</p>
+    $$S_{\rm 混合} = S(E,2V,N) + S(E,2V,N) = 2S(E,2V,N)$$
+    $$S_{\rm 混合} - S_{\rm 前} = 2S(E,2V,N) - 2S(E,V,N) = 2Nk_B\log 2$$
+
+    <div class="result">
+      <span class="result-label">結果：混合エントロピー</span>
+      $$\Delta S = 2Nk_B\log 2 > 0$$
+    </div>
+    <div class="box green">
+      赤と白の粒子は<strong>区別できる</strong>ので、仕切りを外すことで不可逆的な混合が起こり、エントロピーが正しく増加します。問題(2)（同種）ではゼロ、問題(3)（異種）では $2Nk_B\log 2$ の増加、という対比が重要です。
+    </div>
+  </div>
+</div>
+
+<!-- ─── 問題2 ─── -->
+<div class="section" id="q2">
+  <span class="section-num">問題 2</span>
+  <h2>1次元理想気体</h2>
+  <p>1次元容器（長さ $V$）に閉じ込められた $N$ 粒子系。ハミルトニアン：</p>
+  $$\mathcal{H}_1 = \sum_{j=1}^{N} \frac{(p_x^{(j)})^2}{2m}$$
+
+  <h3>相空間体積の計算</h3>
+  <div class="steps">
+  <div class="step">
+    <p>$\mathcal{H}_1 \leq E$ での相空間体積 $\tilde{\Gamma}(E)$：</p>
+    $$\tilde{\Gamma}(E) = \underbrace{\int_0^V dx^{(1)}\cdots\int_0^V dx^{(N)}}_{=V^N} \times \underbrace{\int_{\sum_j(p_x^{(j)})^2 \leq 2mE} d^Np}_{\text{半径}\sqrt{2mE}\text{ の }N\text{次元球}}$$
+    $$= V^N \cdot \frac{\pi^{N/2}(2mE)^{N/2}}{\Gamma(N/2+1)}$$
+  </div>
+  <div class="step">
+    <p>$[E, E+\delta E]$ のシェルの体積（$E$ で微分して $\delta E$ をかける）：</p>
+    $$\Omega_1 = V^N \cdot \frac{\dfrac{N}{2}\,(2\pi m)^{N/2}\,E^{N/2-1}}{\Gamma(N/2+1)}\,\delta E$$
+  </div>
+  <div class="step">
+    <p>状態数：$W(E,V,N) = \dfrac{1}{h^N N!}\Omega_1$</p>
+  </div>
+  </div>
+
+  <h3>エントロピー</h3>
+  <p>$S = k_B\log W$ にスターリングの公式を適用し主要項を取り出す：</p>
+  <div class="result">
+    <span class="result-label">1次元エントロピー</span>
+    $$S(E,V,N) = Nk_B\!\left[\frac{1}{2}\log\frac{4\pi mE}{Nh^2} + \log\frac{V}{N} + \frac{3}{2}\right]$$
+  </div>
+
+  <h3>状態方程式</h3>
+  <div class="box">
+    <span class="box-label">温度</span>
+    $$\frac{1}{T} = \left(\frac{\partial S}{\partial E}\right)_{V,N} = \frac{Nk_B}{2E} \implies \boxed{E = \frac{1}{2}Nk_BT}$$
+    <p style="margin:.3rem 0 0;font-size:.88rem;color:var(--soft)">エネルギー等分配則：1次元では1粒子あたり $\tfrac{1}{2}k_BT$</p>
+  </div>
+  <div class="box green">
+    <span class="box-label">圧力（1次元では $P/T = \partial S/\partial V$ で定義）</span>
+    $$\frac{P}{T} = \left(\frac{\partial S}{\partial V}\right)_{E,N} = \frac{Nk_B}{V} \implies \boxed{PV = Nk_BT}$$
+  </div>
+</div>
+
+<!-- ─── 問題3 ─── -->
+<div class="section" id="q3">
+  <span class="section-num">問題 3</span>
+  <h2>2次元理想気体</h2>
+  <p>2次元容器（面積 $V$）に閉じ込められた $N$ 粒子系。ハミルトニアン：</p>
+  $$\mathcal{H}_2 = \sum_{j=1}^{N} \frac{(p_x^{(j)})^2 + (p_y^{(j)})^2}{2m}$$
+
+  <h3>相空間体積の計算</h3>
+  <div class="steps">
+  <div class="step">
+    <p>$\mathcal{H}_2 \leq E$ での相空間体積：</p>
+    $$\tilde{\Gamma}(E) = V^N \cdot \underbrace{\frac{\pi^N(2mE)^{2N/2}}{\Gamma(N+1)}}_{\text{半径}\sqrt{2mE}\text{ の }2N\text{次元球}} = V^N \cdot \frac{(2\pi mE)^N}{\Gamma(N+1)}$$
+  </div>
+  <div class="step">
+    <p>$[E, E+\delta E]$ のシェルの体積：</p>
+    $$\Omega_2 = V^N \cdot \frac{N\,(2\pi m)^N\,E^{N-1}}{\Gamma(N+1)}\,\delta E$$
+  </div>
+  <div class="step">
+    <p>状態数：$W(E,V,N) = \dfrac{1}{h^{2N} N!}\Omega_2$</p>
+  </div>
+  </div>
+
+  <h3>エントロピー</h3>
+  <div class="result">
+    <span class="result-label">2次元エントロピー</span>
+    $$S(E,V,N) = Nk_B\!\left[\log\frac{2\pi mE}{Nh^2} + \log\frac{V}{N} + 2\right]$$
+  </div>
+
+  <h3>状態方程式</h3>
+  <div class="box">
+    <span class="box-label">温度</span>
+    $$\frac{1}{T} = \frac{Nk_B}{E} \implies \boxed{E = Nk_BT}$$
+    <p style="margin:.3rem 0 0;font-size:.88rem;color:var(--soft)">2次元なので1粒子あたり $k_BT$（$x$, $y$ 方向で各 $\tfrac{1}{2}k_BT$）</p>
+  </div>
+  <div class="box green">
+    <span class="box-label">圧力（2次元では $P/T = \partial S/\partial V$ で定義）</span>
+    $$\frac{P}{T} = \frac{Nk_B}{V} \implies \boxed{PV = Nk_BT}$$
+  </div>
+</div>
+
+</div><!-- /part q -->
+
+
+<!-- ═══════════════════════════════════════
+     SUMMARY
+════════════════════════════════════════ -->
+<div class="part" id="summary">
+<div class="part-title">Summary ── 次元による比較</div>
+
+<div class="section">
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>次元 $d$</th>
+          <th>内部エネルギー $E$</th>
+          <th>状態方程式</th>
+          <th>エントロピー係数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1次元</td>
+          <td>$\dfrac{1}{2}Nk_BT$</td>
+          <td>$PV = Nk_BT$</td>
+          <td>$\dfrac{1}{2}\log(\cdots)$</td>
+        </tr>
+        <tr>
+          <td>2次元</td>
+          <td>$Nk_BT$</td>
+          <td>$PV = Nk_BT$</td>
+          <td>$\log(\cdots)$</td>
+        </tr>
+        <tr>
+          <td>3次元</td>
+          <td>$\dfrac{3}{2}Nk_BT$</td>
+          <td>$PV = Nk_BT$</td>
+          <td>$\dfrac{3}{2}\log(\cdots)$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box green" style="margin-top:1.4rem">
+    <span class="box-label">気づき：エネルギー等分配則</span>
+    <p>内部エネルギーは $E = \dfrac{d}{2}Nk_BT$ という規則があります。各<strong>自由度</strong>（運動できる方向）に $\dfrac{1}{2}k_BT$ のエネルギーが分配されます。</p>
+  </div>
+
+  <div class="box">
+    <span class="box-label">状態方程式の普遍性</span>
+    <p>状態方程式 $PV = Nk_BT$ の形は1次元・2次元・3次元を問わず変わりません。これは圧力の定義 $P/T = \partial S/\partial V$ と、エントロピーの $\log(V/N)$ の項が次元によらず存在することから来ています。</p>
+  </div>
+</div>
+
+</div><!-- /summary -->
+
+</div><!-- /wrap -->
+
+<footer style="text-align:center; padding:2rem 1rem; font-family:var(--mono); font-size:.72rem; color:#8899cc; border-top:1px solid var(--rule); margin-top:2rem;">
+  統計力学１　復習問題４　解説資料　|　May 2026
+</footer>
+
+</body>
+</html>
