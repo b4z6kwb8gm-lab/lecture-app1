@@ -8,7 +8,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-/* ===== RESET ===== */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -20,30 +19,18 @@ body {
   color: #e8dfc8;
   font-family: 'Noto Sans JP', sans-serif;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
-/* ===== BACKGROUND（HOME完全統一） ===== */
 .bg-layer {
   position: fixed;
   inset: 0;
   z-index: 0;
-  pointer-events: none;
 }
 
-.bg-stars {
-  background: #000010;
-}
+.bg-stars { background: #000010; }
+.bg-glow-blue { background: radial-gradient(ellipse at bottom, rgba(20,60,160,0.35), transparent 70%); }
+.bg-glow-gold { background: radial-gradient(ellipse at top, rgba(180,130,40,0.12), transparent 70%); }
 
-.bg-glow-blue {
-  background: radial-gradient(ellipse at bottom, rgba(20,60,160,0.35), transparent 70%);
-}
-
-.bg-glow-gold {
-  background: radial-gradient(ellipse at top, rgba(180,130,40,0.12), transparent 70%);
-}
-
-/* ===== LAYOUT ===== */
 .page {
   position: relative;
   z-index: 10;
@@ -54,7 +41,6 @@ body {
   align-items: center;
 }
 
-/* ===== HEADER ===== */
 .header {
   text-align: center;
   margin-bottom: 40px;
@@ -75,7 +61,6 @@ body {
   color: rgba(200,170,80,0.6);
 }
 
-/* ===== GRID ===== */
 .grid {
   width: 100%;
   max-width: 1000px;
@@ -84,7 +69,6 @@ body {
   gap: 14px;
 }
 
-/* ===== CARD ===== */
 .card {
   padding: 16px;
   border: 1px solid rgba(200,170,80,0.2);
@@ -110,7 +94,6 @@ body {
   color: rgba(200,170,80,0.6);
 }
 
-/* ===== BACK ===== */
 .back {
   margin-top: 40px;
   font-size: 12px;
@@ -121,91 +104,86 @@ body {
 .back:hover {
   color: #fff;
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- BACKGROUND -->
 <div class="bg-layer bg-stars"></div>
 <div class="bg-layer bg-glow-blue"></div>
 <div class="bg-layer bg-glow-gold"></div>
 
 <div class="page">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="title">Experiments</div>
     <div class="sub">実験・データ解析</div>
   </div>
 
-  <!-- GRID -->
   <div class="grid">
 
-    <div class="card" onclick="location.href='./opamp/index.html'">
+    <div class="card" onclick="location.href='opamp/index.html'">
       <h2>OPアンプ</h2>
       <p>増幅回路・演算増幅器の特性解析</p>
     </div>
 
-    <div class="card" onclick="location.href='./xray_orientation/index.html'">
+    <div class="card" onclick="location.href='xray_orientation/index.html'">
       <h2>X線による結晶の方位決定</h2>
       <p>X線回折を用いた結晶構造解析</p>
     </div>
 
-    <div class="card" onclick="location.href='./thermistor/index.html'">
+    <div class="card" onclick="location.href='thermistor/index.html'">
       <h2>サーミスタの特性</h2>
       <p>温度依存性と抵抗変化の測定</p>
     </div>
 
-    <div class="card" onclick="location.href='./digital_circuits/index.html'">
+    <div class="card" onclick="location.href='digital_circuits/index.html'">
       <h2>デジタル回路</h2>
       <p>論理回路設計と動作検証</p>
     </div>
 
-    <div class="card" onclick="location.href='./soldering/index.html'">
+    <div class="card" onclick="location.href='soldering/index.html'">
       <h2>はんだ付け</h2>
       <p>電子工作基礎技術</p>
     </div>
 
-    <div class="card" onclick="location.href='./ferromagnetism/index.html'">
+    <div class="card" onclick="location.href='ferromagnetism/index.html'">
       <h2>強磁性体</h2>
       <p>磁化特性とヒステリシス</p>
     </div>
 
-    <div class="card" onclick="location.href='./high_tc_superconductor/index.html'">
+    <div class="card" onclick="location.href='high_tc_superconductor/index.html'">
       <h2>高温超伝導体</h2>
       <p>超伝導転移と抵抗測定</p>
     </div>
 
-    <div class="card" onclick="location.href='./diffraction/index.html'">
+    <div class="card" onclick="location.href='diffraction/index.html'">
       <h2>光の回折</h2>
       <p>干渉・回折パターン解析</p>
     </div>
 
-    <div class="card" onclick="location.href='./dta/index.html'">
+    <div class="card" onclick="location.href='dta/index.html'">
       <h2>示差熱分析</h2>
       <p>熱物性測定と相変化解析</p>
     </div>
 
-    <div class="card" onclick="location.href='./vacuum_deposition/index.html'">
+    <div class="card" onclick="location.href='vacuum_deposition/index.html'">
       <h2>真空蒸着</h2>
       <p>薄膜形成プロセス</p>
     </div>
 
-    <div class="card" onclick="location.href='./hall_effect/index.html'">
+    <div class="card" onclick="location.href='hall_effect/index.html'">
       <h2>ホール効果</h2>
       <p>キャリア濃度と移動度測定</p>
     </div>
 
-    <div class="card" onclick="location.href='./polarization/index.html'">
+    <div class="card" onclick="location.href='polarization/index.html'">
       <h2>偏光</h2>
       <p>光の偏光特性解析</p>
     </div>
 
   </div>
 
-  <!-- BACK -->
   <div class="back" onclick="location.href='../index.html'">
     ← HOMEに戻る
   </div>
