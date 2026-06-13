@@ -104,8 +104,110 @@ body {
 .back:hover {
   color: #fff;
 }
+
+/* ===== SEARCH ===== */
+.search-wrap{
+  width:100%;
+  max-width:600px;
+  margin:0 auto 30px;
+  position:relative;
+}
+
+.search-box{
+  width:100%;
+  padding:14px;
+  border:1px solid rgba(200,170,80,0.25);
+  background:rgba(0,0,0,0.45);
+  color:#fff;
+  font-size:15px;
+  outline:none;
+}
+
+.search-box:focus{
+  border-color:rgba(255,215,0,0.5);
+}
+
+.suggest-box{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:rgba(10,10,20,0.97);
+  border:1px solid rgba(200,170,80,0.2);
+  display:none;
+  flex-direction:column;
+  z-index:100;
+}
+
+.suggest-item{
+  padding:12px;
+  cursor:pointer;
+}
+
+.suggest-item:hover{
+  background:rgba(80,150,255,0.15);
+}
 </style>
 </head>
+
+<script>
+const data = [
+  { key:"OPアンプ", link:"opamp/index.html" },
+  { key:"X線による結晶の方位決定", link:"xray_orientation/index.html" },
+  { key:"サーミスタの特性", link:"thermistor/index.html" },
+  { key:"デジタル回路", link:"digital_circuits/index.html" },
+  { key:"はんだ付け", link:"soldering/index.html" },
+  { key:"強磁性体", link:"ferromagnetism/index.html" },
+  { key:"高温超伝導体", link:"high_tc_superconductor/index.html" },
+  { key:"光の回折", link:"diffraction/index.html" },
+  { key:"示差熱分析", link:"dta/index.html" },
+  { key:"真空蒸着", link:"vacuum_deposition/index.html" },
+  { key:"ホール効果", link:"hall_effect/index.html" },
+  { key:"偏光", link:"polarization/index.html" }
+];
+
+const input = document.getElementById("search");
+const suggest = document.getElementById("suggest");
+
+input.addEventListener("input", () => {
+  const q = input.value.trim();
+  suggest.innerHTML = "";
+
+  if(!q){
+    suggest.style.display = "none";
+    return;
+  }
+
+  const results = data.filter(d =>
+    d.key.toLowerCase().includes(q.toLowerCase())
+  );
+
+  if(results.length === 0){
+    suggest.style.display = "none";
+    return;
+  }
+
+  results.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "suggest-item";
+    div.textContent = r.key;
+
+    div.onclick = () => {
+      location.href = r.link;
+    };
+
+    suggest.appendChild(div);
+  });
+
+  suggest.style.display = "flex";
+});
+
+document.addEventListener("click", e => {
+  if(!e.target.closest(".search-wrap")){
+    suggest.style.display = "none";
+  }
+});
+</script>
 
 <body>
 
@@ -118,6 +220,17 @@ body {
   <div class="header">
     <div class="title">Experiments</div>
     <div class="sub">実験・データ解析</div>
+  </div>
+
+ <!-- SEARCH -->
+  <div class="search-wrap">
+   <input
+    id="search"
+    class="search-box"
+    type="text"
+    placeholder="実験名を検索..."
+   >
+   <div id="suggest" class="suggest-box"></div>
   </div>
 
   <div class="grid">
