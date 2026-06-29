@@ -173,10 +173,35 @@ body{
   font-size:10px;
   color:rgba(200,170,80,.25);
 }
+.back-button{
+  position:fixed;
+  top:20px;
+  left:20px;
+
+  padding:8px 12px;
+
+  background:rgba(0,0,0,.4);
+  border:1px solid rgba(200,170,80,.3);
+  color:#e8dfc8;
+
+  cursor:pointer;
+  z-index:100;
+
+  transition:.2s;
+}
+
+.back-button:hover{
+  background:rgba(80,150,255,.15);
+}
+
 </style>
 </head>
 
 <body>
+
+<button class="back-button"onclick="location.href='../index.html'">
+       ← HOME
+</button>
 
 <div class="bg-layer bg-stars"></div>
 <div class="bg-layer bg-glow-blue"></div>
