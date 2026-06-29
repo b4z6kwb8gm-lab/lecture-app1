@@ -4,8 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Statistical Mechanics - Exercises</title>
 
@@ -14,328 +13,233 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
 /* ===== RESET ===== */
-
 *,*::before,*::after{
-
-margin:0;
-padding:0;
-box-sizing:border-box;
-
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
 /* ===== BODY ===== */
-
 body{
+  background:#000;
+  color:#e8dfc8;
+  font-family:'Noto Sans JP',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-background:#000;
-color:#e8dfc8;
-font-family:'Noto Sans JP',sans-serif;
-min-height:100vh;
-overflow-x:hidden;
+/* ===== BACK BUTTON ===== */
+.back-button{
+  position:fixed;
+  top:20px;
+  left:20px;
 
+  padding:8px 12px;
+
+  background:rgba(0,0,0,.4);
+  border:1px solid rgba(200,170,80,.3);
+  color:#e8dfc8;
+
+  cursor:pointer;
+  z-index:100;
+
+  transition:.2s;
+}
+
+.back-button:hover{
+  background:rgba(80,150,255,.15);
 }
 
 /* ===== BACKGROUND ===== */
-
 .bg-layer{
-
-position:fixed;
-inset:0;
-pointer-events:none;
-z-index:0;
-
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
 }
 
 .bg-stars{
-
-background:
-radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,.6),transparent),
-radial-gradient(1px 1px at 40% 8%,rgba(255,255,255,.7),transparent),
-radial-gradient(1px 1px at 70% 18%,rgba(255,255,255,.4),transparent),
-radial-gradient(1px 1px at 90% 10%,rgba(255,255,255,.5),transparent),
-radial-gradient(1px 1px at 35% 85%,rgba(255,255,255,.4),transparent);
-
-background-color:#000010;
-
+  background:
+    radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 40% 8%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1px 1px at 70% 18%,rgba(255,255,255,.4),transparent),
+    radial-gradient(1px 1px at 90% 10%,rgba(255,255,255,.5),transparent),
+    radial-gradient(1px 1px at 35% 85%,rgba(255,255,255,.4),transparent);
+  background-color:#000010;
 }
 
 .bg-glow-blue{
-
-background:
-radial-gradient(
-ellipse at bottom,
-rgba(20,60,160,.35),
-transparent 70%);
-
+  background:radial-gradient(ellipse at bottom,rgba(20,60,160,.35),transparent 70%);
 }
 
 /* ===== ORB ===== */
-
 .orb{
-
-position:fixed;
-border-radius:50%;
-filter:blur(60px);
-animation:float 10s ease-in-out infinite alternate;
-z-index:0;
-
+  position:fixed;
+  border-radius:50%;
+  filter:blur(60px);
+  animation:float 10s ease-in-out infinite alternate;
+  z-index:0;
 }
 
 .orb-1{
-
-width:280px;
-height:280px;
-background:rgba(60,100,220,.18);
-top:-80px;
-right:-60px;
-
+  width:280px;
+  height:280px;
+  background:rgba(60,100,220,.18);
+  top:-80px;
+  right:-60px;
 }
 
 .orb-2{
-
-width:200px;
-height:200px;
-background:rgba(180,130,40,.12);
-bottom:40px;
-left:-40px;
-
+  width:200px;
+  height:200px;
+  background:rgba(180,130,40,.12);
+  bottom:40px;
+  left:-40px;
 }
 
 @keyframes float{
-
-from{
-
-transform:
-translate(0,0)
-scale(1);
-
-}
-
-to{
-
-transform:
-translate(20px,-30px)
-scale(1.1);
-
-}
-
+  from{transform:translate(0,0) scale(1);}
+  to{transform:translate(20px,-30px) scale(1.1);}
 }
 
 /* ===== LAYOUT ===== */
-
 #menu-page{
+  position:relative;
+  min-height:100vh;
 
-position:relative;
-min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
 
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-
-padding:40px 20px;
-
-z-index:10;
-
+  padding:40px 20px;
+  z-index:10;
 }
 
 /* ===== HEADER ===== */
-
 .menu-header{
-
-text-align:center;
-margin-bottom:20px;
-
+  text-align:center;
+  margin-bottom:20px;
 }
 
 .menu-eyebrow{
-
-font-family:'Cinzel',serif;
-font-size:11px;
-letter-spacing:.35em;
-color:rgba(200,170,80,.75);
-
+  font-family:'Cinzel',serif;
+  font-size:11px;
+  letter-spacing:.35em;
+  color:rgba(200,170,80,.75);
 }
 
 .menu-title-main{
-
-font-family:'Cinzel',serif;
-font-size:clamp(28px,5vw,48px);
-
-background:
-linear-gradient(
-180deg,
-#fff8e8,
-#c8aa50,
-#8a6e20);
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-
+  font-family:'Cinzel',serif;
+  font-size:clamp(28px,5vw,48px);
+  background:linear-gradient(180deg,#fff8e8,#c8aa50,#8a6e20);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
 /* ===== SEARCH ===== */
-
 .search-wrap{
-
-width:100%;
-max-width:420px;
-margin:20px 0 30px;
-
-position:relative;
-z-index:20;
-
+  width:100%;
+  max-width:420px;
+  margin:20px 0 30px;
+  position:relative;
+  z-index:20;
 }
 
 .search-box{
-
-width:100%;
-padding:12px 14px;
-
-background:rgba(0,0,0,.4);
-
-border:
-1px solid rgba(200,170,80,.3);
-
-color:#e8dfc8;
-
-outline:none;
-
+  width:100%;
+  padding:12px 14px;
+  background:rgba(0,0,0,.4);
+  border:1px solid rgba(200,170,80,.3);
+  color:#e8dfc8;
+  outline:none;
 }
 
+/* ===== SUGGEST ===== */
 .suggest-box{
-
-position:absolute;
-
-top:48px;
-
-width:100%;
-
-background:
-rgba(10,10,20,.95);
-
-border:
-1px solid rgba(200,170,80,.2);
-
-display:none;
-flex-direction:column;
-
+  position:absolute;
+  top:48px;
+  width:100%;
+  background:rgba(10,10,20,.95);
+  border:1px solid rgba(200,170,80,.2);
+  display:none;
+  flex-direction:column;
 }
 
 .suggest-item{
-
-padding:10px;
-cursor:pointer;
-
+  padding:10px;
+  cursor:pointer;
 }
 
 .suggest-item:hover{
-
-background:
-rgba(80,150,255,.15);
-
+  background:rgba(80,150,255,.15);
 }
 
 /* ===== MENU ===== */
-
 .menu-list{
-
-width:100%;
-max-width:560px;
-
-display:flex;
-flex-direction:column;
-
-gap:8px;
-
+  width:100%;
+  max-width:560px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
 .menu-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
 
-position:relative;
-
-display:flex;
-align-items:center;
-
-cursor:pointer;
-
+  height:72px; /* ★安定化 */
+  overflow:hidden;
 }
 
 .mi-bg{
-
-position:absolute;
-inset:0;
-
-opacity:0;
-
-transition:.25s;
-
-background:
-linear-gradient(
-90deg,
-rgba(80,150,255,0),
-rgba(80,150,255,.2),
-rgba(80,150,255,0));
-
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:.25s;
+  background:linear-gradient(90deg,rgba(80,150,255,0),rgba(80,150,255,.2),rgba(80,150,255,0));
 }
 
 .menu-item:hover .mi-bg{
-
-opacity:1;
-
+  opacity:1;
 }
 
 .mi-num{
-
-width:40px;
-
-font-family:'Cinzel',serif;
-
-text-align:right;
-
-color:
-rgba(200,170,80,.6);
-
+  width:40px;
+  text-align:right;
+  font-family:'Cinzel',serif;
+  color:rgba(200,170,80,.6);
+  flex-shrink:0;
 }
 
 .mi-body{
-
-flex:1;
-
-padding:14px 10px;
-
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:0 10px;
 }
 
 .mi-round{
-
-font-size:10px;
-
-letter-spacing:.3em;
-
-color:
-rgba(200,170,80,.6);
-
+  font-size:10px;
+  letter-spacing:.3em;
+  color:rgba(200,170,80,.6);
+  line-height:1;
 }
 
 .mi-title{
-
-font-size:18px;
-
+  font-size:18px;
+  line-height:1.2;
 }
 
 /* ===== FOOTER ===== */
-
 .menu-footer{
-
-margin-top:40px;
-
-font-size:10px;
-
-letter-spacing:.3em;
-
-color:
-rgba(200,170,80,.25);
-
+  margin-top:40px;
+  font-size:10px;
+  letter-spacing:.3em;
+  color:rgba(200,170,80,.25);
 }
 
 </style>
@@ -344,500 +248,181 @@ rgba(200,170,80,.25);
 
 <body>
 
+<!-- BACK BUTTON -->
+<button class="back-button"
+        onclick="location.href='../../index.html'">
+← HOME
+</button>
+
+<!-- BACKGROUND -->
 <div class="bg-layer bg-stars"></div>
 <div class="bg-layer bg-glow-blue"></div>
 
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
-<button
-class="back-button"
-onclick="location.href='../../index.html'">
-
-← HOME
-
-</button
-
+<!-- PAGE -->
 <div id="menu-page">
 
-<div class="menu-header">
+  <div class="menu-header">
+    <div class="menu-eyebrow">Physics Hub</div>
+    <div class="menu-title-main">Exercises</div>
+  </div>
 
-<div class="menu-eyebrow">
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input id="search" class="search-box" type="text" placeholder="Search...">
+    <div id="suggest" class="suggest-box"></div>
+  </div>
 
-Physics Hub
+  <!-- MENU -->
+  <div class="menu-list">
 
-</div>
-
-<div class="menu-title-main">
-
-Exercises
-
-</div>
-
-</div>
-
-<div class="search-wrap">
-
-<input
-id="search"
-class="search-box"
-type="text"
-placeholder="Search...">
-
-<div
-id="suggest"
-class="suggest-box">
-</div>
-
-</div>
-
-<div class="menu-list">
-
-    <div class="menu-item"
-     onclick="location.href='exercize1/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">01</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 1
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize1/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">01</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 1</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize2/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">02</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 2
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize2/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">02</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 2</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize3/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">03</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 3
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize3/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">03</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 3</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize4/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">04</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 4
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize4/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">04</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 4</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize5/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">05</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 5
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize5/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">05</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 5</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize6/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">06</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 6
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize6/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">06</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 6</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize7/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">07</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 7
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize7/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">07</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 7</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize8/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">08</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 8
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize8/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">08</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 8</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize9/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">09</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 9
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize9/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">09</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 9</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize10/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">10</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 10
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize10/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">10</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 10</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize11/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">11</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 11
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize11/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">11</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 11</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize12/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">12</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 12
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize12/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">12</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 12</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize13/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">13</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 13
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize13/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">13</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 13</div></div>
     </div>
 
-</div>
-
-<div class="menu-item"
-     onclick="location.href='exercize14/index.html'">
-
-    <div class="mi-bg"></div>
-
-    <div class="mi-num">14</div>
-
-    <div class="mi-body">
-
-        <div class="mi-round">
-
-            EXERCISE
-
-        </div>
-
-        <div class="mi-title">
-
-            演習 14
-
-        </div>
-
+    <div class="menu-item" onclick="location.href='exercize14/index.html'">
+      <div class="mi-bg"></div>
+      <div class="mi-num">14</div>
+      <div class="mi-body"><div class="mi-round">EXERCISE</div><div class="mi-title">演習 14</div></div>
     </div>
 
-</div>
+  </div>
 
-</div>
-
-<div class="menu-footer">
-
+  <div class="menu-footer">
     Physics Navigation System
-
-</div>
+  </div>
 
 </div>
 
 <script>
-
-
 const data = [
-
-{ key: "演習1", link: "exercize1/index.html" },
-{ key: "演習2", link: "exercize2/index.html" },
-{ key: "演習3", link: "exercize3/index.html" },
-{ key: "演習4", link: "exercize4/index.html" },
-{ key: "演習5", link: "exercize5/index.html" },
-{ key: "演習6", link: "exercize6/index.html" },
-{ key: "演習7", link: "exercize7/index.html" },
-{ key: "演習8", link: "exercize8/index.html" },
-{ key: "演習9", link: "exercize9/index.html" },
-{ key: "演習10", link: "exercize10/index.html" },
-{ key: "演習11", link: "exercize11/index.html" },
-{ key: "演習12", link: "exercize12/index.html" },
-{ key: "演習13", link: "exercize13/index.html" },
-{ key: "演習14", link: "exercize14/index.html" },
-
-{ key: "統計力学", link: "../index.html" },
-{ key: "講義", link: "../lecture/index.html" },
-{ key: "演習", link: "../exercize/index.html" }
-
+{ key:"演習1", link:"exercize1/index.html" },
+{ key:"演習2", link:"exercize2/index.html" },
+{ key:"演習3", link:"exercize3/index.html" },
+{ key:"演習4", link:"exercize4/index.html" },
+{ key:"演習5", link:"exercize5/index.html" },
+{ key:"演習6", link:"exercize6/index.html" },
+{ key:"演習7", link:"exercize7/index.html" },
+{ key:"演習8", link:"exercize8/index.html" },
+{ key:"演習9", link:"exercize9/index.html" },
+{ key:"演習10", link:"exercize10/index.html" },
+{ key:"演習11", link:"exercize11/index.html" },
+{ key:"演習12", link:"exercize12/index.html" },
+{ key:"演習13", link:"exercize13/index.html" },
+{ key:"演習14", link:"exercize14/index.html" }
 ];
 
 const input = document.getElementById("search");
 const suggest = document.getElementById("suggest");
 
-input.addEventListener("input", () => {
+input.addEventListener("input",()=>{
+  const q=input.value.trim();
+  suggest.innerHTML="";
 
-    const q = input.value.trim();
+  if(!q){
+    suggest.style.display="none";
+    return;
+  }
 
-    suggest.innerHTML = "";
+  const res=data.filter(d=>d.key.includes(q));
 
-    if(!q){
+  if(res.length===0){
+    suggest.style.display="none";
+    return;
+  }
 
-        suggest.style.display = "none";
-        return;
+  res.forEach(r=>{
+    const div=document.createElement("div");
+    div.className="suggest-item";
+    div.textContent=r.key;
+    div.onclick=()=>location.href=r.link;
+    suggest.appendChild(div);
+  });
 
-    }
-
-    const result = data.filter(item =>
-        item.key.includes(q)
-    );
-
-    if(result.length === 0){
-
-        suggest.style.display = "none";
-        return;
-
-    }
-
-    result.forEach(item=>{
-
-        const div = document.createElement("div");
-
-        div.className = "suggest-item";
-
-        div.textContent = item.key;
-
-        div.onclick = () => {
-
-            location.href = item.link;
-
-        };
-
-        suggest.appendChild(div);
-
-    });
-
-    suggest.style.display = "flex";
-
+  suggest.style.display="flex";
 });
 
-document.addEventListener("click", (e) => {
-
-    if(!e.target.closest(".search-wrap")){
-
-        suggest.style.display = "none";
-
-    }
-
+document.addEventListener("click",(e)=>{
+  if(!e.target.closest(".search-wrap")){
+    suggest.style.display="none";
+  }
 });
-
 </script>
 
 </body>
