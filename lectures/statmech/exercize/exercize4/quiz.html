@@ -1,0 +1,2615 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統計力学１ 復習問題４ ｜ 穴埋めクイズ</title>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    macros: {
+      kB: "k_{\\mathrm{B}}"
+    }
+  },
+  options: {
+    skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+  }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+<style>
+:root{
+  --bg:            #0d1117;
+  --panel:         #12181f;
+  --panel-raised:  #161d26;
+  --line:          #21283299;
+  --line-strong:   #2a3340;
+  --ink:           #e6edf3;
+  --ink-dim:       #8b96a5;
+  --ink-faint:     #5b6573;
+  --amber:         #e3b341;
+  --amber-dim:     #8a6a2c;
+  --cyan:          #58a6ff;
+  --cyan-dim:      #1f6feb33;
+  --violet:        #bc8cff;
+  --green:         #3fb950;
+  --green-dim:     #3fb95022;
+  --red:           #f85149;
+  --red-dim:       #f8514922;
+  --serif: "Source Han Serif", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --sans:  "Source Han Sans", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono:  "JetBrains Mono", "Fira Code", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+
+body{
+  background:
+    radial-gradient(circle at 1px 1px, #ffffff0c 1px, transparent 1px) 0 0/26px 26px,
+    var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:80px;
+}
+
+/* ===== Header ===== */
+.site-header{
+  position:relative;
+  padding:56px 24px 40px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+.site-header::before{
+  content:"";
+  position:absolute;
+  top:-120px; left:50%;
+  width:600px; height:300px;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at center, #58a6ff22, transparent 70%);
+  pointer-events:none;
+}
+.eyebrow{
+  font-family:var(--mono);
+  letter-spacing:.18em;
+  font-size:12px;
+  color:var(--amber);
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.site-title{
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:clamp(28px,4vw,42px);
+  margin:0 0 12px;
+  color:var(--ink);
+  letter-spacing:.01em;
+}
+.site-sub{
+  color:var(--ink-dim);
+  font-size:15px;
+  max-width:560px;
+  margin:0 auto;
+}
+.formula-strip{
+  margin-top:28px;
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--ink-faint);
+  display:flex;
+  gap:28px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.formula-strip span{
+  padding:6px 12px;
+  border:1px solid var(--line-strong);
+  border-radius:6px;
+  background:var(--panel);
+}
+
+/* ===== Tabs ===== */
+.tab-bar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  display:flex;
+  gap:2px;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding:0 16px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex:0 0 auto;
+  font-family:var(--mono);
+  font-size:14px;
+  color:var(--ink-dim);
+  background:transparent;
+  border:none;
+  padding:18px 22px 16px;
+  cursor:pointer;
+  position:relative;
+  white-space:nowrap;
+  transition:color .15s ease;
+}
+.tab-btn .tab-num{
+  color:var(--ink-faint);
+  margin-right:8px;
+}
+.tab-btn:hover{color:var(--ink);}
+.tab-btn.active{color:var(--ink);}
+.tab-btn.active::after{
+  content:"";
+  position:absolute;
+  left:14px; right:14px; bottom:0;
+  height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--violet));
+  border-radius:2px;
+}
+.tab-btn.active .tab-num{color:var(--amber);}
+
+/* ===== Main layout ===== */
+.wrap{
+  max-width:880px;
+  margin:0 auto;
+  padding:0 20px;
+}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+.section-intro{
+  padding:40px 0 28px;
+  border-bottom:1px dashed var(--line-strong);
+  margin-bottom:36px;
+}
+.section-kicker{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--violet);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.section-title{
+  font-family:var(--serif);
+  font-size:24px;
+  margin:0 0 14px;
+  color:var(--ink);
+}
+.section-desc{
+  color:var(--ink-dim);
+  font-size:14.5px;
+}
+.setup-box{
+  margin-top:18px;
+  background:var(--panel);
+  border:1px solid var(--line-strong);
+  border-left:3px solid var(--cyan);
+  border-radius:8px;
+  padding:18px 20px;
+  font-size:14.5px;
+  color:var(--ink-dim);
+}
+.setup-box .mjx-math, .setup-box mjx-container{color:var(--ink) !important;}
+
+/* ===== Question cards ===== */
+.qcard{
+  background:var(--panel);
+  border:1px solid var(--line-strong);
+  border-radius:10px;
+  padding:24px 24px 22px;
+  margin-bottom:22px;
+  position:relative;
+}
+.qcard-head{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:14px;
+}
+.qcard-num{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--bg);
+  background:var(--amber);
+  border-radius:5px;
+  padding:3px 8px;
+  font-weight:700;
+  flex:0 0 auto;
+}
+.qcard-label{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--ink-faint);
+  letter-spacing:.06em;
+}
+.qcard-body{
+  color:var(--ink);
+  font-size:15.5px;
+  margin-bottom:18px;
+}
+.qcard-body .blank-tag{
+  display:inline-block;
+  font-family:var(--mono);
+  color:var(--amber);
+  border:1px dashed var(--amber-dim);
+  border-radius:5px;
+  padding:1px 8px;
+  margin:0 2px;
+  font-weight:700;
+}
+
+.choices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:6px;
+}
+@media (max-width:560px){
+  .choices{grid-template-columns:1fr;}
+}
+.choice-btn{
+  text-align:left;
+  background:var(--panel-raised);
+  border:1px solid var(--line-strong);
+  border-radius:8px;
+  padding:12px 14px;
+  color:var(--ink);
+  font-size:14.5px;
+  cursor:pointer;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  transition:border-color .12s ease, background .12s ease, transform .08s ease;
+  font-family:var(--sans);
+}
+.choice-btn:hover:not(.locked){
+  border-color:var(--cyan);
+  background:#161d2e;
+}
+.choice-btn:active:not(.locked){transform:scale(.99);}
+.choice-kana{
+  font-family:var(--mono);
+  color:var(--ink-faint);
+  flex:0 0 auto;
+  font-weight:700;
+}
+.choice-text{flex:1;}
+.choice-btn.correct{
+  border-color:var(--green);
+  background:var(--green-dim);
+}
+.choice-btn.correct .choice-kana{color:var(--green);}
+.choice-btn.wrong{
+  border-color:var(--red);
+  background:var(--red-dim);
+}
+.choice-btn.wrong .choice-kana{color:var(--red);}
+.choice-btn.dim{opacity:.45;}
+
+.feedback{
+  margin-top:14px;
+  font-size:13.5px;
+  padding:10px 14px;
+  border-radius:7px;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback.ok{
+  background:var(--green-dim);
+  color:#9be9a8;
+  border:1px solid #2ea04344;
+}
+.feedback.ng{
+  background:var(--red-dim);
+  color:#ffb4ab;
+  border:1px solid #f8514944;
+}
+
+.qcard-footer{
+  margin-top:16px;
+  display:flex;
+  justify-content:flex-end;
+}
+.reveal-btn{
+  font-family:var(--mono);
+  font-size:12.5px;
+  color:var(--cyan);
+  background:transparent;
+  border:1px solid #1f6feb55;
+  border-radius:6px;
+  padding:7px 14px;
+  cursor:pointer;
+  transition:background .12s ease;
+}
+.reveal-btn:hover{background:#1f6feb22;}
+
+.answer-box{
+  display:none;
+  margin-top:16px;
+  background:#0a1830;
+  border:1px solid #1f6feb44;
+  border-left:3px solid var(--cyan);
+  border-radius:8px;
+  padding:16px 18px;
+}
+.answer-box.show{display:block;}
+.answer-box .ans-label{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--cyan);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.answer-box .ans-formula{
+  margin:8px 0;
+}
+.answer-box .ans-note{
+  color:var(--ink-dim);
+  font-size:13.5px;
+  margin-top:8px;
+}
+
+/* ===== Explanation (step-by-step) ===== */
+.explain-section{
+  margin-top:56px;
+  padding-top:8px;
+}
+.explain-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:8px;
+}
+.explain-header .pin{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--violet);
+  box-shadow:0 0 0 4px #bc8cff22;
+  flex:0 0 auto;
+}
+.explain-title{
+  font-family:var(--serif);
+  font-size:21px;
+  color:var(--ink);
+  margin:0;
+}
+.explain-lead{
+  color:var(--ink-dim);
+  font-size:14px;
+  margin:6px 0 28px;
+}
+
+.step{
+  display:grid;
+  grid-template-columns:36px 1fr;
+  gap:16px;
+  margin-bottom:6px;
+}
+.step-rail{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.step-dot{
+  width:30px;height:30px;
+  border-radius:50%;
+  background:var(--panel-raised);
+  border:1px solid var(--line-strong);
+  color:var(--amber);
+  font-family:var(--mono);
+  font-weight:700;
+  font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  flex:0 0 auto;
+}
+.step-line{
+  width:1px;
+  flex:1;
+  background:var(--line-strong);
+  margin:4px 0;
+  min-height:18px;
+}
+.step-content{
+  padding-bottom:30px;
+}
+.step-title{
+  font-weight:700;
+  color:var(--ink);
+  font-size:15.5px;
+  margin-bottom:8px;
+}
+.step-body{
+  color:var(--ink-dim);
+  font-size:14.5px;
+}
+.step-body p{margin:0 0 10px;}
+
+.math-block{
+  background:var(--panel);
+  border:1px solid var(--line-strong);
+  border-radius:8px;
+  padding:16px 20px;
+  margin:14px 0;
+  overflow-x:auto;
+  color:var(--ink);
+}
+
+.point-box{
+  background:linear-gradient(135deg,#1a2233,#161d26);
+  border:1px solid var(--cyan-dim);
+  border-radius:8px;
+  padding:14px 18px;
+  margin:14px 0;
+  font-size:13.5px;
+  color:var(--ink);
+}
+.point-box .point-label{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--cyan);
+  letter-spacing:.08em;
+  margin-bottom:6px;
+  display:block;
+}
+
+.warn-box{
+  background:#2a190f;
+  border:1px solid #8a4a2c66;
+  border-left:3px solid var(--amber);
+  border-radius:8px;
+  padding:14px 18px;
+  margin:14px 0;
+  font-size:13.5px;
+  color:#f0d9b0;
+}
+.warn-box .warn-label{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--amber);
+  letter-spacing:.08em;
+  margin-bottom:6px;
+  display:block;
+}
+
+.keypoints{
+  margin-top:34px;
+  background:var(--panel-raised);
+  border:1px solid var(--line-strong);
+  border-radius:10px;
+  padding:22px 24px;
+}
+.keypoints-title{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--amber);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.keypoints ul{
+  margin:0;
+  padding-left:0;
+  list-style:none;
+}
+.keypoints li{
+  position:relative;
+  padding:8px 0 8px 20px;
+  border-top:1px dashed var(--line);
+  font-size:14px;
+  color:var(--ink);
+}
+.keypoints li:first-child{border-top:none;}
+.keypoints li::before{
+  content:"◆";
+  color:var(--cyan);
+  font-size:10px;
+  position:absolute;
+  left:0;
+  top:11px;
+}
+
+table.cmp-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:14px 0;
+  font-size:13.5px;
+}
+table.cmp-table th, table.cmp-table td{
+  border:1px solid var(--line-strong);
+  padding:10px 12px;
+  text-align:left;
+}
+table.cmp-table th{
+  background:var(--panel-raised);
+  color:var(--amber);
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.04em;
+}
+table.cmp-table td{color:var(--ink-dim);}
+
+/* progress */
+.progress-bar{
+  position:sticky;
+  top:53px;
+  z-index:40;
+  height:3px;
+  background:var(--line);
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--cyan),var(--violet));
+  width:0%;
+  transition:width .3s ease;
+}
+
+footer.page-footer{
+  text-align:center;
+  color:var(--ink-faint);
+  font-size:12px;
+  font-family:var(--mono);
+  padding:50px 20px 10px;
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="eyebrow">Statistical Mechanics I &middot; Review Set 4</div>
+  <h1 class="site-title">統計力学１　復習問題４</h1>
+  <p class="site-sub">相空間の体積からエントロピーへ — 古典理想気体・ギブスのパラドックス・次元の異なる理想気体</p>
+  <div class="formula-strip">
+    <span>\( S = \kB \log W \)</span>
+    <span>\( W = \dfrac{\Omega}{h^{f}N!} \)</span>
+    <span>\( PV=N\kB T \)</span>
+  </div>
+</header>
+
+<nav class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="t1"><span class="tab-num">問1</span>1/N! とギブスのパラドックス</button>
+  <button class="tab-btn" data-tab="t2"><span class="tab-num">問2</span>1次元理想気体</button>
+  <button class="tab-btn" data-tab="t3"><span class="tab-num">問3</span>2次元理想気体</button>
+</nav>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<main class="wrap">
+
+  <!-- ============================================================ -->
+  <!-- TAB 1 -->
+  <!-- ============================================================ -->
+  <section class="tab-panel active" id="t1">
+    <div class="section-intro">
+      <div class="section-kicker">Problem 1</div>
+      <h2 class="section-title">なぜ \(1/N!\) が必要なのか — ギブスのパラドックス</h2>
+      <p class="section-desc">
+        単原子分子古典理想気体の相空間の体積 \(\Omega\) から状態数 \(W=c\,\Omega\) を作るとき，比例係数 \(c\) の中に同種粒子の入れ替えを除く \(1/N!\) を入れないと，熱力学的なエントロピーと矛盾が生じる。この矛盾を，示量性・断熱混合・色分け粒子の3つの場面で確認する。
+      </p>
+      <div class="setup-box">
+        <strong>与えられている表式</strong><br><br>
+        相空間の体積：
+        \[
+        \Omega = V^{N}\times \frac{3N}{2}\,(2\pi m)^{3N/2}\,\frac{E^{3N/2-1}}{\Gamma\!\left(\dfrac{3N}{2}+1\right)}\,\delta E
+        \]
+        正しい状態数（\(1/N!\) 入り）から得られるエントロピー：
+        \[
+        S(E,V,N) = N\kB\left[\frac{3}{2}\log\!\left(\frac{4\pi mE}{3Nh^2}\right)+\log\frac{V}{N}+\frac{5}{2}\right]
+        \]
+        \(1/N!\) を入れなかった場合のエントロピー：
+        \[
+        S_e(E,V,N) = N\kB\left[\frac{3}{2}\log\!\left(\frac{4\pi mE}{3Nh^2}\right)+\log V+\frac{3}{2}\right]
+        \]
+      </div>
+    </div>
+
+    <!-- Q1-1 : c の表式 -->
+    <div class="qcard" data-qid="1-1">
+      <div class="qcard-head">
+        <span class="qcard-num">Q1</span>
+        <span class="qcard-label">比例係数 c</span>
+      </div>
+      <div class="qcard-body">
+        状態数を \(W(E,V,N)=c\times\Omega\) と定義するとき，講義で導入された正しい比例係数 \(c\) は
+        <span class="blank-tag">ア</span> である。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{1}{h^{3N}}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{1}{h^{N}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{1}{h^{3N}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{1}{N!}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(\dfrac{1}{h^{3N}N!}\)</strong>。
+        <div class="ans-note">
+          \(\Omega\) は (位置×運動量)\(^{3N}\) の次元を持つので \(h^{3N}\) で無次元化し，同種粒子 \(N\) 個の番号の付け替え方 \(N!\) 通りの重複を取り除くために \(N!\) で割る。両方が同時に必要。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-2 : S(E,V,N)の対数の中身 -->
+    <div class="qcard" data-qid="1-2">
+      <div class="qcard-head">
+        <span class="qcard-num">Q2</span>
+        <span class="qcard-label">S(E,V,N) の対数項</span>
+      </div>
+      <div class="qcard-body">
+        正しいエントロピー \(S(E,V,N)\) の表式において，\(\log\) の中に入る量は
+        \[
+        S(E,V,N)=N\kB\left[\frac{3}{2}\log\!\left(\;\boxed{\text{イ}}\;\right)+\log\frac{V}{N}+\frac{5}{2}\right]
+        \]
+        である。空欄<span class="blank-tag">イ</span>に入るのはどれか。
+      </div>
+      <div class="choices" data-correct="0">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{4\pi mE}{3Nh^2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{2\pi mE}{3Nh^2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{4\pi mE}{Nh^2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{4\pi mE^2}{3Nh^2}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ア：\(\dfrac{4\pi mE}{3Nh^2}\)</strong>。
+        <div class="ans-note">
+          \(\Omega\) の中の \(E^{3N/2-1}\) や \(\Gamma(3N/2+1)\) をスターリングの公式で展開し，\(N\) に比例しない項（\(\log N\) など）を熱力学極限で無視して主要項だけをまとめると，この形に整理される。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-3 : 末尾の定数 5/2 -->
+    <div class="qcard" data-qid="1-3">
+      <div class="qcard-head">
+        <span class="qcard-num">Q3</span>
+        <span class="qcard-label">S(E,V,N) の定数項</span>
+      </div>
+      <div class="qcard-body">
+        正しいエントロピー \(S(E,V,N)=N\kB\left[\frac{3}{2}\log\!\left(\frac{4\pi mE}{3Nh^2}\right)+\log\frac{V}{N}+\boxed{\text{ウ}}\right]\) の空欄ウに入る定数項は何か。
+      </div>
+      <div class="choices" data-correct="3">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{3}{2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(1\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(2\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{5}{2}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>エ：\(\dfrac{5}{2}\)</strong>。
+        <div class="ans-note">
+          スターリングの公式を \(N!\) と \(\Gamma(3N/2+1)\) の両方に適用した結果として現れる定数。これがサックール・テトロード型の式の定数項にあたる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-4 : Se の違い：log V -->
+    <div class="qcard" data-qid="1-4">
+      <div class="qcard-head">
+        <span class="qcard-num">Q4</span>
+        <span class="qcard-label">\(1/N!\) を入れない場合の \(S_e\)</span>
+      </div>
+      <div class="qcard-body">
+        もし比例係数に \(1/N!\) を入れなかった場合のエントロピーは
+        \[
+        S_e(E,V,N)=N\kB\left[\frac{3}{2}\log\!\left(\frac{4\pi mE}{3Nh^2}\right)+\boxed{\text{エ}}+\frac{3}{2}\right]
+        \]
+        となる。空欄エに入るのはどれか（\(S(E,V,N)\) との違いに注目）。
+      </div>
+      <div class="choices" data-correct="1">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\log\dfrac{V}{N}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\log V\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\log N\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(N\log V\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>イ：\(\log V\)</strong>。
+        <div class="ans-note">
+          \(1/N!\) を省くと \(\log N!\simeq N\log N - N\) の項が落ちるため，\(\log(V/N)=\log V-\log N\) のうち \(-\log N\) の寄与が消え，単に \(\log V\) になる。さらに定数項も \(5/2\) から \(3/2\) に変わる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-5 : Se の定数項 -->
+    <div class="qcard" data-qid="1-5">
+      <div class="qcard-head">
+        <span class="qcard-num">Q5</span>
+        <span class="qcard-label">\(S_e\) の定数項</span>
+      </div>
+      <div class="qcard-body">
+        \(S_e(E,V,N)\) の定数項（上の式の最後の項）は <span class="blank-tag">オ</span> である。
+      </div>
+      <div class="choices" data-correct="0">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{3}{2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{5}{2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(0\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(1\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ア：\(\dfrac{3}{2}\)</strong>。
+        <div class="ans-note">
+          \(N!\) によるスターリング展開の寄与（\(-N\log N + N\) の項）がそのまま欠落するため，\(S\) の \(5/2\) から \(1\) 分だけ小さい \(3/2\) になる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-6 : (1) S の示量性 -->
+    <div class="qcard" data-qid="1-6">
+      <div class="qcard-head">
+        <span class="qcard-num">Q6</span>
+        <span class="qcard-label">(1) 示量性：S(aE,aV,aN)</span>
+      </div>
+      <div class="qcard-body">
+        系を \(E\to aE,\ V\to aV,\ N\to aN\) と \(a\) 倍したとき，正しいエントロピー \(S\) については
+        \[
+        S(aE,aV,aN) = \boxed{\text{カ}}
+        \]
+        となり，示量性を満たす。空欄カに入るのはどれか。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(S(E,V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(a^2 S(E,V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(a\,S(E,V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(a\,S(E,V,N)+aN\kB\log a\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(a\,S(E,V,N)\)</strong>。
+        <div class="ans-note">
+          \(E/N\) と \(V/N\) はどちらも \(a\) 倍してもそれぞれ \(E/N,\ V/N\) のまま不変なので，\(\log\) の中身は変わらず，全体の係数 \(N\) だけが \(aN\) になる。これが「示量性」が満たされている，ということ。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-7 : (1) Se の示量性の破れ -->
+    <div class="qcard" data-qid="1-7">
+      <div class="qcard-head">
+        <span class="qcard-num">Q7</span>
+        <span class="qcard-label">(1) 示量性の破れ：\(S_e(aE,aV,aN)\)</span>
+      </div>
+      <div class="qcard-body">
+        一方，\(1/N!\) を含めない場合のエントロピー \(S_e\) については
+        \[
+        S_e(aE,aV,aN) = \boxed{\text{キ}}
+        \]
+        となり，示量性を <strong>満たさない</strong>。空欄キに入る正しい式はどれか。
+      </div>
+      <div class="choices" data-correct="3">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(a\,S_e(E,V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(a\,S_e(E,V,N)-aN\kB\log a\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(a^2 S_e(E,V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(a\,S_e(E,V,N)+aN\kB\log a\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>エ：\(a\,S_e(E,V,N)+aN\kB\log a\)</strong>。
+        <div class="ans-note">
+          \(S_e\) では \(\log V\) のままなので，\(V\to aV\) で \(\log V\to \log V+\log a\) という余分な項が生じ，それに係数 \(N\to aN\) がかかって \(aN\kB\log a\) という余分項が残る。これが示量性を破る原因。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-8 : (2) 混合前後でSは変化しない -->
+    <div class="qcard" data-qid="1-8">
+      <div class="qcard-head">
+        <span class="qcard-num">Q8</span>
+        <span class="qcard-label">(2) 同種粒子の断熱混合：正しい S の場合</span>
+      </div>
+      <div class="qcard-body">
+        体積 \(V\) の2つの区画に同種の気体 \((E,V,N)\) を入れ，仕切りを外して \((2E,2V,2N)\) にする。正しい \(S\) を用いると，混合前の全エントロピー \(2S(E,V,N)\) と混合後の \(S(2E,2V,2N)\) の関係は
+        \[
+        S(2E,2V,2N) = \boxed{\text{ク}}
+        \]
+        となる（空欄ク）。
+      </div>
+      <div class="choices" data-correct="1">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(2S(E,V,N)+2N\kB\log 2\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(2S(E,V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(4S(E,V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(S(E,V,N)\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>イ：\(2S(E,V,N)\)</strong>。
+        <div class="ans-note">
+          (1)の結果 \(S(aE,aV,aN)=aS(E,V,N)\) に \(a=2\) を代入すれば直ちに得られる。つまり混合の前後でエントロピーは変化せず，断熱準静過程として熱力学と整合する。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-9 : (2) Se の場合の不整合 -->
+    <div class="qcard" data-qid="1-9">
+      <div class="qcard-head">
+        <span class="qcard-num">Q9</span>
+        <span class="qcard-label">(2) 同種粒子の断熱混合：\(S_e\) の場合の矛盾</span>
+      </div>
+      <div class="qcard-body">
+        一方，\(S_e\) を用いると，混合後のエントロピーは混合前に比べて
+        \[
+        S_e(2E,2V,2N) - 2S_e(E,V,N) = \boxed{\text{ケ}}
+        \]
+        だけ変化してしまい（空欄ケ），断熱準静過程にもかかわらずエントロピーが増えるという矛盾が生じる。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(0\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(N\kB\log 2\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(2N\kB\log 2\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(4N\kB\log 2\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(2N\kB\log 2\)</strong>。
+        <div class="ans-note">
+          \(S_e(aE,aV,aN)=aS_e(E,V,N)+aN\kB\log a\) に \(a=2\) を入れると，余分項は \(2N\kB\log 2\)。これは熱力学的にあり得ない「断熱過程でのエントロピー増大」であり，\(1/N!\) を入れないことの誤りを示している。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-10 : (3) c' の表式 -->
+    <div class="qcard" data-qid="1-10">
+      <div class="qcard-head">
+        <span class="qcard-num">Q10</span>
+        <span class="qcard-label">(3) 赤と白の粒子：規格化係数 \(c'\)</span>
+      </div>
+      <div class="qcard-body">
+        区画1に赤粒子 \(N\) 個，区画2に白粒子 \(N\) 個（色以外は同じ性質）を入れて混合する。赤と白は区別できるので，番号の入れ替えうる方法の総数は赤・白それぞれ独立に \(N!\) 通りであり，混合後の状態数の比例係数 \(c'\) は
+        \[
+        c' = \boxed{\text{コ}}
+        \]
+        となる（空欄コ。\((2N)!\) ではないことに注意）。
+      </div>
+      <div class="choices" data-correct="3">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{1}{h^{3(2N)}(2N)!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{1}{h^{3N}(N!)^2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{1}{h^{3(2N)}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{1}{h^{3(2N)}(N!)^2}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>エ：\(\dfrac{1}{h^{3(2N)}(N!)^2}\)</strong>。
+        <div class="ans-note">
+          全粒子数は \(2N\) なので無次元化は \(h^{3(2N)}\)。しかし赤と白は区別できるため，入れ替えの重複は赤粒子内の \(N!\) と白粒子内の \(N!\) の積，つまり \((N!)^2\) であり，\((2N)!\) にはならない。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-11 : (3) S_mixed の表式 -->
+    <div class="qcard" data-qid="1-11">
+      <div class="qcard-head">
+        <span class="qcard-num">Q11</span>
+        <span class="qcard-label">(3) 混合後のエントロピー（状態数からの計算）</span>
+      </div>
+      <div class="qcard-body">
+        \(c'\) を用いて状態数 \(W(2E,2V,2N)=c'\times\Omega(2E,2V,2N)\) からエントロピーを計算すると，
+        \[
+        S_{\text{混合}}(2E,2V,2N) = S(2E,2V,2N) + \boxed{\text{サ}}
+        \]
+        と書ける（空欄サ）。ここで \(S(2E,2V,2N)\) は同種粒子を2つ合わせた場合のエントロピー。空欄に入るのはどれか。
+      </div>
+      <div class="choices" data-correct="0">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(2N\kB\log 2\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(N\kB\log 2\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(0\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(-2N\kB\log 2\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ア：\(2N\kB\log 2\)</strong>。
+        <div class="ans-note">
+          \((N!)^2\) は \((2N)!\) より大きいため重複の除き方が少なく，その分エントロピーが \(S(2E,2V,2N)\) より \(2N\kB\log 2\) だけ大きくなる。これは赤白を区別する自由度が増えた分の寄与である。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-12 : (3) 熱力学的な再計算 S_mixed = 2 S(E,2V,N) -->
+    <div class="qcard" data-qid="1-12">
+      <div class="qcard-head">
+        <span class="qcard-num">Q12</span>
+        <span class="qcard-label">(3) 熱力学的考察：混合後の体積分配</span>
+      </div>
+      <div class="qcard-body">
+        熱力学的に考えると，仕切りを外した後，赤粒子も白粒子も全体積 \(2V\) を動き回れる。両者は対称なので平衡状態ではエネルギーはそれぞれ \(E\) ずつ分配され，混合後の全系のエントロピーは
+        \[
+        S_{\text{混合}} = \boxed{\text{シ}}
+        \]
+        と書ける（空欄シ）。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(2S(E,V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(S(2E,2V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(2S(E,2V,N)\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(S(E,2V,2N)\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(2S(E,2V,N)\)</strong>。
+        <div class="ans-note">
+          赤粒子 \(N\) 個がエネルギー \(E\)・体積 \(2V\) を占める寄与 \(S(E,2V,N)\) と，白粒子の同じ寄与 \(S(E,2V,N)\) の和。各成分は独立に体積 \(2V\) 全体を使えるが，互いの存在に直接影響されないため，単純な和になる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q1-13 : (3) エントロピー差 -->
+    <div class="qcard" data-qid="1-13">
+      <div class="qcard-head">
+        <span class="qcard-num">Q13</span>
+        <span class="qcard-label">(3) 混合前後のエントロピー差（最終結果）</span>
+      </div>
+      <div class="qcard-body">
+        混合前の全エントロピーは \(2S(E,V,N)\)，混合後は \(2S(E,2V,N)\) であるから，その差
+        \[
+        2S(E,2V,N)-2S(E,V,N) = \boxed{\text{ス}}
+        \]
+        となる（空欄ス）。赤と白が区別できる場合，仕切りを外すとエントロピーはこれだけ増加する。
+      </div>
+      <div class="choices" data-correct="3">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(0\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(N\kB\log 2\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(4N\kB\log 2\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(2N\kB\log 2\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>エ：\(2N\kB\log 2\)</strong>。
+        <div class="ans-note">
+          \(S(E,V,N)\) の表式で \(V\to 2V\) とすると \(\log(2V/N)=\log(V/N)+\log 2\) となり，これに係数 \(N\) と「2区画分」の係数2がかかるので \(2N\kB\log 2\) が増える。区別できる粒子同士の混合では，このエントロピー増加（混合エントロピー）が実在の物理的効果として現れる。
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== EXPLANATION ===================== -->
+    <div class="explain-section">
+      <div class="explain-header">
+        <span class="pin"></span>
+        <h3 class="explain-title">ステップ・バイ・ステップ解説：1/N! とギブスのパラドックス</h3>
+      </div>
+      <p class="explain-lead">初めて統計力学を学ぶ人向けに，この問題全体の流れを最初から丁寧に追っていく。</p>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">そもそも何を数えているのか：相空間の体積 \(\Omega\)</div>
+          <div class="step-body">
+            <p>
+              古典力学では，\(N\) 個の粒子からなる系の状態は，各粒子の位置 \(\mathbf{r}_j\) と運動量 \(\mathbf{p}_j\) をすべて並べた \(6N\) 次元の相空間（3次元空間なら位置3成分・運動量3成分で1粒子あたり6次元）の1点で表される。
+            </p>
+            <p>
+              講義で与えられた \(\Omega\) は，エネルギーが \([E,E+\delta E]\) の薄い「殻」の中に入る相空間の体積である。これは状態の「数」そのものではなく，あくまで体積（つまり連続的な量）であることに注意する。
+            </p>
+            <div class="math-block">
+              \[
+              \Omega = V^{N}\times \frac{3N}{2}\,(2\pi m)^{3N/2}\,\frac{E^{3N/2-1}}{\Gamma\!\left(\dfrac{3N}{2}+1\right)}\,\delta E
+              \]
+            </div>
+            <div class="point-box">
+              <span class="point-label">Point</span>
+              \(\Omega\) は位置の体積（\(V^N\)）と運動量の体積（半径 \(\sqrt{2mE}\) の高次元球の表面付近の体積）の積になっている。次元は (位置×運動量)\(^{3N}\)，つまり（作用）\(^{3N}\) である。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">体積から「状態数」へ：なぜ \(h^{3N}\) で割るのか</div>
+          <div class="step-body">
+            <p>
+              状態数 \(W(E,V,N)\) は無次元の「数」でなければならない。しかし \(\Omega\) は (位置×運動量)\(^{3N}\) の次元を持つ量であり，そのままでは無次元の「個数」として扱えない。
+            </p>
+            <p>
+              量子力学的には，位置と運動量を同時に決める1つの「セル」の大きさはプランク定数 \(h\) 程度（不確定性関係 \(\Delta x\,\Delta p\sim h\)）であることが知られている。そこで相空間を一辺 \(h\) のセルに分割し，\(\Omega\) を1セルの体積 \(h^{3N}\) で割れば，「殻の中にどれだけのセル（＝状態）が入っているか」という無次元の数が得られる。
+            </p>
+            <div class="math-block">
+              \[
+              \frac{\Omega}{h^{3N}}\ \longrightarrow\ \text{無次元の「状態の個数」}
+              \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">なぜさらに \(N!\) で割るのか：同種粒子の重複カウント</div>
+          <div class="step-body">
+            <p>
+              ここがこの問題の核心である。相空間の1点は，「1番目の粒子が \((\mathbf r_1,\mathbf p_1)\)，2番目の粒子が \((\mathbf r_2,\mathbf p_2)\)，…」というように，粒子に番号をつけてはじめて定義される。
+            </p>
+            <p>
+              ところが，同種粒子（質量も性質もまったく同じ粒子）からなる系では，「どの粒子が何番か」という情報自体に物理的な意味がない。たとえば2つの同種粒子の番号を入れ替えても，気体の物理的な状態（圧力，温度，エネルギー分布など，観測できるすべての量）はまったく変わらない。
+            </p>
+            <div class="warn-box">
+              <span class="warn-label">注意</span>
+              番号の付け替え方は \(N!\) 通りある（\(N\) 個の異なる番号を並べる順列の数）。これらはすべて相空間上では別の点として数えられてしまうが，物理的には同じ1つの状態である。よって \(\Omega/h^{3N}\) は同じ物理状態を \(N!\) 回重複して数えていることになる。
+            </div>
+            <p>
+              この重複を取り除くために \(N!\) で割る。これが
+            </p>
+            <div class="math-block">
+              \[
+              c = \frac{1}{h^{3N}N!},\qquad W(E,V,N)=c\times\Omega
+              \]
+            </div>
+            の由来である。
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">4</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">ボルツマンの原理とスターリングの公式で \(S\) を作る</div>
+          <div class="step-body">
+            <p>
+              状態数 \(W\) からエントロピーを得るには，ボルツマンの原理
+            </p>
+            <div class="math-block">\[ S(E,V,N) = \kB \log W(E,V,N) \]</div>
+            <p>
+              を使う。\(W\) の中には \(N!\) や \(\Gamma(3N/2+1)\) のような大きな数の階乗・ガンマ関数が現れるので，これをスターリングの公式
+            </p>
+            <div class="math-block">
+              \[
+              \log n! \simeq n\log n - n \quad(n\gg1), \qquad
+              \log\Gamma(x) \simeq x\log x - x \quad (x\gg1)
+              \]
+            </div>
+            <p>
+              で展開する。さらに，熱力学極限（\(N\to\infty\)）では，\(N\) に比例する項（主要項，\(O(N)\)）に比べて，\(\log N\) や \(\log(\delta E/E)\) のような対数的に大きくなるだけの項（\(O(\log N)\)）は無視できるほど小さい。この「主要項だけ残す」操作を行うと，
+            </p>
+            <div class="math-block">
+              \[
+              S(E,V,N) = N\kB\left[\frac{3}{2}\log\!\left(\frac{4\pi mE}{3Nh^2}\right)+\log\frac{V}{N}+\frac{5}{2}\right]
+              \]
+            </div>
+            が得られる。ここで \(N!\) による寄与のおかげで \(\log V\) が \(\log(V/N)\) に変わっている点に注目してほしい。これが次のステップで効いてくる。
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">5</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">(1) 示量性のチェック：\(a\) 倍してみる</div>
+          <div class="step-body">
+            <p>
+              エントロピーは「示量性変数」，つまり系を \(a\) 倍すれば値も \(a\) 倍になるべき量である（直感的には，気体を2つくっつけたらエントロピーも2倍になるはず，という要請）。これを数式で確認する。
+            </p>
+            <p>
+              \(S(E,V,N)\) では，対数の中身は \(E/N\) と \(V/N\) という「1粒子あたりの量」の組み合わせでできている。\(E\to aE,\ N\to aN\) としても \(E/N\) は不変，同様に \(V/N\) も不変なので，対数の中身は変わらず，外側の係数だけが \(N\to aN\) になる：
+            </p>
+            <div class="math-block">\[ S(aE,aV,aN) = aS(E,V,N) \]</div>
+            <p>
+              一方，\(S_e\)（\(1/N!\) を入れなかった場合）では \(\log V\)（\(N\) で割っていない）が残っているため，\(V\to aV\) のとき \(\log(aV)=\log V+\log a\) という余分な定数が生じてしまう。これに係数 \(aN\kB\) がかかるので，
+            </p>
+            <div class="math-block">\[ S_e(aE,aV,aN) = aS_e(E,V,N) + aN\kB\log a \]</div>
+            <p>
+              余分項 \(aN\kB\log a\) がある限り \(S_e\) は示量性を満たさない。これが \(1/N!\) を入れなければならない理由の一つ目である。
+            </p>
+            <table class="cmp-table">
+              <tr><th></th><th>a倍したときの振る舞い</th><th>示量性</th></tr>
+              <tr><td>\(S(E,V,N)\)</td><td>\(aS(E,V,N)\)</td><td>○ 満たす</td></tr>
+              <tr><td>\(S_e(E,V,N)\)</td><td>\(aS_e(E,V,N)+aN\kB\log a\)</td><td>✕ 満たさない</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">6</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">(2) 同種粒子の断熱混合：仕切りを外しても \(S\) は不変であるべき</div>
+          <div class="step-body">
+            <p>
+              次に，容器を仕切り板で2つに分け，それぞれ同じ種類・同じ \((E,V,N)\) の気体を入れる。仕切りを外すと，全体は \((2E,2V,2N)\) の1つの系になる。
+            </p>
+            <p>
+              ここで重要なのは「2つの区画の気体は完全に同種（区別不可能）」ということ。仕切りを外して気体が混ざっても，物理的には何も変わらない（左半分にあった気体分子と右半分にあった気体分子を区別する手段がそもそも存在しない）。よってこの過程は，実質的に何も変化していない断熱準静的過程であり，エントロピーは変化しないはずである。
+            </p>
+            <div class="math-block">
+              \[
+              \text{混合前の全エントロピー} = S(E,V,N)+S(E,V,N)=2S(E,V,N)
+              \]
+            </div>
+            <p>
+              一方，混合後のエントロピーは \(S(2E,2V,2N)\)。ステップ5の示量性の結果（\(a=2\)）を使えば，
+            </p>
+            <div class="math-block">\[ S(2E,2V,2N) = 2S(E,V,N) \]</div>
+            <p>
+              となり，混合前後でエントロピーは一致する。つまり正しい \(S\) は熱力学の要請と整合する。
+            </p>
+            <p>
+              ところが \(S_e\) を使うと，
+            </p>
+            <div class="math-block">\[ S_e(2E,2V,2N) = 2S_e(E,V,N) + 2N\kB\log 2 \neq 2S_e(E,V,N) \]</div>
+            <div class="warn-box">
+              <span class="warn-label">矛盾</span>
+              何も物理的に変化していない断熱準静過程なのに，\(S_e\) を使うとエントロピーが \(2N\kB\log 2\) だけ増えてしまう。これは熱力学第二法則（可逆過程ではエントロピー不変）と矛盾する。この矛盾こそが「ギブスのパラドックス」と呼ばれる現象であり，\(1/N!\) を入れないことの誤りを明確に示している。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">7</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">(3) 赤と白の粒子：区別できる場合は何が変わるか</div>
+          <div class="step-body">
+            <p>
+              最後に，区画1に「赤」の粒子，区画2に「白」の粒子（色以外は完全に同じ性質）を入れる場合を考える。今度は赤と白は色で区別できるので，「番号の付け替えで重複して数えてしまう」状況が変わる。
+            </p>
+            <p>
+              全体で粒子は \(2N\) 個あるが，区別できない番号の入れ替えは「赤粒子内部での入れ替え」（\(N!\) 通り）と「白粒子内部での入れ替え」（\(N!\) 通り）だけである。赤と白を入れ替えることは別の物理状態を作ってしまうので，それは重複とみなしてはいけない。したがって重複の総数は
+            </p>
+            <div class="math-block">\[ (N!)^2 \quad (\text{ではなく } (2N)!\text{ ではない}) \]</div>
+            <p>
+              であり，無次元化は全粒子数 \(2N\) に対して行うので \(h^{3(2N)}\)。よって
+            </p>
+            <div class="math-block">\[ c' = \frac{1}{h^{3(2N)}(N!)^2} \]</div>
+            <p>
+              このことに気をつけて状態数 \(W(2E,2V,2N)=c'\times\Omega(2E,2V,2N)\) からエントロピーを計算すると，
+            </p>
+            <div class="math-block">
+              \[
+              S_{\text{混合}}(2E,2V,2N) = \underbrace{S(2E,2V,2N)}_{\text{同種粒子2つ分のS}} + 2N\kB\log 2
+              \]
+            </div>
+            <p>
+              という結果になる。\((N!)^2\) は \((2N)!\) より小さい数なので，もし誤って \((2N)!\) で割ってしまうと状態数を過小評価してしまう。正しく \((N!)^2\) で割ることで，赤白を区別する自由度の分だけ状態数（＝エントロピー）が同種粒子の場合より大きくなる，という結果が正しく反映される。
+            </p>
+            <p>
+              <strong>熱力学的な視点からも同じ結果を確認できる。</strong>仕切りを外した後，赤粒子も白粒子もそれぞれ全体積 \(2V\) を自由に動き回れる。両者の性質は同じなので，対称性から平衡状態ではエネルギーは赤・白にそれぞれ \(E\) ずつ均等に分配される。よって，
+            </p>
+            <div class="math-block">
+              \[
+              S_{\text{混合}} = S(E,2V,N) + S(E,2V,N) = 2S(E,2V,N)
+              \]
+            </div>
+            <p>
+              混合前の全エントロピーは \(2S(E,V,N)\)（区別できても，分離された状態では単に2つの独立系の和）。したがって混合によるエントロピー変化は
+            </p>
+            <div class="math-block">
+              \[
+              \Delta S = 2S(E,2V,N) - 2S(E,V,N) = 2N\kB\log 2
+              \]
+            </div>
+            <p>
+              \(S(E,V,N)\) の表式に立ち戻ると，\(V\to 2V\) によって \(\log(V/N)\to\log(2V/N)=\log(V/N)+\log2\) となり，これに係数 \(N\kB\) と「2つの成分分」の2をかけて \(2N\kB\log2\) が得られる，という計算で確認できる。
+            </p>
+            <div class="point-box">
+              <span class="point-label">Point — これが本当の「混合エントロピー」</span>
+              赤と白のように区別できる2種類の気体を混合すると，このように実際に \(2N\kB\log2\) だけエントロピーが増加する。これは物理的に正しい現象（混合エントロピー）であり，矛盾ではない。一方，同種粒子（区別できない）の場合に同じ増加が出てしまうのは誤り（ギブスのパラドックス）であり，\(1/N!\) によって正しく回避される。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">8</div></div>
+        <div class="step-content">
+          <div class="step-title">全体のまとめ：何が結論なのか</div>
+          <div class="step-body">
+            <p>
+              この問題が伝えたいメッセージは次の一点に尽きる：「同種粒子（互いに区別できない粒子）からなる系を扱うときは，状態数の比例係数に \(1/N!\) を入れなければ，熱力学（示量性・断熱過程でのエントロピー不変）と矛盾する」。逆に，色など何らかの方法で区別できる粒子の場合は，それぞれの種類ごとに独立に \(N!\) で割る（複数成分なら成分ごとに同種粒子の入れ替えを同一視する）。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="keypoints">
+        <div class="keypoints-title">★ キーポイントまとめ</div>
+        <ul>
+          <li>相空間の体積 \(\Omega\) は連続量であり，無次元の「状態数」にするには \(h^{3N}\) で割って量子力学的なセルの大きさに合わせる必要がある。</li>
+          <li>同種粒子（区別不可能な粒子）の番号の付け替えは，相空間上では別の点だが物理的には同じ状態。この重複（\(N!\) 通り）を除くために \(N!\) で割る。</li>
+          <li>\(1/N!\) を入れた正しい \(S(E,V,N)\) は \(\log(V/N)\) の形になり，示量性 \(S(aE,aV,aN)=aS(E,V,N)\) を満たす。</li>
+          <li>\(1/N!\) を入れない \(S_e(E,V,N)\) は \(\log V\) のままで，余分な \(aN\kB\log a\) が現れて示量性が破れる。</li>
+          <li>同種粒子を断熱的に混ぜる過程は，本来エントロピー不変であるべき。\(S_e\) を使うとエントロピーが \(2N\kB\log2\) 増えてしまう（ギブスのパラドックス）。</li>
+          <li>赤・白のように区別できる粒子を混合する場合は，実際に \(2N\kB\log2\) のエントロピー増加（混合エントロピー）が生じる。これは正しい物理現象であり矛盾ではない。</li>
+          <li>複数成分の気体では，成分ごとに同種粒子の入れ替えを同一視して，それぞれ独立に \(N_i!\) で割る。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TAB 2 -->
+  <!-- ============================================================ -->
+  <section class="tab-panel" id="t2">
+    <div class="section-intro">
+      <div class="section-kicker">Problem 2</div>
+      <h2 class="section-title">1次元理想気体 — 状態数からエントロピー，状態方程式まで</h2>
+      <p class="section-desc">
+        長さ \(V\) の1次元容器に閉じ込められた \(N\) 個の理想気体粒子を考え，相空間の体積 \(\Omega_1\) → 状態数 \(W\) → エントロピー \(S\) → 温度・圧力・状態方程式の順に，3次元の場合と同じ手順を1次元で実行する。
+      </p>
+      <div class="setup-box">
+        <strong>系のハミルトニアン</strong>
+        \[
+        H_1 = \sum_{j=1}^{N}\frac{(p_x^{(j)})^2}{2m}
+        \]
+        \(j\) 番目の粒子の位置を \(x^{(j)}\)，運動量を \(p_x^{(j)}\) とする（1次元なので各粒子の自由度は1つだけ）。
+      </div>
+    </div>
+
+    <!-- Q2-1 : Γ(E~) の位置積分部分 -->
+    <div class="qcard" data-qid="2-1">
+      <div class="qcard-head">
+        <span class="qcard-num">Q1</span>
+        <span class="qcard-label">位置座標についての積分</span>
+      </div>
+      <div class="qcard-body">
+        \(H_1\le E\) を満たす相空間の体積 \(\tilde\Gamma(E)\) を求める際，まず位置座標についての積分 \(\int_0^V dx^{(1)}\cdots\int_0^V dx^{(N)}\) を実行すると
+        <span class="blank-tag">ア</span> となる。
+      </div>
+      <div class="choices" data-correct="1">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(NV\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(V^N\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(V^{N/2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(V\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>イ：\(V^N\)</strong>。
+        <div class="ans-note">
+          各粒子の位置座標は独立に \(0\) から \(V\) まで積分されるので，\(N\) 個分の積分の積は \(V\times V\times\cdots\times V=V^N\)。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-2 : N次元球の体積（運動量空間） -->
+    <div class="qcard" data-qid="2-2">
+      <div class="qcard-head">
+        <span class="qcard-num">Q2</span>
+        <span class="qcard-label">運動量空間の積分：N次元球の体積</span>
+      </div>
+      <div class="qcard-body">
+        運動量についての積分 \(\int_{H_1\le E} d^N p\) は，半径 \(\sqrt{2mE}\) の \(N\) 次元球の体積に等しい。\(n\) 次元球（半径 \(r\)）の体積の公式 \(\dfrac{\pi^{n/2}r^n}{\Gamma(n/2+1)}\) を用いると，この積分は
+        <span class="blank-tag">イ</span> となる。
+      </div>
+      <div class="choices" data-correct="3">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{\pi^{N/2}(2mE)^{N/2}}{\Gamma(N/2+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{\pi^{N}(2mE)^{N}}{\Gamma(N+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{\pi^{N/2}\sqrt{2mE}}{\Gamma(N/2+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{\pi^{N/2}(\sqrt{2mE})^{N}}{\Gamma(N/2+1)}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>エ：\(\dfrac{\pi^{N/2}(\sqrt{2mE})^{N}}{\Gamma(N/2+1)}\)</strong>。
+        <div class="ans-note">
+          \(n\) 次元球の体積公式に \(n=N\)，\(r=\sqrt{2mE}\) を代入するだけ。整理すると \((\sqrt{2mE})^N=(2mE)^{N/2}\) なので，後の表式と一致する。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-3 : Γ(E~) 全体 -->
+    <div class="qcard" data-qid="2-3">
+      <div class="qcard-head">
+        <span class="qcard-num">Q3</span>
+        <span class="qcard-label">\(\tilde\Gamma(E)\) の全体表式</span>
+      </div>
+      <div class="qcard-body">
+        位置と運動量の積分をまとめると，
+        \[
+        \tilde\Gamma(E) = \boxed{\text{ウ}}
+        \]
+        となる（空欄ウ）。
+      </div>
+      <div class="choices" data-correct="0">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{V^N(2\pi m E)^{N/2}}{\Gamma(N/2+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{V^N(2\pi m E)^{N}}{\Gamma(N+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{NV^{N-1}(2\pi m E)^{N/2}}{\Gamma(N/2+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{V^N(2\pi m E)^{N/2-1}}{\Gamma(N/2+1)}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ア：\(\dfrac{V^N(2\pi m E)^{N/2}}{\Gamma(N/2+1)}\)</strong>。
+        <div class="ans-note">
+          Q1の \(V^N\) と Q2の \(\pi^{N/2}(2mE)^{N/2}/\Gamma(N/2+1)\) をかけ合わせ，\(\pi^{N/2}(2m)^{N/2}=(2\pi m)^{N/2}\) とまとめると得られる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-4 : Ω1 = dΓ/dE * δE -->
+    <div class="qcard" data-qid="2-4">
+      <div class="qcard-head">
+        <span class="qcard-num">Q4</span>
+        <span class="qcard-label">薄い殻の体積 \(\Omega_1\)（Eの指数）</span>
+      </div>
+      <div class="qcard-body">
+        \(([E,E+\delta E],V,N)\) で指定される相空間の体積 \(\Omega_1=\tilde\Gamma'(E)\delta E\) を計算すると，\(E\) について
+        \[
+        \Omega_1 = V^N\times\frac{N}{2}(2\pi m)^{N/2}E^{\boxed{\text{エ}}}\,\frac{1}{\Gamma(N/2+1)}\,\delta E
+        \]
+        となる（空欄エ）。\(E\) の指数に入るのはどれか。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(N/2\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(N/2+1\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(N/2-1\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(N-1\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(N/2-1\)</strong>。
+        <div class="ans-note">
+          \(\tilde\Gamma(E)\propto E^{N/2}\) を \(E\) で微分すると，指数が1下がって \(E^{N/2-1}\) になり，係数として元の指数 \(N/2\) が前に出てくる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-5 : W(E,V,N) -->
+    <div class="qcard" data-qid="2-5">
+      <div class="qcard-head">
+        <span class="qcard-num">Q5</span>
+        <span class="qcard-label">状態数 \(W(E,V,N)\) の比例係数</span>
+      </div>
+      <div class="qcard-body">
+        1次元理想気体（自由度は1粒子あたり位置1・運動量1の計2）の状態数は \(W(E,V,N)=\boxed{\text{オ}}\times\Omega_1\) で与えられる。空欄オに入る正しい比例係数はどれか。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{1}{h^{3N}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{1}{h^{2N}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{1}{h^{N}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{1}{h^{N}}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(\dfrac{1}{h^{N}N!}\)</strong>。
+        <div class="ans-note">
+          1次元では1粒子あたりの自由度（位置・運動量のペア）は1組だけなので，無次元化に必要なのは \(h^N\)（3次元の \(h^{3N}\) とは異なる）。同種粒子の重複を除く \(1/N!\) は次元に関係なく必要。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-6 : S(E,V,N) -->
+    <div class="qcard" data-qid="2-6">
+      <div class="qcard-head">
+        <span class="qcard-num">Q6</span>
+        <span class="qcard-label">エントロピー \(S(E,V,N)\)</span>
+      </div>
+      <div class="qcard-body">
+        \(W\) にボルツマンの原理とスターリングの公式を適用して主要項を取り出すと，
+        \[
+        S(E,V,N) = N\kB\left[\frac{1}{2}\log\!\left(\frac{4\pi mE}{Nh^2}\right)+\log\frac{V}{N}+\boxed{\text{カ}}\right]
+        \]
+        となる。空欄カに入る定数はどれか。
+      </div>
+      <div class="choices" data-correct="1">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{5}{2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{3}{2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(1\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(2\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>イ：\(\dfrac{3}{2}\)</strong>。
+        <div class="ans-note">
+          3次元の場合の定数 \(5/2\) は，自由度の数（3次元なら3N個の運動量自由度＋位置）に応じて変わる。1次元では運動量の自由度が1粒子あたり1つしかないため，定数項は \(3/2\) になる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-7 : 1/T -->
+    <div class="qcard" data-qid="2-7">
+      <div class="qcard-head">
+        <span class="qcard-num">Q7</span>
+        <span class="qcard-label">温度の関係式 \(1/T\)</span>
+      </div>
+      <div class="qcard-body">
+        熱力学の関係式 \(1/T=(\partial S/\partial E)_{V,N}\) を \(S(E,V,N)\) に適用すると，
+        \[
+        \frac{1}{T} = \boxed{\text{キ}}
+        \]
+        となる（空欄キ）。
+      </div>
+      <div class="choices" data-correct="0">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{N\kB}{2E}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{N\kB}{E}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{3N\kB}{2E}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{2E}{N\kB}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ア：\(\dfrac{N\kB}{2E}\)</strong>。
+        <div class="ans-note">
+          \(S\) の \(E\) 依存部分は \(\frac{N\kB}{2}\log E\) なので，これを \(E\) で微分すると \(\frac{N\kB}{2E}\) が得られる（対数の中の他の \(E\) に依存しない因子は微分に影響しない）。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-8 : E = (1/2)NkBT -->
+    <div class="qcard" data-qid="2-8">
+      <div class="qcard-head">
+        <span class="qcard-num">Q8</span>
+        <span class="qcard-label">内部エネルギー \(E\)</span>
+      </div>
+      <div class="qcard-body">
+        \(\dfrac{1}{T}=\dfrac{N\kB}{2E}\) を \(E\) について解くと，
+        \[
+        E = \boxed{\text{ク}}
+        \]
+        となる（空欄ク）。これは「エネルギー等分配則：自由度1つあたり \(\frac12\kB T\)」と一致している（1次元なので運動の自由度は1粒子あたり1つ）。
+      </div>
+      <div class="choices" data-correct="3">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{3}{2}N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(2N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{1}{2}N\kB T\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>エ：\(\dfrac{1}{2}N\kB T\)</strong>。
+        <div class="ans-note">
+          \(\frac{1}{T}=\frac{N\kB}{2E}\) の両辺の逆数を取って \(T=\frac{2E}{N\kB}\)，これを \(E\) について解くと \(E=\frac12 N\kB T\)。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-9 : P/T -->
+    <div class="qcard" data-qid="2-9">
+      <div class="qcard-head">
+        <span class="qcard-num">Q9</span>
+        <span class="qcard-label">圧力の関係式 \(P/T\)</span>
+      </div>
+      <div class="qcard-body">
+        圧力は \(P/T=(\partial S/\partial V)_{E,N}\) で定義される。\(S(E,V,N)\) の \(\log(V/N)\) の項から，
+        \[
+        \frac{P}{T} = \boxed{\text{ケ}}
+        \]
+        が得られる（空欄ケ）。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{N\kB}{2V}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{\kB}{V}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{N\kB}{V}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{2N\kB}{V}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(\dfrac{N\kB}{V}\)</strong>。
+        <div class="ans-note">
+          \(S\) の \(V\) 依存部分は \(N\kB\log V\)（\(-N\kB\log N\) は \(V\) に依存しないので微分で消える）。これを \(V\) で微分すれば \(N\kB/V\)。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2-10 : PV = NkBT -->
+    <div class="qcard" data-qid="2-10">
+      <div class="qcard-head">
+        <span class="qcard-num">Q10</span>
+        <span class="qcard-label">状態方程式（最終結果）</span>
+      </div>
+      <div class="qcard-body">
+        \(P/T=N\kB/V\) より，1次元理想気体の状態方程式は
+        \[
+        \boxed{\text{コ}}
+        \]
+        となる（空欄コ）。3次元の状態方程式と比べてどうなっているか。
+      </div>
+      <div class="choices" data-correct="1">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(PV=\dfrac{1}{2}N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(PV=N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(PV=\dfrac{3}{2}N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(PV=2N\kB T\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>イ：\(PV=N\kB T\)</strong>。
+        <div class="ans-note">
+          形だけ見ると3次元の状態方程式 \(PV=N\kB T\) と全く同じになる。ただし内部エネルギーは \(E=\frac12N\kB T\) であり，3次元の \(E=\frac32N\kB T\) とは異なる（次元によって変わるのは比熱・内部エネルギーで，\(PV=N\kB T\) という形自体は次元に依らない）。
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== EXPLANATION ===================== -->
+    <div class="explain-section">
+      <div class="explain-header">
+        <span class="pin"></span>
+        <h3 class="explain-title">ステップ・バイ・ステップ解説：1次元理想気体</h3>
+      </div>
+      <p class="explain-lead">3次元の場合と全く同じ手順を，自由度の数だけ変えて1次元で実行する。手順そのものを身につけることが目的。</p>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">設定の確認：1次元のハミルトニアン</div>
+          <div class="step-body">
+            <p>
+              長さ \(V\) の容器（1次元なので「体積」は実は「長さ」）に，\(N\) 個の粒子が閉じ込められている。各粒子は \(x\) 方向にしか運動できないので，運動量も \(p_x^{(j)}\) の1成分だけである。ハミルトニアン（全エネルギー）は
+            </p>
+            <div class="math-block">
+              \[ H_1 = \sum_{j=1}^N \frac{(p_x^{(j)})^2}{2m} \]
+            </div>
+            <div class="point-box">
+              <span class="point-label">Point</span>
+              3次元では1粒子あたり「位置3つ＋運動量3つ＝6自由度」だったが，1次元では「位置1つ＋運動量1つ＝2自由度」。この自由度の違いがすべての指数・係数の違いを生む。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">\(H_1\le E\) を満たす相空間の体積を求める</div>
+          <div class="step-body">
+            <p>
+              \(\tilde\Gamma(E)\) は，「位置についての積分」と「運動量についての積分」に分離できる：
+            </p>
+            <div class="math-block">
+              \[
+              \tilde\Gamma(E) = \underbrace{\int_0^V dx^{(1)}\cdots\int_0^V dx^{(N)}}_{=V^N}\ \times\ \underbrace{\int_{H_1\le E} d^N p}_{\text{半径}\sqrt{2mE}\text{の}N\text{次元球の体積}}
+              \]
+            </div>
+            <p>
+              位置についての積分は，各粒子が長さ \(V\) の中のどこにいてもよいので，単純に \(V\) を \(N\) 回掛けて \(V^N\)。
+            </p>
+            <p>
+              運動量についての積分は，条件 \(\sum_j (p_x^{(j)})^2 \le 2mE\) を満たす \((p_x^{(1)},\dots,p_x^{(N)})\) の領域の体積であり，これは \(N\) 次元空間における半径 \(\sqrt{2mE}\) の球の体積そのものである。\(n\) 次元球（半径 \(r\)）の体積公式
+            </p>
+            <div class="math-block">\[ V_n(r) = \frac{\pi^{n/2}r^n}{\Gamma(n/2+1)} \]</div>
+            <p>
+              に \(n=N\)，\(r=\sqrt{2mE}\) を当てはめると，
+            </p>
+            <div class="math-block">
+              \[
+              \int_{H_1\le E} d^Np = \frac{\pi^{N/2}(\sqrt{2mE})^N}{\Gamma(N/2+1)} = \frac{\pi^{N/2}(2mE)^{N/2}}{\Gamma(N/2+1)}
+              \]
+            </div>
+            <p>
+              両方をまとめると，
+            </p>
+            <div class="math-block">
+              \[ \tilde\Gamma(E) = V^N\,\frac{(2\pi mE)^{N/2}}{\Gamma(N/2+1)} \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">薄い殻 \([E,E+\delta E]\) の体積 \(\Omega_1\)</div>
+          <div class="step-body">
+            <p>
+              \(\tilde\Gamma(E)\) は「エネルギー \(E\) 以下」の全体積であり，欲しいのは「エネルギーがちょうど \([E,E+\delta E]\) の範囲にある」薄い殻の体積である。\(\delta E\) が十分小さいとして，これは \(\tilde\Gamma\) の \(E\) についての微分に \(\delta E\) を掛けたものになる：
+            </p>
+            <div class="math-block">\[ \Omega_1 = \tilde\Gamma'(E)\,\delta E \]</div>
+            <p>
+              \(\tilde\Gamma(E)\propto E^{N/2}\) を微分すると，指数法則 \(\frac{d}{dE}E^{N/2}=\frac{N}{2}E^{N/2-1}\) より，指数が1下がって係数 \(N/2\) が前に出る：
+            </p>
+            <div class="math-block">
+              \[
+              \Omega_1 = V^N \times \frac{N}{2}(2\pi m)^{N/2}\,\frac{E^{N/2-1}}{\Gamma(N/2+1)}\,\delta E
+              \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">4</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">状態数 \(W\)：無次元化と \(1/N!\)</div>
+          <div class="step-body">
+            <p>
+              \(\Omega_1\) を無次元の状態数にするには，3次元のときと同じ論理を1次元に適用する。1粒子あたりの自由度は位置・運動量のペア1組だけなので，無次元化に必要なのは \(h^N\)（3次元の \(h^{3N}\) ではない）。さらに，粒子が同種であれば番号の入れ替えの重複を除くために \(1/N!\) が必要（これは次元に関わらず常に成り立つ）。
+            </p>
+            <div class="math-block">
+              \[
+              W(E,V,N) = \frac{1}{h^N N!}\,\Omega_1 = \frac{1}{h^N N!}\,V^N\,\frac{N}{2}(2\pi m)^{N/2}\,\frac{E^{N/2-1}}{\Gamma(N/2+1)}\,\delta E
+              \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">5</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">ボルツマンの原理とスターリングの公式で \(S\) を求める</div>
+          <div class="step-body">
+            <p>
+              \(S=\kB\log W\) に，\(N!\) と \(\Gamma(N/2+1)\) のスターリング近似を適用し，熱力学極限で \(N\) に比例しない項（\(\log N,\ \log(\delta E/E)\) など）を無視して主要項だけを残す。結果は，
+            </p>
+            <div class="math-block">
+              \[
+              S(E,V,N) = N\kB\left[\frac12\log\!\left(\frac{4\pi mE}{Nh^2}\right)+\log\frac{V}{N}+\frac32\right]
+              \]
+            </div>
+            <table class="cmp-table">
+              <tr><th>次元</th><th>対数の係数</th><th>定数項</th></tr>
+              <tr><td>3次元（問1）</td><td>\(\frac32\)</td><td>\(\frac52\)</td></tr>
+              <tr><td>1次元（本問）</td><td>\(\frac12\)</td><td>\(\frac32\)</td></tr>
+            </table>
+            <div class="point-box">
+              <span class="point-label">Point</span>
+              対数の係数（\(\frac12\) や \(\frac32\)）は，運動量の自由度の数の半分に対応する（1次元なら自由度1個 → \(\frac12\)，3次元なら自由度3個 → \(\frac32\)）。定数項も，\(N!\) と \(\Gamma\) のスターリング展開から出てくる \(+1\) の寄与の分だけ，対数係数より1大きい値になっている。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">6</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">温度・内部エネルギーを求める</div>
+          <div class="step-body">
+            <p>
+              熱力学では，エントロピーをエネルギーで偏微分すると温度の逆数が得られる：
+            </p>
+            <div class="math-block">\[ \frac{1}{T} = \left(\frac{\partial S}{\partial E}\right)_{V,N} \]</div>
+            <p>
+              \(S(E,V,N)\) のうち \(E\) に依存するのは \(\frac{N\kB}{2}\log E\)（対数の中の \(4\pi m/(Nh^2)\) は \(E\) に依存しないので微分すると消える）。これを \(E\) で微分すると，
+            </p>
+            <div class="math-block">\[ \frac{1}{T} = \frac{N\kB}{2E} \]</div>
+            <p>
+              両辺を逆数にして整理すれば，内部エネルギーが温度の関数として得られる：
+            </p>
+            <div class="math-block">\[ E = \frac{1}{2}N\kB T \]</div>
+            <div class="point-box">
+              <span class="point-label">Point — エネルギー等分配則</span>
+              この結果は「1自由度あたり \(\frac12\kB T\) のエネルギーが配分される」というエネルギー等分配則そのもの。1次元気体では運動の自由度が1粒子あたり1つだけなので，\(E=\frac12N\kB T\)（3次元なら3自由度で \(E=\frac32N\kB T\)）。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">7</div></div>
+        <div class="step-content">
+          <div class="step-title">圧力と状態方程式を求める</div>
+          <div class="step-body">
+            <p>
+              同様に，圧力は \(S\) を \(V\) で偏微分して定義する：
+            </p>
+            <div class="math-block">\[ \frac{P}{T} = \left(\frac{\partial S}{\partial V}\right)_{E,N} \]</div>
+            <p>
+              \(S\) のうち \(V\) に依存するのは \(N\kB\log(V/N)=N\kB\log V - N\kB\log N\)。\(N\) は \(V\) に依存しないので，微分に効くのは \(N\kB\log V\) の部分だけ：
+            </p>
+            <div class="math-block">\[ \frac{P}{T} = \frac{N\kB}{V} \]</div>
+            <p>
+              両辺に \(TV\) を掛けると，状態方程式が得られる：
+            </p>
+            <div class="math-block">\[ PV = N\kB T \]</div>
+            <div class="warn-box">
+              <span class="warn-label">注意</span>
+              形だけ見ると3次元の理想気体の状態方程式と全く同じ \(PV=N\kB T\) になる。ただし，ここでの \(V\) は「長さ」であり，3次元の「体積」とは次元が異なる点に注意。また内部エネルギーは次元によって変わる（1次元なら \(\frac12N\kB T\)，3次元なら \(\frac32N\kB T\)）ので，状態方程式の形が同じでも気体の性質（比熱など）は次元に依存する。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="keypoints">
+        <div class="keypoints-title">★ キーポイントまとめ</div>
+        <ul>
+          <li>相空間の体積は「位置についての積分（\(V^N\)）」と「運動量についての積分（\(N\)次元球の体積）」に分離して計算する。</li>
+          <li>1次元では1粒子あたりの自由度が1つ（3次元なら3つ）であり，これが \(N\) 次元球の公式における次元 \(n\) の値（1次元では \(n=N\)，3次元では \(n=3N\)）に対応する。</li>
+          <li>無次元化に使う \(h\) のべきは自由度の総数に対応する（1次元は \(h^N\)，3次元は \(h^{3N}\)）。同種粒子の重複を除く \(1/N!\) は次元に関わらず常に必要。</li>
+          <li>\(S(E,V,N)\) の \(\log\) の係数は自由度の半分（1次元は \(1/2\)，3次元は \(3/2\)）。これがエネルギー等分配則 \(E=\frac{f}{2}N\kB T\)（\(f\)＝1粒子あたりの自由度数）に直結する。</li>
+          <li>圧力の関係式 \(P/T=N\kB/V\) は次元に関わらず同じ形になり，状態方程式 \(PV=N\kB T\) も次元を問わず成立する。</li>
+          <li>次元に依存して変わるのは「エネルギーと温度の関係（比熱）」であり，「圧力と体積・温度の関係（状態方程式の形）」は変わらない，という点を区別して理解することが重要。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TAB 3 -->
+  <!-- ============================================================ -->
+  <section class="tab-panel" id="t3">
+    <div class="section-intro">
+      <div class="section-kicker">Problem 3</div>
+      <h2 class="section-title">2次元理想気体 — 状態数からエントロピー，状態方程式まで</h2>
+      <p class="section-desc">
+        面積 \(V\) の2次元容器に閉じ込められた \(N\) 個の理想気体粒子について，1次元・3次元と同じ手順（相空間の体積 \(\Omega_2\) → 状態数 \(W\) → エントロピー \(S\) → 温度・圧力・状態方程式）を実行する。
+      </p>
+      <div class="setup-box">
+        <strong>系のハミルトニアン</strong>
+        \[
+        H_2 = \sum_{j=1}^{N}\frac{(p_x^{(j)})^2+(p_y^{(j)})^2}{2m}
+        \]
+        \(j\) 番目の粒子の位置を \((x^{(j)},y^{(j)})\)，運動量を \((p_x^{(j)},p_y^{(j)})\) とする（2次元なので1粒子あたりの自由度は位置2・運動量2の計4）。
+      </div>
+    </div>
+
+    <!-- Q3-1 : 位置積分 -->
+    <div class="qcard" data-qid="3-1">
+      <div class="qcard-head">
+        <span class="qcard-num">Q1</span>
+        <span class="qcard-label">位置座標についての積分</span>
+      </div>
+      <div class="qcard-body">
+        \(H_2\le E\) を満たす相空間の体積 \(\tilde\Gamma(E)\) を求める際，まず位置座標についての積分 \(\prod_{j=1}^N\int_V dx^{(j)}dy^{(j)}\) を実行すると <span class="blank-tag">ア</span> となる。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(V\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(NV\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(V^N\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(V^{2N}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(V^N\)</strong>。
+        <div class="ans-note">
+          \(V\) はここでは「面積」を表す量であり，各粒子の位置 \((x^{(j)},y^{(j)})\) が面積 \(V\) の容器内のどこにあってもよいという1回分の積分が \(V\) を与え，これを \(N\) 個分かけ合わせて \(V^N\) になる（\(V^{2N}\) ではないことに注意。\(V\) 自体がすでに2次元の面積を表しているため）。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-2 : 2N次元球 -->
+    <div class="qcard" data-qid="3-2">
+      <div class="qcard-head">
+        <span class="qcard-num">Q2</span>
+        <span class="qcard-label">運動量空間の積分：何次元球か</span>
+      </div>
+      <div class="qcard-body">
+        運動量についての積分 \(\int_{H_2\le E}d^{2N}p\) は，半径 \(\sqrt{2mE}\) の <span class="blank-tag">イ</span> 次元球の体積に等しい。
+      </div>
+      <div class="choices" data-correct="1">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(N\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(2N\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(3N\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(4N\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>イ：\(2N\)</strong>。
+        <div class="ans-note">
+          条件は \(\sum_j[(p_x^{(j)})^2+(p_y^{(j)})^2]\le 2mE\) であり，変数の総数は \(N\) 個の粒子それぞれに \(p_x,p_y\) の2成分，合計 \(2N\) 個。よって \(2N\) 次元球になる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-3 : Γ(E~) 全体 -->
+    <div class="qcard" data-qid="3-3">
+      <div class="qcard-head">
+        <span class="qcard-num">Q3</span>
+        <span class="qcard-label">\(\tilde\Gamma(E)\) の全体表式</span>
+      </div>
+      <div class="qcard-body">
+        \(2N\) 次元球の体積公式 \(\dfrac{\pi^{N}r^{2N}}{\Gamma(N+1)}\)（\(r=\sqrt{2mE}\)）を使って位置・運動量の積分をまとめると，
+        \[
+        \tilde\Gamma(E) = \boxed{\text{ウ}}
+        \]
+        となる（空欄ウ）。
+      </div>
+      <div class="choices" data-correct="3">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{V^N(2\pi m E)^{N/2}}{\Gamma(N/2+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{V^{2N}(2\pi m E)^{N}}{\Gamma(N+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{V^N(\pi m E)^{N}}{\Gamma(N+1)}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{V^N(2\pi m E)^{N}}{\Gamma(N+1)}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>エ：\(\dfrac{V^N(2\pi m E)^{N}}{\Gamma(N+1)}\)</strong>。
+        <div class="ans-note">
+          \(2N\) 次元球の体積は \(\dfrac{\pi^N(\sqrt{2mE})^{2N}}{\Gamma(N+1)}=\dfrac{\pi^N(2mE)^N}{\Gamma(N+1)}\)。これに位置の積分 \(V^N\) を掛け，\(\pi^N(2m)^N=(2\pi m)^N\) とまとめると得られる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-4 : Ω2 の E の指数 -->
+    <div class="qcard" data-qid="3-4">
+      <div class="qcard-head">
+        <span class="qcard-num">Q4</span>
+        <span class="qcard-label">薄い殻の体積 \(\Omega_2\)（Eの指数）</span>
+      </div>
+      <div class="qcard-body">
+        \(\Omega_2=\tilde\Gamma'(E)\delta E\) を計算すると，
+        \[
+        \Omega_2 = V^N\,N\,(2\pi m)^N\,\frac{E^{\boxed{\text{エ}}}}{\Gamma(N+1)}\,\delta E
+        \]
+        となる（空欄エ）。\(E\) の指数に入るのはどれか。
+      </div>
+      <div class="choices" data-correct="1">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(N\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(N-1\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(N/2-1\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(N+1\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>イ：\(N-1\)</strong>。
+        <div class="ans-note">
+          \(\tilde\Gamma(E)\propto E^N\) を \(E\) で微分すると，指数が1下がって \(E^{N-1}\) になり，係数として元の指数 \(N\) が前に出る。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-5 : W(E,V,N) -->
+    <div class="qcard" data-qid="3-5">
+      <div class="qcard-head">
+        <span class="qcard-num">Q5</span>
+        <span class="qcard-label">状態数 \(W(E,V,N)\) の比例係数</span>
+      </div>
+      <div class="qcard-body">
+        2次元理想気体（1粒子あたりの自由度は位置2・運動量2の計4）の状態数は \(W(E,V,N)=\boxed{\text{オ}}\times\Omega_2\) で与えられる。空欄オに入る正しい比例係数はどれか。
+      </div>
+      <div class="choices" data-correct="0">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{1}{h^{2N}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{1}{h^{N}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{1}{h^{3N}N!}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{1}{h^{4N}N!}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ア：\(\dfrac{1}{h^{2N}N!}\)</strong>。
+        <div class="ans-note">
+          2次元では1粒子あたり位置・運動量のペアが2組（\(x,p_x\) と \(y,p_y\)）あるので，無次元化に必要なのは \(h^{2N}\)（1次元の \(h^N\)，3次元の \(h^{3N}\) との対比に注目）。\(1/N!\) は次元に関わらず常に必要。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-6 : S(E,V,N) -->
+    <div class="qcard" data-qid="3-6">
+      <div class="qcard-head">
+        <span class="qcard-num">Q6</span>
+        <span class="qcard-label">エントロピー \(S(E,V,N)\)</span>
+      </div>
+      <div class="qcard-body">
+        スターリングの公式で主要項を取り出すと，
+        \[
+        S(E,V,N) = N\kB\left[\log\!\left(\frac{2\pi mE}{Nh^2}\right)+\log\frac{V}{N}+\boxed{\text{カ}}\right]
+        \]
+        となる。空欄カに入る定数はどれか。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{3}{2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{5}{2}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(2\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(1\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(2\)</strong>。
+        <div class="ans-note">
+          対数の係数が \(1\)（運動量自由度2個の半分）であり，定数項はそれに \(N!,\ \Gamma(N+1)\) のスターリング展開からの寄与 \(+1\) が加わって \(2\) になる。1次元（\(\frac12\to\frac32\)）・3次元（\(\frac32\to\frac52\)）と同じパターン。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-7 : 1/T -->
+    <div class="qcard" data-qid="3-7">
+      <div class="qcard-head">
+        <span class="qcard-num">Q7</span>
+        <span class="qcard-label">温度の関係式 \(1/T\)</span>
+      </div>
+      <div class="qcard-body">
+        \(1/T=(\partial S/\partial E)_{V,N}\) を計算すると，
+        \[
+        \frac{1}{T} = \boxed{\text{キ}}
+        \]
+        となる（空欄キ）。
+      </div>
+      <div class="choices" data-correct="3">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{N\kB}{2E}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{2N\kB}{E}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{3N\kB}{2E}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{N\kB}{E}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>エ：\(\dfrac{N\kB}{E}\)</strong>。
+        <div class="ans-note">
+          \(S\) の \(E\) 依存部分は \(N\kB\log E\)（対数の係数が1なので \(\frac12\) のような分数係数がつかない）。これを \(E\) で微分すると \(N\kB/E\) が得られる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-8 : E = NkBT -->
+    <div class="qcard" data-qid="3-8">
+      <div class="qcard-head">
+        <span class="qcard-num">Q8</span>
+        <span class="qcard-label">内部エネルギー \(E\)</span>
+      </div>
+      <div class="qcard-body">
+        \(\dfrac{1}{T}=\dfrac{N\kB}{E}\) を \(E\) について解くと，
+        \[
+        E = \boxed{\text{ク}}
+        \]
+        となる（空欄ク）。これはエネルギー等分配則（1粒子あたり運動の自由度2つ × \(\frac12\kB T\)）と一致する。
+      </div>
+      <div class="choices" data-correct="1">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{1}{2}N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{3}{2}N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(2N\kB T\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>イ：\(N\kB T\)</strong>。
+        <div class="ans-note">
+          \(\frac1T=\frac{N\kB}{E}\) の逆数を取って \(T=\frac{E}{N\kB}\)，\(E\) について解くと \(E=N\kB T\)。1次元の \(\frac12N\kB T\)，3次元の \(\frac32N\kB T\) と比較すると，自由度の数（1，2，3）の半分に \(N\kB T\) を掛けた値になっているとわかる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-9 : P/T -->
+    <div class="qcard" data-qid="3-9">
+      <div class="qcard-head">
+        <span class="qcard-num">Q9</span>
+        <span class="qcard-label">圧力の関係式 \(P/T\)</span>
+      </div>
+      <div class="qcard-body">
+        \(P/T=(\partial S/\partial V)_{E,N}\) を計算すると，
+        \[
+        \frac{P}{T} = \boxed{\text{ケ}}
+        \]
+        となる（空欄ケ）。
+      </div>
+      <div class="choices" data-correct="2">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(\dfrac{2N\kB}{V}\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(\dfrac{N\kB}{2V}\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(\dfrac{N\kB}{V}\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(\dfrac{\kB}{V}\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ウ：\(\dfrac{N\kB}{V}\)</strong>。
+        <div class="ans-note">
+          \(S\) の \(V\) 依存部分は \(N\kB\log V\)（\(N\) は \(V\) に依存しないため \(\log(V/N)\) の \(-\log N\) 部分は微分に効かない）。これを \(V\) で微分すれば \(N\kB/V\)。1次元・3次元と全く同じ形になる。
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3-10 : PV = NkBT -->
+    <div class="qcard" data-qid="3-10">
+      <div class="qcard-head">
+        <span class="qcard-num">Q10</span>
+        <span class="qcard-label">状態方程式（最終結果）</span>
+      </div>
+      <div class="qcard-body">
+        \(P/T=N\kB/V\) より，2次元理想気体の状態方程式は
+        \[
+        \boxed{\text{コ}}
+        \]
+        となる（空欄コ）。1次元・3次元の結果と比較してどうなっているか。
+      </div>
+      <div class="choices" data-correct="0">
+        <button class="choice-btn" data-k="ア">
+          <span class="choice-kana">ア</span><span class="choice-text">\(PV=N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="イ">
+          <span class="choice-kana">イ</span><span class="choice-text">\(PV=2N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="ウ">
+          <span class="choice-kana">ウ</span><span class="choice-text">\(PV=\dfrac{1}{2}N\kB T\)</span>
+        </button>
+        <button class="choice-btn" data-k="エ">
+          <span class="choice-kana">エ</span><span class="choice-text">\(PV=\dfrac{3}{2}N\kB T\)</span>
+        </button>
+      </div>
+      <div class="feedback"></div>
+      <div class="qcard-footer"><button class="reveal-btn">答えを見る</button></div>
+      <div class="answer-box">
+        <div class="ans-label">Answer</div>
+        正解は <strong>ア：\(PV=N\kB T\)</strong>。
+        <div class="ans-note">
+          1次元・2次元・3次元のいずれでも，状態方程式は形だけ見ると \(PV=N\kB T\) で共通している。次元によって変わるのは内部エネルギー \(E\)（自由度に比例：1次元 \(\frac12N\kB T\)，2次元 \(N\kB T\)，3次元 \(\frac32N\kB T\)）であり，\(PV=N\kB T\) という状態方程式の形自体は変わらない。
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== EXPLANATION ===================== -->
+    <div class="explain-section">
+      <div class="explain-header">
+        <span class="pin"></span>
+        <h3 class="explain-title">ステップ・バイ・ステップ解説：2次元理想気体</h3>
+      </div>
+      <p class="explain-lead">1次元・3次元と全く同じ手順を，自由度の数だけ変えて2次元で実行する。最後に3つの次元の結果を比較して，何が変わり何が変わらないかを整理する。</p>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">設定の確認：2次元のハミルトニアン</div>
+          <div class="step-body">
+            <p>
+              面積 \(V\) の容器の中を，\(N\) 個の粒子が \(xy\) 平面上を自由に運動している。各粒子の位置は \((x^{(j)},y^{(j)})\)，運動量は \((p_x^{(j)},p_y^{(j)})\) で，ハミルトニアンは
+            </p>
+            <div class="math-block">
+              \[ H_2 = \sum_{j=1}^N \frac{(p_x^{(j)})^2+(p_y^{(j)})^2}{2m} \]
+            </div>
+            <div class="point-box">
+              <span class="point-label">Point</span>
+              1粒子あたりの自由度は「位置2つ（\(x,y\)）＋運動量2つ（\(p_x,p_y\)）＝4自由度」。1次元（2自由度）・3次元（6自由度）の中間にあたる。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">\(H_2\le E\) を満たす相空間の体積を求める</div>
+          <div class="step-body">
+            <p>
+              位置と運動量の積分に分けて計算する：
+            </p>
+            <div class="math-block">
+              \[
+              \tilde\Gamma(E) = \underbrace{\prod_{j=1}^N \int_V dx^{(j)}dy^{(j)}}_{=V^N}\ \times\ \underbrace{\int_{H_2\le E} d^{2N}p}_{\text{半径}\sqrt{2mE}\text{の}2N\text{次元球の体積}}
+              \]
+            </div>
+            <p>
+              位置についての積分は，1粒子あたり面積 \(V\) の中のどこにいてもよいという積分が \(V\) を与え（\(V\) はすでに面積を表す量），これを \(N\) 個分かけて \(V^N\)。
+            </p>
+            <p>
+              運動量についての積分の条件 \(\sum_j[(p_x^{(j)})^2+(p_y^{(j)})^2]\le 2mE\) は，変数の数が \(N\) 個の粒子 \(\times\) 2成分 \(=2N\) 個あるので，\(2N\) 次元空間における半径 \(\sqrt{2mE}\) の球の体積に対応する：
+            </p>
+            <div class="math-block">
+              \[
+              \int_{H_2\le E} d^{2N}p = \frac{\pi^{N}(\sqrt{2mE})^{2N}}{\Gamma(N+1)} = \frac{\pi^N(2mE)^N}{\Gamma(N+1)}
+              \]
+            </div>
+            <p>
+              （\(2N\) 次元球の公式 \(\pi^{n/2}r^n/\Gamma(n/2+1)\) に \(n=2N\) を代入すると \(\pi^{N}r^{2N}/\Gamma(N+1)\) になる）両方をまとめると，
+            </p>
+            <div class="math-block">
+              \[ \tilde\Gamma(E) = V^N\,\frac{(2\pi mE)^N}{\Gamma(N+1)} \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">薄い殻 \([E,E+\delta E]\) の体積 \(\Omega_2\)</div>
+          <div class="step-body">
+            <p>
+              1次元・3次元のときと同様，\(\Omega_2=\tilde\Gamma'(E)\delta E\) として \(E\) で微分する。\(\tilde\Gamma(E)\propto E^N\) なので，
+            </p>
+            <div class="math-block">
+              \[ \frac{d}{dE}E^N = N E^{N-1} \]
+            </div>
+            <p>
+              より，指数が1下がって \(E^{N-1}\)，係数として元の指数 \(N\) が前に出る：
+            </p>
+            <div class="math-block">
+              \[ \Omega_2 = V^N\,N\,(2\pi m)^N\,\frac{E^{N-1}}{\Gamma(N+1)}\,\delta E \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">4</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">状態数 \(W\)：無次元化と \(1/N!\)</div>
+          <div class="step-body">
+            <p>
+              2次元では1粒子あたりの位置・運動量のペアが2組（\(x,p_x\) と \(y,p_y\)）あるので，無次元化に必要なのは \(h^{2N}\)。さらに，同種粒子の番号の入れ替えの重複を除くために \(1/N!\) をかける（この理由は次元に関わらず常に同じ：番号付けに物理的な意味はない）。
+            </p>
+            <div class="math-block">
+              \[
+              W(E,V,N) = \frac{1}{h^{2N}N!}\,\Omega_2 = \frac{1}{h^{2N}N!}\,V^N\,N\,(2\pi m)^N\,\frac{E^{N-1}}{\Gamma(N+1)}\,\delta E
+              \]
+            </div>
+            <table class="cmp-table">
+              <tr><th>次元</th><th>1粒子あたりの自由度</th><th>無次元化の \(h\) のべき</th></tr>
+              <tr><td>1次元</td><td>2（\(x,p_x\)）</td><td>\(h^{N}\)</td></tr>
+              <tr><td>2次元</td><td>4（\(x,y,p_x,p_y\)）</td><td>\(h^{2N}\)</td></tr>
+              <tr><td>3次元</td><td>6（\(x,y,z,p_x,p_y,p_z\)）</td><td>\(h^{3N}\)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">5</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">ボルツマンの原理とスターリングの公式で \(S\) を求める</div>
+          <div class="step-body">
+            <p>
+              \(S=\kB\log W\) に \(N!\) と \(\Gamma(N+1)\) のスターリング近似を適用し，\(N\) に比例しない項を無視して主要項だけを取り出す。\(\Gamma(N+1)=N!\) であることに注意すると，\(\log N!\) の寄与が2回（\(N!\) と \(\Gamma(N+1)\)）現れるのではなく，状態数の式の中で適切に整理されて，
+            </p>
+            <div class="math-block">
+              \[
+              S(E,V,N) = N\kB\left[\log\!\left(\frac{2\pi mE}{Nh^2}\right)+\log\frac{V}{N}+2\right]
+              \]
+            </div>
+            <p>
+              という結果が得られる。
+            </p>
+            <table class="cmp-table">
+              <tr><th>次元</th><th>対数の係数</th><th>定数項</th></tr>
+              <tr><td>1次元</td><td>\(\frac12\)</td><td>\(\frac32\)</td></tr>
+              <tr><td>2次元（本問）</td><td>\(1\)</td><td>\(2\)</td></tr>
+              <tr><td>3次元</td><td>\(\frac32\)</td><td>\(\frac52\)</td></tr>
+            </table>
+            <div class="point-box">
+              <span class="point-label">Point — きれいな規則性</span>
+              対数の係数は「1粒子あたりの運動量自由度の数 \(\div 2\)」（1次元: \(1/2\)，2次元: \(2/2=1\)，3次元: \(3/2\)）。定数項は対数の係数に \(+1\) した値になっている。この規則性に気づけば，4次元以上の架空の理想気体でも同様に予想できる。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">6</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <div class="step-title">温度・内部エネルギーを求める</div>
+          <div class="step-body">
+            <p>
+              \(1/T=(\partial S/\partial E)_{V,N}\) を計算する。\(S\) の \(E\) 依存部分は \(N\kB\log E\)（対数の係数が \(1\) なので分数の係数がつかない）：
+            </p>
+            <div class="math-block">\[ \frac{1}{T} = \frac{N\kB}{E} \]</div>
+            <p>
+              これを \(E\) について解くと，
+            </p>
+            <div class="math-block">\[ E = N\kB T \]</div>
+            <div class="point-box">
+              <span class="point-label">Point — エネルギー等分配則の確認</span>
+              2次元気体では運動の自由度が1粒子あたり2つ（\(x,y\) 方向）あるので，等分配則により \(E=2\times\frac12N\kB T=N\kB T\)。1次元の \(\frac12N\kB T\)，3次元の \(\frac32N\kB T\) と並べると，自由度の数（1，2，3）に比例してエネルギーが増えていく規則性が見える。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-rail"><div class="step-dot">7</div></div>
+        <div class="step-content">
+          <div class="step-title">圧力と状態方程式を求める：次元を超えて変わらないもの</div>
+          <div class="step-body">
+            <p>
+              \(P/T=(\partial S/\partial V)_{E,N}\) を計算する。\(S\) の \(V\) 依存部分は \(N\kB\log V\)（1次元・3次元と全く同じ形）：
+            </p>
+            <div class="math-block">\[ \frac{P}{T} = \frac{N\kB}{V} \]</div>
+            <p>
+              両辺に \(TV\) を掛けると状態方程式が得られる：
+            </p>
+            <div class="math-block">\[ PV = N\kB T \]</div>
+            <div class="warn-box">
+              <span class="warn-label">注意</span>
+              1次元・2次元・3次元のいずれでも \(PV=N\kB T\) という同じ形の状態方程式になる。これは，\(S\) の \(V\) 依存性が常に \(N\kB\log(V/N)\) という同じ形で現れるためである（\(\log\) の中の \(E\) に依存する部分の係数は次元によって変わるが，\(V\) に依存する部分の係数は常に \(N\kB\) のまま）。
+            </div>
+            <table class="cmp-table">
+              <tr><th>次元</th><th>内部エネルギー \(E\)</th><th>状態方程式</th></tr>
+              <tr><td>1次元</td><td>\(\frac12N\kB T\)</td><td>\(PV=N\kB T\)</td></tr>
+              <tr><td>2次元</td><td>\(N\kB T\)</td><td>\(PV=N\kB T\)</td></tr>
+              <tr><td>3次元</td><td>\(\frac32N\kB T\)</td><td>\(PV=N\kB T\)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="keypoints">
+        <div class="keypoints-title">★ キーポイントまとめ</div>
+        <ul>
+          <li>2次元では1粒子あたりの自由度は4つ（位置2＋運動量2）。運動量空間の積分は \(2N\) 次元球の体積になる。</li>
+          <li>無次元化の \(h\) のべきは自由度の総数（2次元は \(h^{2N}\)）に対応し，\(1/N!\) は次元に関わらず常に必要。</li>
+          <li>\(S\) の対数の係数（1次元 \(\frac12\)，2次元 \(1\)，3次元 \(\frac32\)）は，1粒子あたりの運動量自由度数の半分になっている。定数項は対数の係数に \(+1\) した値。</li>
+          <li>内部エネルギー \(E\) はエネルギー等分配則に従い，次元（自由度数）に比例して \(\frac12N\kB T,\ N\kB T,\ \frac32N\kB T\) と増えていく。</li>
+          <li>一方，状態方程式 \(PV=N\kB T\) は1次元・2次元・3次元のいずれでも同じ形になる。「圧力に関係する \(V\) 依存性」は次元を問わず共通だが，「エネルギーに関係する \(E\) 依存性」は次元（自由度）によって変わる，という構造を理解することが本質。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="page-footer">統計力学１ &middot; 復習問題４ 穴埋めクイズ &middot; 全問正解を目指そう</footer>
+
+<script>
+(function(){
+  // ---------- Tab switching ----------
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var panels  = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.getAttribute('data-tab');
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById(target).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+      updateProgress();
+    });
+  });
+
+  // ---------- Quiz answer logic ----------
+  var allCards = document.querySelectorAll('.qcard');
+
+  allCards.forEach(function(card){
+    var choicesWrap = card.querySelector('.choices');
+    var correctIdx = parseInt(choicesWrap.getAttribute('data-correct'), 10);
+    var buttons = choicesWrap.querySelectorAll('.choice-btn');
+    var feedback = card.querySelector('.feedback');
+    var answered = false;
+
+    buttons.forEach(function(btn, idx){
+      btn.addEventListener('click', function(){
+        if (answered) return;
+        answered = true;
+        card.setAttribute('data-answered', 'true');
+
+        buttons.forEach(function(b){ b.classList.add('locked'); });
+
+        if (idx === correctIdx){
+          btn.classList.add('correct');
+          feedback.textContent = '○ 正解！ 「' + btn.querySelector('.choice-kana').textContent + '」が正しい。';
+          feedback.className = 'feedback show ok';
+        } else {
+          btn.classList.add('wrong');
+          buttons[correctIdx].classList.add('correct');
+          feedback.textContent = '✕ 不正解。正解は「' + buttons[correctIdx].querySelector('.choice-kana').textContent + '」。';
+          feedback.className = 'feedback show ng';
+        }
+
+        buttons.forEach(function(b, i){
+          if (i !== idx && i !== correctIdx) b.classList.add('dim');
+        });
+
+        updateProgress();
+        // feedback.textContent is plain text (kana letters only) — no
+        // math markup is inserted here, so no typeset call is needed.
+      });
+    });
+
+    var revealBtn = card.querySelector('.reveal-btn');
+    var answerBox = card.querySelector('.answer-box');
+    revealBtn.addEventListener('click', function(){
+      var showing = answerBox.classList.toggle('show');
+      revealBtn.textContent = showing ? '答えを隠す' : '答えを見る';
+      // answerBox's math was already converted by MathJax's automatic
+      // startup typesetting when the page first loaded (it was present
+      // in the static HTML, just hidden via CSS). Re-running typesetPromise
+      // on it would re-process already-converted output and corrupt the
+      // layout, so we only ever need to do this once — and in practice
+      // never, since startup typesetting already covers it.
+    });
+  });
+
+  // ---------- Progress bar (per active tab) ----------
+  function updateProgress(){
+    var activePanel = document.querySelector('.tab-panel.active');
+    if (!activePanel) return;
+    var cards = activePanel.querySelectorAll('.qcard');
+    var total = cards.length;
+    var done = activePanel.querySelectorAll('.qcard[data-answered="true"]').length;
+    var pct = total ? (done/total*100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+  updateProgress();
+
+  // Initial typesetting is handled automatically by MathJax's startup
+  // sequence (do NOT call typesetPromise() here with no arguments —
+  // doing so re-processes already-typeset content and corrupts layout).
+})();
+
+</script>
+</body>
+</html>

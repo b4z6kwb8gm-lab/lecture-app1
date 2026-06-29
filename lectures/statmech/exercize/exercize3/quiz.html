@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>統計力学１ 復習問題３ 穴埋めクイズ</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+:root{
+  --bg:#0d1117;
+  --panel:#161b22;
+  --panel2:#1c2330;
+  --border:#30363d;
+  --text:#e6edf3;
+  --sub:#9da7b3;
+  --accent:#58a6ff;
+  --accent2:#79c0ff;
+  --good:#3fb950;
+  --bad:#f85149;
+  --warn:#d29922;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  line-height:1.8;
+  padding:0 0 60px 0;
+}
+header{
+  background:linear-gradient(135deg,#161b22,#0d1117);
+  border-bottom:1px solid var(--border);
+  padding:28px 20px 18px;
+  text-align:center;
+}
+header h1{
+  margin:0 0 6px;
+  font-size:1.6em;
+  color:var(--accent2);
+  letter-spacing:.02em;
+}
+header p{
+  margin:0;
+  color:var(--sub);
+  font-size:.95em;
+}
+.container{
+  max-width:880px;
+  margin:0 auto;
+  padding:24px 16px;
+}
+.tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:24px;
+  position:sticky;
+  top:0;
+  background:var(--bg);
+  padding:14px 0;
+  z-index:50;
+  border-bottom:1px solid var(--border);
+}
+.tab-btn{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--sub);
+  padding:10px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:.9em;
+  transition:.2s;
+  white-space:nowrap;
+}
+.tab-btn:hover{ border-color:var(--accent); color:var(--text);}
+.tab-btn.active{
+  background:var(--accent);
+  color:#0d1117;
+  border-color:var(--accent);
+  font-weight:bold;
+}
+.tab-content{ display:none; animation:fade .3s; }
+.tab-content.active{ display:block; }
+@keyframes fade{ from{opacity:0;} to{opacity:1;} }
+
+.section-title{
+  font-size:1.25em;
+  color:var(--accent2);
+  border-left:5px solid var(--accent);
+  padding-left:12px;
+  margin:30px 0 16px;
+}
+.setup-box{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:16px 20px;
+  margin-bottom:24px;
+  color:var(--sub);
+  font-size:.95em;
+}
+.setup-box b{color:var(--text);}
+
+.qcard{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px 20px;
+  margin-bottom:18px;
+}
+.qhead{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+.qnum{
+  background:var(--accent);
+  color:#0d1117;
+  font-weight:bold;
+  border-radius:50%;
+  width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-size:.9em;
+}
+.qtext{ font-size:1.02em; }
+.blank{
+  display:inline-block;
+  background:var(--panel2);
+  border:1px dashed var(--accent);
+  border-radius:6px;
+  padding:1px 10px;
+  color:var(--warn);
+  font-weight:bold;
+  margin:0 2px;
+}
+.choices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+@media(max-width:560px){ .choices{ grid-template-columns:1fr; } }
+.choice{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 14px;
+  cursor:pointer;
+  transition:.15s;
+  font-size:.95em;
+}
+.choice:hover{ border-color:var(--accent); }
+.choice.correct{
+  background:rgba(63,185,80,.18);
+  border-color:var(--good);
+  color:var(--good);
+}
+.choice.wrong{
+  background:rgba(248,81,73,.18);
+  border-color:var(--bad);
+  color:var(--bad);
+}
+.choice.disabled{ pointer-events:none; opacity:.7; }
+.result-msg{
+  margin-top:10px;
+  font-weight:bold;
+  min-height:1.4em;
+}
+.result-msg.ok{ color:var(--good); }
+.result-msg.ng{ color:var(--bad); }
+
+.btnrow{ margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;}
+.ans-btn{
+  background:transparent;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  padding:7px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:.88em;
+}
+.ans-btn:hover{ background:var(--accent); color:#0d1117; }
+.answer-box{
+  display:none;
+  margin-top:12px;
+  background:var(--panel2);
+  border-left:4px solid var(--accent2);
+  padding:12px 16px;
+  border-radius:0 8px 8px 0;
+  font-size:.95em;
+}
+.answer-box.show{ display:block; }
+.answer-box .label{ color:var(--accent2); font-weight:bold; margin-bottom:4px;}
+
+.explain{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:22px 24px;
+  margin-top:30px;
+}
+.explain h3{
+  color:var(--accent2);
+  margin-top:0;
+  border-bottom:1px solid var(--border);
+  padding-bottom:10px;
+}
+.step{
+  margin:18px 0;
+  padding-left:14px;
+  border-left:3px solid var(--accent);
+}
+.step .stitle{
+  font-weight:bold;
+  color:var(--text);
+  margin-bottom:6px;
+}
+.mathblock{
+  background:#0a0e14;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 16px;
+  margin:10px 0;
+  overflow-x:auto;
+}
+.pointbox{
+  background:rgba(88,166,255,.08);
+  border:1px solid var(--accent);
+  border-radius:8px;
+  padding:12px 16px;
+  margin:12px 0;
+  font-size:.93em;
+}
+.pointbox .ptitle{ color:var(--accent2); font-weight:bold; margin-bottom:4px;}
+.keypoints{
+  background:rgba(63,185,80,.08);
+  border:1px solid var(--good);
+  border-radius:8px;
+  padding:14px 18px;
+  margin-top:18px;
+}
+.keypoints .ktitle{ color:var(--good); font-weight:bold; margin-bottom:8px; }
+.keypoints ul{ margin:0; padding-left:20px; }
+.keypoints li{ margin-bottom:6px; }
+
+.progress{
+  text-align:center;
+  color:var(--sub);
+  font-size:.85em;
+  margin-bottom:10px;
+}
+footer{
+  text-align:center;
+  color:var(--sub);
+  font-size:.8em;
+  margin-top:40px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>統計力学１　復習問題３　穴埋めクイズ</h1>
+  <p>２つの系の接触・熱平衡・エントロピーの加法性とBoltzmann定数</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="t1">① 状態数とエネルギー保存</button>
+  <button class="tab-btn" data-tab="t2">② 平衡条件とエントロピー</button>
+  <button class="tab-btn" data-tab="t3">③ 温度の定義と熱の流れ</button>
+  <button class="tab-btn" data-tab="t4">④ kBの普遍性</button>
+</div>
+
+<div class="container">
+
+<!-- ============ TAB 1 ============ -->
+<div class="tab-content active" id="t1">
+  <div class="setup-box">
+    系A，系Bを透熱壁で接触させ，それ以外は断熱壁で囲んだ孤立系を考える。系Aのエネルギーが
+    $E_A$ のときの微視的状態数を $W_A$，系Bのエネルギーが $E_B$ のときの微視的状態数を
+    $W_B$ とする。
+  </div>
+  <div class="section-title">問題 (1)〜(3)：状態数とエネルギー保存則</div>
+
+  <div class="qcard" data-qid="q1">
+    <div class="qhead"><div class="qnum">1</div>
+      <div class="qtext">系A，Bのエネルギーがそれぞれ $E_A,E_B$ のとき，全系が取りうる状態数 $W$ は，$W_A,W_B$ を用いて <span class="blank">ア</span> と表される。<span class="blank">ア</span> に入るものを選べ。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$W = W_A W_B$$
+      系Aと系Bは独立に状態を取れるので，全系の状態数は各々の状態数の<b>積</b>になる（組み合わせの原理）。和ではない点に注意。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q2">
+    <div class="qhead"><div class="qnum">2</div>
+      <div class="qtext">平衡状態とは，全系の状態数 $W$ が <span class="blank">イ</span> となる状態である。<span class="blank">イ</span> に入る言葉を選べ。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      <b>最大</b><br>
+      孤立系は，許される条件のもとで実現可能な微視的状態の数が最も多い状態（最も「ありふれた」状態）に向かって自然に変化し，そこに落ち着く。これが統計力学における平衡状態の定義である。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q3">
+    <div class="qhead"><div class="qnum">3</div>
+      <div class="qtext">全系のエネルギーを $E$ とする。系は孤立系で $E$ は一定であるから，$E_A,E_B,E$ の間に成立する関係式は <span class="blank">ウ</span> である。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$E = E_A + E_B \quad(\text{一定})$$
+      外界とのエネルギーのやり取りがない孤立系なので，全エネルギー $E$ はAとBの間でやり取りされても合計は変化しない（エネルギー保存則）。
+    </div>
+  </div>
+
+  <div class="explain">
+    <h3>初学者向けステップ解説（①）</h3>
+    <div class="step">
+      <div class="stitle">ステップ1：状態数が「積」になる理由</div>
+      系Aが取りうるミクロ状態が $W_A$ 通り，系Bが取りうるミクロ状態が $W_B$ 通りあるとき，
+      系Aのどの状態とも，系Bのどの状態とも独立に組み合わせることができる。
+      これはサイコロを2つ振るときの組み合わせ数の数え方と同じで，「Aの選び方」×「Bの選び方」になる。
+      <div class="mathblock">$$W(E_A,E_B) = W_A(E_A)\times W_B(E_B)$$</div>
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ2：平衡状態＝最大の状態数</div>
+      孤立系が時間とともに変化していくと，圧倒的多数のミクロ状態に対応する $E_A,E_B$ の配分に
+      自然と落ち着く。これは「ありえないほど特殊な配分」よりも「圧倒的に多い配分」のほうが
+      観測される確率が高いから。これが熱力学的平衡の統計力学的な正体である。
+      <div class="pointbox">
+        <div class="ptitle">ポイント</div>
+        熱力学でいう「平衡状態」は，統計力学では「微視的状態数 $W$ が最大になる状態」に対応する。これは統計力学の最も基本的な仮説（等重率の仮説）に基づく結論である。
+      </div>
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ3：エネルギー保存則の意味</div>
+      系全体が断熱壁で囲まれているため，外部とのエネルギーのやり取りはない。
+      接触面（透熱壁）を通してAとBの間でエネルギーが移動することはあっても，
+      その合計 $E=E_A+E_B$ は常に一定である。これは後の(4)(5)の計算で
+      $dE_A+dE_B=0$ という制約条件として使われる重要な式である。
+      <div class="mathblock">$$E_A + E_B = E = \text{const.}$$</div>
+    </div>
+    <div class="keypoints">
+      <div class="ktitle">①のキーポイントまとめ</div>
+      <ul>
+        <li>独立な2系の状態数は<b>積</b>で表される：$W=W_AW_B$</li>
+        <li>平衡状態は状態数 $W$ が<b>最大</b>になる状態</li>
+        <li>孤立系では全エネルギー $E=E_A+E_B$ は<b>一定</b>に保たれる</li>
+        <li>これらが次の問題でエントロピーの関係式を導く出発点になる</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TAB 2 ============ -->
+<div class="tab-content" id="t2">
+  <div class="setup-box">
+    $W_A=W_A(E_A)$，$W_B=W_B(E_B)$ とし，$S_A(E_A):=k_B\log W_A(E_A)$，
+    $S_B(E_B):=k_B\log W_B(E_B)$ とする。平衡状態において，これらに成立する関係式を導く。
+  </div>
+  <div class="section-title">問題 (4)：エントロピーの関係式の導出</div>
+
+  <div class="qcard" data-qid="q4">
+    <div class="qhead"><div class="qnum">4</div>
+      <div class="qtext">全系のエントロピーを $S(E):=k_B\log W$ とおく。$W=W_AW_B$ を用いると，
+      $S(E)=k_B\log(W_AW_B)=$ <span class="blank">エ</span> となる。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$S(E) = k_B\log W_A(E_A) + k_B\log W_B(E_B) = S_A(E_A)+S_B(E_B)$$
+      対数の性質 $\log(xy)=\log x+\log y$ より，積が和に変換される。これがエントロピーの加法性の起源である。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q5">
+    <div class="qhead"><div class="qnum">5</div>
+      <div class="qtext">$S(E)$ を $E_A,E_B$ の関数とみて全微分すると $dS=\dfrac{\partial S}{\partial E_A}dE_A+\dfrac{\partial S}{\partial E_B}dE_B$ となる。
+      孤立系の条件 $E_A+E_B=$ 一定 より $dE_A+dE_B=0$ であるから，$dE_B=$ <span class="blank">オ</span> である。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$dE_B = -dE_A$$
+      $E=E_A+E_B$ が一定なので，両辺を微分すれば $0=dE_A+dE_B$。これより $E_A$ が増えた分だけ $E_B$ は減る（あるいはその逆）という制約が得られる。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q6">
+    <div class="qhead"><div class="qnum">6</div>
+      <div class="qtext">$dE_B=-dE_A$ を $dS$ の式に代入すると，$dS=\left(\dfrac{\partial S}{\partial E_A}-\dfrac{\partial S}{\partial E_B}\right)dE_A$ となる。
+      平衡状態では $W$（すなわち $S$）が最大なので $dS=$ <span class="blank">カ</span> である。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$dS = 0$$
+      $S$（あるいは$W$）が極大値（最大）をとる点では，変数についての微小変化に対して関数の変化量はゼロになる。これは極値の必要条件 $dS=0$ である。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q7">
+    <div class="qhead"><div class="qnum">7</div>
+      <div class="qtext">$dS=0$ がどのような $dE_A$ に対しても成り立つためには，係数 $\left(\dfrac{\partial S}{\partial E_A}-\dfrac{\partial S}{\partial E_B}\right)$ が
+      <span class="blank">キ</span> でなければならない。すなわち，平衡状態では <span class="blank">キ</span> という関係式が成り立つ。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$\frac{\partial S}{\partial E_A} = \frac{\partial S}{\partial E_B}$$
+      すなわち $\dfrac{\partial}{\partial E_A}(k_B\log W_A)=\dfrac{\partial}{\partial E_B}(k_B\log W_B)$。これが(4)で求める最終的な関係式である。
+    </div>
+  </div>
+
+  <div class="explain">
+    <h3>初学者向けステップ解説（②）</h3>
+    <div class="step">
+      <div class="stitle">ステップ1：エントロピーは「足し算」できる量</div>
+      $W=W_AW_B$（状態数は積）であっても，対数をとった $S=k_B\log W$ は
+      $S=S_A+S_B$（エントロピーは和）になる。これは対数関数が積を和に変換する性質を持つためで，
+      エントロピーを定義する際に対数を使う最大の理由のひとつである。
+      <div class="mathblock">$$S = k_B\log(W_AW_B) = k_B\log W_A + k_B\log W_B = S_A+S_B$$</div>
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ2：全微分と制約条件</div>
+      $S$ は $E_A,E_B$ の2変数の関数なので，全微分は
+      $$dS=\frac{\partial S}{\partial E_A}dE_A+\frac{\partial S}{\partial E_B}dE_B$$
+      で表される。ここに孤立系の制約 $E_A+E_B=\text{const.}\Rightarrow dE_A+dE_B=0$ を使うと，
+      $dE_B=-dE_A$ となり，2つの独立変数のうち実質1つ（$E_A$）だけが自由に動けることになる。
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ3：代入して dS を E_A だけの式にする</div>
+      $dE_B=-dE_A$ を代入すると
+      $$dS=\left(\frac{\partial S}{\partial E_A}-\frac{\partial S}{\partial E_B}\right)dE_A$$
+      となる。これは「$E_A$ がわずかに変化したときに，全系のエントロピーがどう変化するか」を表す式である。
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ4：平衡条件 dS=0 から関係式を導く</div>
+      平衡状態は $S$（＝$\log W$）が最大になる状態である。関数が最大値（極値）を取る点では，
+      任意の方向の微小変化に対して一次の変化量がゼロになる。すなわち $dS=0$。
+      これが「任意の $dE_A$」に対して成り立つには，係数そのものがゼロでなければならない。
+      <div class="pointbox">
+        <div class="ptitle">ポイント：なぜ「係数がゼロ」なのか</div>
+        $dS=C\cdot dE_A=0$ が，$dE_A$ がどんな値でも成り立つには $C=0$ しかありえない。
+        これは高校数学の「関数の最大・最小では導関数が0」という考え方と同じ。
+      </div>
+      よって
+      $$\frac{\partial S}{\partial E_A}=\frac{\partial S}{\partial E_B}
+      \quad\Longleftrightarrow\quad
+      \frac{\partial}{\partial E_A}(k_B\log W_A)=\frac{\partial}{\partial E_B}(k_B\log W_B)$$
+    </div>
+    <div class="keypoints">
+      <div class="ktitle">②のキーポイントまとめ</div>
+      <ul>
+        <li>エントロピーは状態数の対数なので<b>加法的</b>：$S=S_A+S_B$</li>
+        <li>孤立系の制約から $dE_B=-dE_A$ が成り立つ</li>
+        <li>平衡状態では $dS=0$（$S$ が極大値をとる条件）</li>
+        <li>結果として $\dfrac{\partial S_A}{\partial E_A}=\dfrac{\partial S_B}{\partial E_B}$ が成立し，これが次の「温度」の定義につながる</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TAB 3 ============ -->
+<div class="tab-content" id="t3">
+  <div class="setup-box">
+    温度 $T$ を $\dfrac{1}{T}=\dfrac{\partial S(E)}{\partial E}=\dfrac{\partial}{\partial E}(k_B\log W(E))$ として定義する。
+    接触前の系A，系Bの温度をそれぞれ $T_A,T_B$ とし，$T_A>T_B$ のときエネルギーがどちらに移動するかを調べる。
+  </div>
+  <div class="section-title">問題 (5)：温度の定義と熱の移動方向</div>
+
+  <div class="qcard" data-qid="q8">
+    <div class="qhead"><div class="qnum">8</div>
+      <div class="qtext">$T_A>T_B$ のとき，温度の定義 $\dfrac{1}{T}=\dfrac{\partial}{\partial E}(k_B\log W)$ を用いると，
+      $\dfrac{\partial}{\partial E_A}(k_B\log W_A)=\dfrac1{T_A}$ と $\dfrac1{T_B}$ の大小関係は <span class="blank">ク</span> である。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$\frac1{T_A} < \frac1{T_B}$$
+      $T_A>T_B>0$ のとき，逆数を取ると大小関係は反転するので $1/T_A<1/T_B$ となる。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q9">
+    <div class="qhead"><div class="qnum">9</div>
+      <div class="qtext">$\dfrac1{T_A}<\dfrac1{T_B}$ を整理すると $0<\dfrac1{T_B}-\dfrac1{T_A}=\dfrac{\partial S}{\partial E_B}-\dfrac{\partial S}{\partial E_A}$ となる。
+      これを(4)で得た $dS=\left(\dfrac{\partial S}{\partial E_A}-\dfrac{\partial S}{\partial E_B}\right)dE_A=\left(-\dfrac{\partial S}{\partial E_A}+\dfrac{\partial S}{\partial E_B}\right)dE_B$ に代入すると，
+      接触直後の $dS/dE_B$ の符号は <span class="blank">ケ</span> である。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$\frac{dS}{dE_B} > 0$$
+      $\dfrac{\partial S}{\partial E_B}-\dfrac{\partial S}{\partial E_A}>0$ がそのまま $dS/dE_B$ の式の係数になるため，正である。すなわち $S$（＝$\log W$）は $E_B$ の増加関数になっている。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q10">
+    <div class="qhead"><div class="qnum">10</div>
+      <div class="qtext">$dS/dE_B>0$ より $W$ は $E_B$ の増加関数である。平衡状態は $W$ が最大となる状態なので，
+      接触後，系は $E_B$ が <span class="blank">コ</span> する方向に変化する。すなわちエネルギーは系 <span class="blank">サ</span> から系 <span class="blank">シ</span> へ移動する。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $E_B$ が<b>増加</b>する方向に変化し，エネルギーは系<b>A</b>から系<b>B</b>へ移動する。<br>
+      つまり高温（$T_A$）の系から低温（$T_B$）の系へ熱（エネルギー）が流れる，という熱力学第二法則の statistical な根拠が得られる。
+    </div>
+  </div>
+
+  <div class="explain">
+    <h3>初学者向けステップ解説（③）</h3>
+    <div class="step">
+      <div class="stitle">ステップ1：温度の定義を確認する</div>
+      ここでは温度を，エントロピーのエネルギーに関する偏微分の逆数として<b>定義</b>する：
+      <div class="mathblock">$$\frac1T = \frac{\partial S(E)}{\partial E}$$</div>
+      これは普段使う「温度計の温度」とは見た目が違うが，熱力学的に温度が満たすべき性質
+      （熱は高温から低温へ流れる，平衡では温度が等しくなる）を統計力学の言葉で再現できる定義になっている。
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ2：T_A > T_B から偏微分の大小を求める</div>
+      $T_A>T_B>0$（温度は正）として両辺の逆数を取ると，大小関係が反転して
+      $$\frac1{T_A}<\frac1{T_B}
+      \quad\Longleftrightarrow\quad
+      \frac{\partial S}{\partial E_A}<\frac{\partial S}{\partial E_B}$$
+      <div class="pointbox">
+        <div class="ptitle">ポイント：逆数で不等号が反転する</div>
+        正の数 $a>b>0$ に対して $1/a<1/b$ となる。これは中学・高校でもおなじみの性質だが，
+        ここでは「高温ほど $1/T$ が小さい＝$\partial S/\partial E$ が小さい」という重要な意味を持つ。
+      </div>
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ3：(4)の dS の式に代入する</div>
+      (4)で得た $dS=\left(-\dfrac{\partial S}{\partial E_A}+\dfrac{\partial S}{\partial E_B}\right)dE_B$ の係数
+      $\left(\dfrac{\partial S}{\partial E_B}-\dfrac{\partial S}{\partial E_A}\right)$ は，ステップ2の結果からまさに<b>正</b>である。
+      よって
+      $$\frac{dS}{dE_B} = \frac{\partial S}{\partial E_B}-\frac{\partial S}{\partial E_A} > 0$$
+      これは「$E_B$ をわずかに増やすと，全系のエントロピー（状態数の対数）が増える」ことを意味する。
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ4：平衡へ向かう方向＝Wが増える方向</div>
+      孤立系は自然に状態数 $W$（エントロピー $S$）が増える方向，最終的に最大になる方向へ変化する。
+      $dS/dE_B>0$ ということは，$E_B$ を増やせば増やすほど $S$ は増えるので，
+      系は自発的に $E_B$ を増やす方向＝$E_A$ を減らす方向へ進む。
+      <div class="pointbox">
+        <div class="ptitle">ポイント：これが「熱は高温から低温へ流れる」の正体</div>
+        高温側（$T_A$が大きい）はエネルギーを失い，低温側（$T_B$が小さい）はエネルギーを得る。
+        日常的に知っている「熱は高温から低温に流れる」という法則が，
+        「微視的状態数が最大になろうとする」という統計力学の原理から導かれたことになる。
+      </div>
+    </div>
+    <div class="keypoints">
+      <div class="ktitle">③のキーポイントまとめ</div>
+      <ul>
+        <li>温度は $1/T=\partial S/\partial E$ として統計力学的に定義される</li>
+        <li>$T_A>T_B$ なら $\partial S/\partial E_A<\partial S/\partial E_B$</li>
+        <li>これより $dS/dE_B>0$，すなわち $W$ は $E_B$ の増加関数</li>
+        <li>系は自発的に $E_B$ が増える方向＝A→Bへエネルギーが流れる方向に変化する</li>
+        <li>結論：熱は高温（$T_A$）から低温（$T_B$）へ流れる</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TAB 4 ============ -->
+<div class="tab-content" id="t4">
+  <div class="setup-box">
+    Boltzmannの関係式 $S=k_B\log W$ において，エントロピーが加法的（$S_{A+B}=S_A+S_B$）であると仮定すると，
+    比例定数 $k_B$ が系の種類に依存しないことを示す。
+  </div>
+  <div class="section-title">問題 (6)：Boltzmann定数の普遍性</div>
+
+  <div class="qcard" data-qid="q11">
+    <div class="qhead"><div class="qnum">11</div>
+      <div class="qtext">系A，系Bそれぞれに比例定数 $k_1,k_2$ を許して $S_A=k_1\log W_A$，$S_B=k_2\log W_B$，
+      $S_{A+B}=k_3\log(W_AW_B)$ とおく。エントロピーの加法性とは，$S_{A+B}=$ <span class="blank">ス</span> が成り立つことである。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$S_{A+B} = S_A + S_B$$
+      「エントロピーが加法的」とは，合成系のエントロピーが各部分系のエントロピーの単純な和になるという性質のことである。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q12">
+    <div class="qhead"><div class="qnum">12</div>
+      <div class="qtext">$S_{A+B}=S_A+S_B$ に各式を代入すると $k_3\log(W_AW_B)=k_1\log W_A+k_2\log W_B$ となる。
+      左辺を対数の性質を使って展開すると <span class="blank">セ</span> となる。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$k_3\log W_A + k_3\log W_B$$
+      $\log(W_AW_B)=\log W_A+\log W_B$ より，$k_3$ をかけて分配すればこの形になる。
+    </div>
+  </div>
+
+  <div class="qcard" data-qid="q13">
+    <div class="qhead"><div class="qnum">13</div>
+      <div class="qtext">$k_3\log W_A+k_3\log W_B=k_1\log W_A+k_2\log W_B$ が，任意の $W_A,W_B$ に対して成り立つためには，
+      <span class="blank">ソ</span> でなければならない。</div>
+    </div>
+    <div class="choices"></div>
+    <div class="result-msg"></div>
+    <div class="btnrow"><button class="ans-btn">答えを見る</button></div>
+    <div class="answer-box">
+      <div class="label">解答</div>
+      $$k_1 = k_2 = k_3$$
+      $\log W_A$ と $\log W_B$ は（一般には）独立に任意の値を取りうるので，両辺の対応する係数が等しくなければ等式は恒等的には成り立たない。よって比例定数は系の種類によらない普遍定数（Boltzmann定数 $k_B$）でなければならない。
+    </div>
+  </div>
+
+  <div class="explain">
+    <h3>初学者向けステップ解説（④）</h3>
+    <div class="step">
+      <div class="stitle">ステップ1：仮に比例定数が系ごとに違うとしてみる</div>
+      もし $k_B$ が本当に系の種類によって違う値を取ってよいなら，系Aには $k_1$，系Bには $k_2$，
+      合成系A+Bには $k_3$ という別々の定数があってもおかしくない，とまず仮定してみる。
+      <div class="mathblock">$$S_A=k_1\log W_A,\quad S_B=k_2\log W_B,\quad S_{A+B}=k_3\log(W_AW_B)$$</div>
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ2：加法性の要請を式にする</div>
+      エントロピーが加法的であるという物理的な要請（巨視的な熱力学で知られている性質）から，
+      $$S_{A+B}=S_A+S_B$$
+      が成り立たなければならない。これに先の3つの式を代入する。
+      $$k_3\log(W_AW_B) = k_1\log W_A + k_2\log W_B$$
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ3：対数の性質で左辺を分解する</div>
+      対数の積の性質 $\log(xy)=\log x+\log y$ を使うと，左辺は
+      $$k_3\log(W_AW_B) = k_3\log W_A + k_3\log W_B$$
+      と書き直せる。したがって等式は
+      $$k_3\log W_A + k_3\log W_B = k_1\log W_A + k_2\log W_B$$
+      という形になる。
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ4：任意のW_A, W_Bで成り立つ条件を考える</div>
+      この等式は，系A・系Bの状態数 $W_A,W_B$ がどんな値であっても（つまりどんな系を選んでも）
+      成り立たなければならない。$\log W_A$ と $\log W_B$ は互いに独立に変化しうる量なので，
+      <div class="pointbox">
+        <div class="ptitle">ポイント：係数比較の考え方</div>
+        $aX+bY=cX+dY$ がすべての $X,Y$ に対して成り立つには，$a=c$ かつ $b=d$ でなければならない（$X,Y$ が独立に動けるため）。これは多項式の係数比較と同じ考え方である。
+      </div>
+      これを当てはめると，$k_3=k_1$ かつ $k_3=k_2$，すなわち
+      $$k_1=k_2=k_3$$
+      が結論される。
+    </div>
+    <div class="step">
+      <div class="stitle">ステップ5：結論——Boltzmann定数は普遍定数</div>
+      系A，系B，そして合成系A+Bという，互いに性質の異なる（種類の異なる）系を考えても，
+      比例定数は同じ値でなければならない。これはAとBがどんな物理系であっても成り立つ議論なので，
+      結局比例定数は<b>あらゆる系に共通な普遍定数</b>でなければならないことが分かる。
+      この定数をBoltzmann定数 $k_B$ と呼ぶ。
+    </div>
+    <div class="keypoints">
+      <div class="ktitle">④のキーポイントまとめ</div>
+      <ul>
+        <li>エントロピーの加法性 $S_{A+B}=S_A+S_B$ を出発点にする</li>
+        <li>$S=k\log W$ で対数の性質 $\log(W_AW_B)=\log W_A+\log W_B$ を使うと係数比較ができる</li>
+        <li>任意の $W_A,W_B$ で成り立つには係数が等しい必要があり，$k_1=k_2=k_3$</li>
+        <li>結論：比例定数 $k_B$ は系の種類に関係なく一定の<b>普遍定数</b>である</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- container -->
+
+<footer>統計力学１　復習問題３　穴埋めクイズ　｜　MathJax 3.2.2 (cdnjs)</footer>
+
+<script>
+// ---------- Tab switching ----------
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ---------- Question data: choices + correct index (randomized placement) ----------
+const QDATA = {
+  q1: { choices: ["$W_A+W_B$","$W_AW_B$","$W_A/W_B$","$W_A^{\\,W_B}$"], correctText: "$W_AW_B$" },
+  q2: { choices: ["最小","一定","ゼロ","最大"], correctText: "最大" },
+  q3: { choices: ["$E=E_A+E_B$","$E=E_A-E_B$","$E=E_AE_B$","$E=E_A/E_B$"], correctText: "$E=E_A+E_B$" },
+  q4: { choices: ["$k_B\\log W_A+k_B\\log W_B$","$k_B(\\log W_A)(\\log W_B)$","$k_B\\log W_A-k_B\\log W_B$","$k_B\\log(W_A+W_B)$"], correctText: "$k_B\\log W_A+k_B\\log W_B$" },
+  q5: { choices: ["$dE_A$","$-dE_A$","$0$","$2\\,dE_A$"], correctText: "$-dE_A$" },
+  q6: { choices: ["$0$","$1$","$\\infty$","定義できない"], correctText: "$0$" },
+  q7: { choices: ["$\\dfrac{\\partial S}{\\partial E_A}=-\\dfrac{\\partial S}{\\partial E_B}$","$\\dfrac{\\partial S}{\\partial E_A}=\\dfrac{\\partial S}{\\partial E_B}$","$\\dfrac{\\partial S}{\\partial E_A}\\cdot\\dfrac{\\partial S}{\\partial E_B}=1$","$\\dfrac{\\partial S}{\\partial E_A}+\\dfrac{\\partial S}{\\partial E_B}=0$"], correctText: "$\\dfrac{\\partial S}{\\partial E_A}=\\dfrac{\\partial S}{\\partial E_B}$" },
+  q8: { choices: ["$\\dfrac1{T_A}>\\dfrac1{T_B}$","$\\dfrac1{T_A}=\\dfrac1{T_B}$","$\\dfrac1{T_A}<\\dfrac1{T_B}$","大小関係は決まらない"], correctText: "$\\dfrac1{T_A}<\\dfrac1{T_B}$" },
+  q9: { choices: ["正（$>0$）","負（$<0$）","ゼロ","符号は不定"], correctText: "正（$>0$）" },
+  q10:{ choices: ["減少／B／A","一定／A／B","増加／B／A","増加／A／B"], correctText: "増加／A／B" },
+  q11:{ choices: ["$S_A-S_B$","$S_A\\times S_B$","$S_A+S_B$","$S_A/S_B$"], correctText: "$S_A+S_B$" },
+  q12:{ choices: ["$k_3\\log W_A+k_3\\log W_B$","$k_3\\log W_A-k_3\\log W_B$","$k_3(\\log W_A)(\\log W_B)$","$k_3\\log(W_A-W_B)$"], correctText: "$k_3\\log W_A+k_3\\log W_B$" },
+  q13:{ choices: ["$k_1=k_2$ かつ $k_3$ は自由","$k_1+k_2=k_3$","$k_1=k_2=k_3$","$k_1k_2=k_3$"], correctText: "$k_1=k_2=k_3$" }
+};
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+document.querySelectorAll('.qcard').forEach(card=>{
+  const qid = card.dataset.qid;
+  const data = QDATA[qid];
+  if(!data) return;
+  const order = shuffle(data.choices.map((_,i)=>i));
+  const choicesDiv = card.querySelector('.choices');
+  const msgDiv = card.querySelector('.result-msg');
+
+  order.forEach(idx=>{
+    const div = document.createElement('div');
+    div.className = 'choice';
+    div.innerHTML = data.choices[idx];
+    div.dataset.isCorrect = (data.choices[idx] === data.correctText) ? '1':'0';
+    div.addEventListener('click', ()=>{
+      if(card.dataset.answered) return;
+      card.dataset.answered = '1';
+      const allChoices = choicesDiv.querySelectorAll('.choice');
+      allChoices.forEach(c=>{
+        c.classList.add('disabled');
+        if(c.dataset.isCorrect==='1') c.classList.add('correct');
+      });
+      if(div.dataset.isCorrect==='1'){
+        msgDiv.textContent = '○ 正解！';
+        msgDiv.className = 'result-msg ok';
+      } else {
+        div.classList.add('wrong');
+        msgDiv.textContent = '× 不正解…正解（緑）を確認しよう';
+        msgDiv.className = 'result-msg ng';
+      }
+    });
+    choicesDiv.appendChild(div);
+  });
+
+  const ansBtn = card.querySelector('.ans-btn');
+  const ansBox = card.querySelector('.answer-box');
+  ansBtn.addEventListener('click', ()=>{
+    ansBox.classList.toggle('show');
+    ansBtn.textContent = ansBox.classList.contains('show') ? '答えを隠す' : '答えを見る';
+    typesetSafe([ansBox]);
+  });
+});
+
+// ---------- Robust MathJax typesetting (wait for MathJax to be fully ready) ----------
+function typesetSafe(elements){
+  function run(){
+    if(window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise(elements).catch(err=>console.error('MathJax typeset error:', err));
+    }
+  }
+  if(window.MathJax && MathJax.startup && MathJax.startup.promise){
+    MathJax.startup.promise.then(run);
+  } else {
+    setTimeout(()=>typesetSafe(elements), 100);
+  }
+}
+
+// Typeset the whole document once everything (including dynamically built choices) is in the DOM
+typesetSafe();
+</script>
+
+</body>
+</html>

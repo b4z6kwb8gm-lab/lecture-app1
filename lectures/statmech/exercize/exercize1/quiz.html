@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統計力学１ 復習問題１ ｰ 穴埋めクイズ</title>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)'], ['$', '$']],
+    displayMath: [['\\[', '\\]'], ['$$', '$$']]
+  },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg: #0d1117;
+    --bg-panel: #11161d;
+    --bg-card: #161c26;
+    --bg-card-hover: #1b2330;
+    --border: #232b38;
+    --border-soft: #1a212c;
+    --ink: #e6edf3;
+    --ink-dim: #9aa7b8;
+    --ink-faint: #6b7686;
+    --accent: #39d2c0;
+    --accent-dim: #1f6e64;
+    --accent-glow: rgba(57,210,192,0.12);
+    --amber: #e3b341;
+    --amber-dim: rgba(227,179,65,0.12);
+    --wrong: #f06464;
+    --wrong-dim: rgba(240,100,100,0.12);
+    --correct: #39d2c0;
+    --serif: 'Georgia', 'Hiragino Mincho ProN', serif;
+    --mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+    --sans: 'Hiragino Sans', 'Yu Gothic', 'Segoe UI', sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before{
+    content:'';
+    position: fixed;
+    top:0; left:0; right:0; height: 380px;
+    background: radial-gradient(ellipse at 20% -10%, var(--accent-glow), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    padding: 56px 0 28px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 28px;
+  }
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width: 7px; height:7px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    display:inline-block;
+  }
+  h1{
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 34px;
+    margin: 0 0 12px;
+    letter-spacing: 0.01em;
+    color: #fff;
+  }
+  h1 em{ color: var(--accent); font-style: normal; }
+  .sub{
+    color: var(--ink-dim);
+    font-size: 15px;
+    max-width: 560px;
+  }
+  .meta-row{
+    display:flex; gap:22px; margin-top:22px; flex-wrap: wrap;
+  }
+  .meta-item{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .meta-item b{ color: var(--ink-dim); font-weight: 600;}
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    gap: 6px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-soft);
+    overflow-x: auto;
+  }
+  .tab-btn{
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    font-family: var(--sans);
+    font-size: 14.5px;
+    font-weight: 600;
+    padding: 14px 18px 16px;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: color .15s ease;
+  }
+  .tab-btn .tag{
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    display:block;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .tab-btn:hover{ color: var(--ink); }
+  .tab-btn.active{ color: #fff; }
+  .tab-btn.active .tag{ color: var(--accent); }
+  .tab-btn.active::after{
+    content:'';
+    position:absolute;
+    bottom:-1px; left:0; right:0;
+    height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+  }
+  .tab-btn .score-pill{
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1px 8px;
+    margin-left: 6px;
+  }
+
+  .tab-panel{ display:none; animation: fadein .25s ease; }
+  .tab-panel.active{ display:block; }
+  @keyframes fadein{ from{opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
+
+  /* ---------- SOURCE PROBLEM BOX ---------- */
+  .source-box{
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--amber);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin-bottom: 36px;
+    font-size: 14.5px;
+    color: var(--ink-dim);
+  }
+  .source-box .src-label{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display:block;
+  }
+  .source-box p{ margin: 0 0 10px; }
+  .source-box p:last-child{ margin-bottom: 0; }
+  .blank{
+    display:inline-block;
+    min-width: 2.4em;
+    text-align:center;
+    border-bottom: 1.5px dashed var(--ink-faint);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-weight:700;
+    padding: 0 3px;
+  }
+
+  /* ---------- SECTION LABEL ---------- */
+  .section-label{
+    display:flex;
+    align-items:baseline;
+    gap: 10px;
+    margin: 44px 0 18px;
+  }
+  .section-label .num{
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--accent);
+  }
+  .section-label .txt{
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .section-label .count{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-left: auto;
+  }
+
+  /* ---------- QUESTION CARD ---------- */
+  .qcard{
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 24px 22px;
+    margin-bottom: 18px;
+    transition: border-color .15s ease;
+  }
+  .qcard:hover{ border-color: #2c3645; }
+  .qhead{
+    display:flex;
+    align-items:flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .qbadge{
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--bg);
+    background: var(--accent);
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    margin-top: 1px;
+  }
+  .qprompt{
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .qprompt .qprompt-blank{
+    color: var(--accent);
+    font-family: var(--mono);
+    font-weight: 700;
+  }
+
+  .choices{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0 6px;
+  }
+  @media (max-width: 560px){
+    .choices{ grid-template-columns: 1fr; }
+  }
+  .choice-btn{
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    color: var(--ink-dim);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    transition: all .12s ease;
+    font-family: var(--sans);
+  }
+  .choice-btn .letter{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    width: 20px; height:20px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .choice-btn:hover:not(:disabled){
+    border-color: var(--accent-dim);
+    background: var(--bg-card-hover);
+    color: var(--ink);
+  }
+  .choice-btn:disabled{ cursor: default; }
+  .choice-btn.correct{
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .choice-btn.correct .letter{ border-color: var(--accent); color: var(--accent); }
+  .choice-btn.wrong{
+    background: var(--wrong-dim);
+    border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .choice-btn.wrong .letter{ border-color: var(--wrong); color: var(--wrong); }
+  .choice-btn.dim{ opacity: 0.45; }
+
+  .feedback{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    display:none;
+  }
+  .feedback.show{ display:block; animation: fadein .2s ease; }
+  .feedback.ok{ background: var(--accent-glow); color: var(--accent); }
+  .feedback.ng{ background: var(--wrong-dim); color: var(--wrong); }
+
+  .qfoot{
+    display:flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+  }
+  .reveal-btn{
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .reveal-btn:hover{ border-color: var(--amber); color: var(--amber); }
+
+  .answer-panel{
+    display:none;
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: var(--amber-dim);
+    border: 1px solid rgba(227,179,65,0.35);
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .answer-panel.show{ display:block; animation: fadein .2s ease; }
+  .answer-panel .ans-label{
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--amber);
+    text-transform: uppercase;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .answer-panel .ans-value{
+    font-weight: 700;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+  .answer-panel .ans-note{ color: var(--ink-dim); }
+
+  /* ---------- EXPLANATION SECTION ---------- */
+  .explain-divider{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    margin: 56px 0 28px;
+  }
+  .explain-divider::before, .explain-divider::after{
+    content:'';
+    flex:1;
+    height: 1px;
+    background: var(--border);
+  }
+  .explain-divider span{
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .explain-box{
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 32px 8px;
+    margin-bottom: 20px;
+  }
+  .explain-box h3.eb-title{
+    font-family: var(--serif);
+    font-size: 21px;
+    color: #fff;
+    margin: 0 0 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .step{
+    display:flex;
+    gap: 16px;
+    margin-bottom: 26px;
+  }
+  .step .stepnum{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    background: var(--accent-glow);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step .stepbody{ flex:1; min-width:0; }
+  .step .steptitle{
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .step p{
+    margin: 0 0 10px;
+    font-size: 14.5px;
+    color: var(--ink-dim);
+  }
+  .step p:last-child{ margin-bottom: 0; }
+
+  .mathblock{
+    background: #0a0e14;
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 12px 0;
+    overflow-x: auto;
+    font-size: 15px;
+  }
+
+  .pointbox{
+    background: rgba(57,210,192,0.06);
+    border: 1px solid var(--accent-dim);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-size: 13.5px;
+    color: var(--ink-dim);
+  }
+  .pointbox .pb-label{
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-transform: uppercase;
+    display:flex;
+    align-items:center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .pointbox .pb-label::before{ content: '💡'; font-size: 12px; }
+
+  .warnbox{
+    background: var(--wrong-dim);
+    border: 1px solid rgba(240,100,100,0.3);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-size: 13.5px;
+    color: var(--ink-dim);
+  }
+  .warnbox .wb-label{
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--wrong);
+    text-transform: uppercase;
+    display:block;
+    margin-bottom: 6px;
+  }
+
+  .keypoints{
+    margin-top: 30px;
+    margin-bottom: 28px;
+    background: linear-gradient(135deg, rgba(57,210,192,0.08), rgba(227,179,65,0.05));
+    border: 1px solid var(--accent-dim);
+    border-radius: 10px;
+    padding: 22px 24px;
+  }
+  .keypoints .kp-title{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+  }
+  .keypoints .kp-title::before{ content:'★'; }
+  .keypoints ul{
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .keypoints li{
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .keypoints li:last-child{ margin-bottom: 0; }
+  .keypoints li::before{
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  footer{
+    text-align:center;
+    padding: 40px 0 0;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar{ height: 6px; width: 6px; }
+  ::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-track{ background: transparent; }
+
+  mjx-container{ color: var(--ink) !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">統計力学１ ・ Review Quiz</div>
+    <h1>復習問題１ <em>穴埋めクイズ</em></h1>
+    <p class="sub">熱力学と統計力学の違いから、期待値の計算（離散型・連続型）まで。各タブの最後には省略なしのステップバイステップ解説付き。</p>
+    <div class="meta-row">
+      <div class="meta-item"><b>全問題数</b> 13問</div>
+      <div class="meta-item"><b>セクション</b> 3タブ</div>
+      <div class="meta-item"><b>更新日</b> April 2026 ベース</div>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabBar">
+    <button class="tab-btn active" data-tab="t1">
+      <span class="tag">SECTION 01</span>
+      熱力学と統計力学 <span class="score-pill" id="score-t1">0/3</span>
+    </button>
+    <button class="tab-btn" data-tab="t2">
+      <span class="tag">SECTION 02</span>
+      期待値：玉の問題 <span class="score-pill" id="score-t2">0/5</span>
+    </button>
+    <button class="tab-btn" data-tab="t3">
+      <span class="tag">SECTION 03</span>
+      期待値：ガウス分布 <span class="score-pill" id="score-t3">0/5</span>
+    </button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 1 -->
+  <!-- ============================================================ -->
+  <div class="tab-panel active" id="t1">
+
+    <div class="source-box">
+      <span class="src-label">元の問題 1</span>
+      <p>以下の文章の［　］内に当てはまる語句を下の語群の中から選びその記号を答えよ。</p>
+      <p>熱力学とは，<span class="blank">(1-1)</span> な物理量の間に成立する普遍的な関係式を現象論的に考察する学問である。これに対し統計力学とは，力学や量子力学など系を構成する要素に成立する <span class="blank">(1-2)</span> な法則に基づき，系の <span class="blank">(1-3)</span> な性質を論ずる学問である。</p>
+      <p>語群：(a) 巨視的　(b) 微視的</p>
+    </div>
+
+    <div class="section-label">
+      <span class="num">Q</span>
+      <span class="txt">3つの空欄を埋めよう</span>
+      <span class="count">3 QUESTIONS</span>
+    </div>
+
+    <div id="quiz-t1"></div>
+
+    <div class="explain-divider"><span>ここからは解説</span></div>
+
+    <div class="explain-box">
+      <h3 class="eb-title">ステップバイステップ解説：熱力学と統計力学の違い</h3>
+
+      <div class="step">
+        <div class="stepnum">1</div>
+        <div class="stepbody">
+          <div class="steptitle">そもそも「巨視的」「微視的」とは何か</div>
+          <p><b>巨視的（macroscopic）</b>とは，私たちが直接測定したり感じたりできるスケールの量を指す。たとえば，気体の入った容器を考えたとき，その「温度」「圧力」「体積」「全体のエネルギー」などは，気体分子を一つ一つ見ることなく，容器全体としてまとめて測定できる量である。これらを巨視的な物理量と呼ぶ。</p>
+          <p><b>微視的（microscopic）</b>とは，系を構成する個々の要素（原子・分子・電子など）一つ一つの振る舞いに関する量を指す。たとえば，気体分子それぞれの位置や速度，量子力学的な状態（エネルギー準位など）は微視的な量である。気体には分子が $10^{23}$ 個程度含まれているため，すべての分子の位置と速度を個別に追うことは現実的に不可能であり，また私たちが知覚することもできない。</p>
+          <div class="pointbox">
+            <span class="pb-label">Point</span>
+            「巨視的」と「微視的」は，物理量そのものの性質ではなく，<b>どのスケールで系を見ているか</b>という視点の違いを表す言葉である。同じ気体でも，「圧力は何 Pa か」と問えば巨視的な問い，「1個の分子の速度はいくらか」と問えば微視的な問いになる。
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">2</div>
+        <div class="stepbody">
+          <div class="steptitle">熱力学とは何を論じる学問か（(1-1) の根拠）</div>
+          <p>熱力学は，温度・圧力・体積・内部エネルギー・エントロピーといった<b>巨視的な物理量</b>の間に成り立つ関係式（熱力学第一法則，第二法則など）を，実験的事実の積み重ねとして体系化した学問である。問題文にある「現象論的に考察する」という表現がこれを裏付けている。「現象論的」とは，背後にある微視的な仕組み（原子や分子がどう運動しているか）を一切問わずに，観測される巨視的な現象だけを出発点として理論を組み立てる，という立場を意味する。</p>
+          <p>つまり熱力学では，「なぜ気体を圧縮すると温度が上がるのか，分子レベルで何が起きているのか」を説明する必要はなく，「圧力 $P$，体積 $V$，温度 $T$ の間にはこういう関係が成り立つ」という巨視的な法則そのものを記述すれば十分である。</p>
+          <div class="mathblock">
+            \[
+            \text{熱力学：}\quad \underbrace{P,\ V,\ T,\ U,\ S}_{\text{巨視的な物理量}} \ \text{の間の関係式を現象論的に記述}
+            \]
+          </div>
+          <p>したがって (1-1) には「巨視的」が入る。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">3</div>
+        <div class="stepbody">
+          <div class="steptitle">統計力学とは何を出発点とする学問か（(1-2) の根拠）</div>
+          <p>統計力学は，熱力学とは逆のアプローチを取る。系を構成している個々の要素（原子・分子）が従う<b>力学や量子力学の法則</b>，すなわち微視的な法則をまず認め，そこから出発する。問題文の「力学や量子力学など系を構成する要素に成立する法則」という記述がこれに対応している。力学（ニュートン力学）や量子力学はいずれも，1個の粒子や少数の粒子の運動・状態を記述する理論であり，これはまさに微視的なスケールの法則である。</p>
+          <div class="pointbox">
+            <span class="pb-label">Point</span>
+            統計力学は「新しい力学法則」を発明するわけではない。すでに知られている微視的な法則（古典力学・量子力学）を，膨大な数の粒子の集団に対して<b>確率・統計の手法</b>を用いて適用する，という点が特徴である。
+          </div>
+          <p>したがって (1-2) には「微視的」が入る。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">4</div>
+        <div class="stepbody">
+          <div class="steptitle">統計力学は最終的に何を説明するのか（(1-3) の根拠）</div>
+          <p>微視的な法則だけを見ていても，「この気体の温度は何度か」という巨視的な問いには直接答えられない。統計力学の目的は，微視的な法則（個々の分子の運動）から出発し，確率論・統計的な平均化の手続きを経て，最終的に<b>巨視的な性質</b>（温度・圧力・比熱・状態方程式など）を導き出すことにある。問題文の「系の (1-3) な性質を論ずる」という部分が，この「最終的な目的地」を指している。</p>
+          <div class="mathblock">
+            \[
+            \text{統計力学：}\quad \underbrace{\text{力学・量子力学の法則}}_{\text{微視的（出発点）}} \ \xrightarrow{\ \text{確率・統計による平均化}\ }\ \underbrace{P,\ V,\ T,\ \cdots}_{\text{巨視的（結論）}}
+            \]
+          </div>
+          <p>したがって (1-3) には「巨視的」が入る。</p>
+        </div>
+      </div>
+
+      <div class="keypoints">
+        <div class="kp-title">Key Points まとめ</div>
+        <ul>
+          <li>熱力学＝巨視的な物理量どうしの関係式を，微視的な仕組みを問わずに現象論的にまとめる学問。</li>
+          <li>統計力学＝力学・量子力学という微視的な法則を出発点として，系全体の巨視的な性質を導き出す学問。</li>
+          <li>統計力学は「微視的 → （確率・統計による橋渡し） → 巨視的」という一方向の流れを持つ。</li>
+          <li>解答：(1-1) 巨視的，(1-2) 微視的，(1-3) 巨視的。</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 2 -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="t2">
+
+    <div class="source-box">
+      <span class="src-label">元の問題 2(1)</span>
+      <p>袋の中に赤玉 3 個，白玉 2 個が入っている。この中から戻さずに玉を 2 個取り出す。赤玉を 1 個取り出すごとに 2 点もらえるとする。総得点を $X$ とするとき，期待値 $E(X)$ を求めよ。</p>
+    </div>
+
+    <div class="section-label">
+      <span class="num">Q</span>
+      <span class="txt">計算の過程から最終的な期待値まで，順番に確認しよう</span>
+      <span class="count">5 QUESTIONS</span>
+    </div>
+
+    <div id="quiz-t2"></div>
+
+    <div class="explain-divider"><span>ここからは解説</span></div>
+
+    <div class="explain-box">
+      <h3 class="eb-title">ステップバイステップ解説：玉を戻さずに取り出す問題</h3>
+
+      <div class="step">
+        <div class="stepnum">1</div>
+        <div class="stepbody">
+          <div class="steptitle">設定を整理する</div>
+          <p>袋の中身は赤玉 3 個，白玉 2 個で，合計 5 個である。ここから玉を<b>戻さずに（非復元抽出）</b> 2 個取り出す。「戻さない」という条件がこの問題の核心であり，1 個取り出すごとに袋の中の玉の総数も，残っている色ごとの個数も変化する。赤玉を 1 個取り出すごとに 2 点もらえるので，2 個とも赤玉なら $2+2=4$ 点，1 個だけ赤玉なら $2$ 点，赤玉が 0 個（つまり 2 個とも白玉）なら $0$ 点になる。</p>
+          <div class="pointbox">
+            <span class="pb-label">Point</span>
+            「戻さずに取り出す」問題では，1 回目の結果によって 2 回目の確率（分母・分子）が変わる。これを忘れて毎回 $\dfrac{3}{5}$ や $\dfrac{2}{5}$ のまま計算してしまうのは典型的なミスなので注意する。
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">2</div>
+        <div class="stepbody">
+          <div class="steptitle">$X$ が取り得る値を列挙する（赤玉が 0 個・1 個・2 個の場合）</div>
+          <p>2 個取り出したときに含まれる赤玉の個数は 0 個，1 個，2 個の 3 通りしかない。それぞれに対応する得点 $X$ は，</p>
+          <div class="mathblock">
+            \[
+            \text{赤玉 0 個} \to X=0,\qquad \text{赤玉 1 個} \to X=2,\qquad \text{赤玉 2 個} \to X=4
+            \]
+          </div>
+          <p>であるから，$X$ が取り得る値は $X=0,\,2,\,4$ の 3 つだけである。$X=1$ や $X=3$ のような奇数の値は，赤玉 1 個あたり必ず 2 点という設定上，絶対に出てこないことに注意する。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">3</div>
+        <div class="stepbody">
+          <div class="steptitle">$P(X=0)$：2 個とも白玉である確率</div>
+          <p>1 回目に白玉を取る確率は，白玉 2 個／全体 5 個なので $\dfrac{2}{5}$。1 回目で白玉を 1 個取ってしまった後，袋の中には白玉が 1 個，赤玉が 3 個，合計 4 個残っている。よって 2 回目も白玉を取る確率は $\dfrac{1}{4}$ である。2 回とも白玉である確率は，これらを掛け合わせて求める。</p>
+          <div class="mathblock">
+            \[
+            P(X=0)=\frac{2}{5}\cdot\frac{1}{4}=\frac{2}{20}=\frac{1}{10}
+            \]
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">4</div>
+        <div class="stepbody">
+          <div class="steptitle">$P(X=2)$：赤玉 1 個・白玉 1 個である確率</div>
+          <p>赤玉と白玉を 1 個ずつ取り出す場合，取り出す<b>順番</b>が 2 通りある：①「赤→白」の順，②「白→赤」の順。この 2 つの場合は重複なく排他的なので，それぞれの確率を計算してから足し合わせる。</p>
+          <div class="mathblock">
+            \[
+            \text{①赤→白：}\ \frac{3}{5}\cdot\frac{2}{4}=\frac{6}{20}=\frac{3}{10}
+            \qquad\qquad
+            \text{②白→赤：}\ \frac{2}{5}\cdot\frac{3}{4}=\frac{6}{20}=\frac{3}{10}
+            \]
+          </div>
+          <p>①も②も同じ値 $\dfrac{3}{10}$ になるのは偶然ではなく，「5 個中の特定の 2 個（赤1つ・白1つ）を順序込みで選ぶ」という構造が対称になっているためである。これが解答にある「$2\times\left(\dfrac{3}{5}\cdot\dfrac{2}{4}\right)$」という書き方の意味であり，2 通りの順番をまとめて「2 倍」として表している。</p>
+          <div class="mathblock">
+            \[
+            P(X=2)=2\times\left(\frac{3}{5}\cdot\frac{2}{4}\right)=2\times\frac{3}{10}=\frac{6}{10}=\frac{3}{5}
+            \]
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">5</div>
+        <div class="stepbody">
+          <div class="steptitle">$P(X=4)$：2 個とも赤玉である確率</div>
+          <p>1 回目に赤玉を取る確率は $\dfrac{3}{5}$。1 回目で赤玉を 1 個取った後，袋には赤玉が 2 個，白玉が 2 個，合計 4 個残っているので，2 回目も赤玉を取る確率は $\dfrac{2}{4}$ である。</p>
+          <div class="mathblock">
+            \[
+            P(X=4)=\frac{3}{5}\cdot\frac{2}{4}=\frac{6}{20}=\frac{3}{10}
+            \]
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">6</div>
+        <div class="stepbody">
+          <div class="steptitle">確率の合計が 1 になることを確認する</div>
+          <p>$X$ が取り得る値はこれで全て尽くされているはずなので，3 つの確率を合計すると必ず 1 になる。これは計算ミスがないかを確認する非常に便利なチェック方法である。</p>
+          <div class="mathblock">
+            \[
+            P(X=0)+P(X=2)+P(X=4)=\frac{1}{10}+\frac{6}{10}+\frac{3}{10}=\frac{10}{10}=1 \quad \checkmark
+            \]
+          </div>
+          <div class="pointbox">
+            <span class="pb-label">Point</span>
+            確率の問題を解いたら，必ず全事象の確率の合計が 1 になるかを検算する習慣をつけると，計算ミスをその場で発見できる。
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">7</div>
+        <div class="stepbody">
+          <div class="steptitle">期待値 $E(X)$ を計算する</div>
+          <p>離散型確率変数の期待値は，「取り得る値 × その値を取る確率」をすべて足し合わせて求める。</p>
+          <div class="mathblock">
+            \[
+            E(X)=\sum_X X\,P(X)=0\cdot P(0)+2\cdot P(2)+4\cdot P(4)
+            \]
+          </div>
+          <p>ここに先ほど求めた値を代入する。</p>
+          <div class="mathblock">
+            \[
+            E(X)=0\cdot\frac{1}{10}+2\cdot\frac{3}{5}+4\cdot\frac{3}{10}
+            =0+\frac{6}{5}+\frac{12}{10}
+            =\frac{6}{5}+\frac{6}{5}=\frac{12}{5}
+            \]
+          </div>
+          <p>よって $E(X)=\dfrac{12}{5}=2.4$ である。</p>
+        </div>
+      </div>
+
+      <div class="keypoints">
+        <div class="kp-title">Key Points まとめ</div>
+        <ul>
+          <li>離散型確率変数の期待値は $E(X)=\sum_X X\,P(X)$（取り得る値とその確率の積を全て足す）。</li>
+          <li>「戻さずに取り出す」（非復元抽出）では，1 回目の結果によって 2 回目の確率の分母・分子が変化する。</li>
+          <li>「順序が異なる複数のケース」がある場合（赤→白，白→赤）は，それぞれ確率を計算してから足し合わせる。</li>
+          <li>確率の合計が 1 になることを確認すると，計算ミスの良いチェックになる。</li>
+          <li>解答：$P(X=0)=\dfrac{1}{10}$，$P(X=2)=\dfrac{3}{5}$，$P(X=4)=\dfrac{3}{10}$，$E(X)=\dfrac{12}{5}$。</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 3 -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="t3">
+
+    <div class="source-box">
+      <span class="src-label">元の問題 2(2)</span>
+      <p>$X\in(-\infty,\infty)$ として，$a\le X\le b\ (a \lt b)$ を取る確率が</p>
+      <div class="mathblock" style="margin:10px 0;">
+        \[
+        P(a\le X\le b)=\int_a^b f(x)\,dx,\qquad f(x)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]
+        \]
+      </div>
+      <p>で与えられるとき（ガウス分布），期待値 $E(X)$ を求めよ。</p>
+      <p>ヒント：$\displaystyle\int_{-\infty}^{\infty} e^{-ay^2}\,dy=\sqrt{\frac{\pi}{a}}\ \ (a \gt 0)$ を用いてよい。</p>
+    </div>
+
+    <div class="section-label">
+      <span class="num">Q</span>
+      <span class="txt">置換積分の過程から最終的な期待値まで，順番に確認しよう</span>
+      <span class="count">5 QUESTIONS</span>
+    </div>
+
+    <div id="quiz-t3"></div>
+
+    <div class="explain-divider"><span>ここからは解説</span></div>
+
+    <div class="explain-box">
+      <h3 class="eb-title">ステップバイステップ解説：ガウス分布の期待値</h3>
+
+      <div class="step">
+        <div class="stepnum">1</div>
+        <div class="stepbody">
+          <div class="steptitle">連続型確率変数の期待値の定義から出発する</div>
+          <p>連続型確率変数の期待値は，離散型の $\sum_X X\,P(X)$ の「足し合わせ」を「積分」に置き換えたものであり，確率密度関数 $f(x)$ を重みとして $x$ を積分する。</p>
+          <div class="mathblock">
+            \[
+            E(X)=\int_{-\infty}^{\infty} x\,f(x)\,dx
+            =\frac{1}{\sqrt{2\pi\sigma^2}}\int_{-\infty}^{\infty} x\,\exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]dx
+            \]
+          </div>
+          <p>この積分をそのまま計算しようとすると，指数の中の $(x-\mu)^2$ が扱いにくい。そこで変数を置き換えて，計算しやすい形に変形することを考える。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">2</div>
+        <div class="stepbody">
+          <div class="steptitle">置換 $y=x-\mu$ を行う</div>
+          <p>$y=x-\mu$ と置くと，これを $x$ について解くと $x=y+\mu$ となる。また $\mu$ は定数なので $dx=dy$ であり，積分区間も $x:-\infty\to\infty$ がそのまま $y:-\infty\to\infty$ に対応する（区間が変わらない）。この置換により，指数の中身は $(x-\mu)^2=y^2$ というシンプルな形になる。</p>
+          <div class="mathblock">
+            \[
+            E(X)=\frac{1}{\sqrt{2\pi\sigma^2}}\int_{-\infty}^{\infty} (y+\mu)\,\exp\!\left[-\frac{y^2}{2\sigma^2}\right]dy
+            \]
+          </div>
+          <div class="pointbox">
+            <span class="pb-label">Point</span>
+            ガウス分布の指数部分 $(x-\mu)^2$ は「$\mu$ を中心とした形」をしている。$y=x-\mu$ と置くことで，分布の中心を原点 $y=0$ に移動させ，対称性を見やすくするのがこの置換の狙いである。
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">3</div>
+        <div class="stepbody">
+          <div class="steptitle">積分を 2 つの項に分ける</div>
+          <p>被積分関数の $(y+\mu)$ を展開して積分を分配すると，2 つの項に分けられる。</p>
+          <div class="mathblock">
+            \[
+            E(X)=\frac{1}{\sqrt{2\pi\sigma^2}}\left[\ \underbrace{\int_{-\infty}^{\infty} y\,\exp\!\left[-\frac{y^2}{2\sigma^2}\right]dy}_{\text{①}}\ +\ \mu\underbrace{\int_{-\infty}^{\infty} \exp\!\left[-\frac{y^2}{2\sigma^2}\right]dy}_{\text{②}}\ \right]
+            \]
+          </div>
+          <p>①と②をそれぞれ別に計算すればよい。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">4</div>
+        <div class="stepbody">
+          <div class="steptitle">①の積分が 0 になる理由（奇関数の積分）</div>
+          <p>関数 $g(y)=y\exp\!\left[-\dfrac{y^2}{2\sigma^2}\right]$ を考えると，$g(-y)=(-y)\exp\!\left[-\dfrac{(-y)^2}{2\sigma^2}\right]=-y\exp\!\left[-\dfrac{y^2}{2\sigma^2}\right]=-g(y)$ が成り立つ。つまり $g(y)$ は<b>奇関数</b>である（$y$ は奇関数，$\exp[-y^2/2\sigma^2]$ は偶関数なので，奇関数×偶関数＝奇関数）。</p>
+          <p>奇関数を，原点に関して対称な区間（$-\infty$ から $\infty$ のような区間）で積分すると，$y \gt 0$ の部分の値と $y \lt 0$ の部分の値がちょうど正負逆で打ち消し合うため，積分値は必ず 0 になる。</p>
+          <div class="mathblock">
+            \[
+            \int_{-\infty}^{\infty} y\,\exp\!\left[-\frac{y^2}{2\sigma^2}\right]dy=0
+            \]
+          </div>
+          <div class="warnbox">
+            <span class="wb-label">注意</span>
+            この「奇関数だから 0」というテクニックは，積分区間が原点に関して<b>左右対称</b>であるときにしか使えない（例：$-\infty$ から $\infty$，または $-a$ から $a$）。区間が非対称（例：$0$ から $\infty$）の場合はこの議論は成り立たない。
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">5</div>
+        <div class="stepbody">
+          <div class="steptitle">②の積分をヒントの公式で計算する</div>
+          <p>ヒントとして与えられた公式は $\displaystyle\int_{-\infty}^{\infty} e^{-ay^2}dy=\sqrt{\dfrac{\pi}{a}}$ である。②の積分 $\displaystyle\int_{-\infty}^{\infty}\exp\!\left[-\dfrac{y^2}{2\sigma^2}\right]dy$ をこの形に合わせるには，指数を $-ay^2$ の形と比較して $a=\dfrac{1}{2\sigma^2}$ と読み取ればよい。</p>
+          <div class="mathblock">
+            \[
+            \int_{-\infty}^{\infty} \exp\!\left[-\frac{y^2}{2\sigma^2}\right]dy
+            =\sqrt{\frac{\pi}{a}}\Bigg|_{a=\frac{1}{2\sigma^2}}
+            =\sqrt{\pi\times 2\sigma^2}=\sqrt{2\pi\sigma^2}
+            \]
+          </div>
+          <div class="pointbox">
+            <span class="pb-label">Point</span>
+            $\sqrt{\dfrac{\pi}{a}}$ の $a$ に $\dfrac{1}{2\sigma^2}$ を代入するとき，「分母の中の分数」を逆数にして掛けることに注意する：$\dfrac{\pi}{1/(2\sigma^2)}=\pi\times 2\sigma^2=2\pi\sigma^2$。
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="stepnum">6</div>
+        <div class="stepbody">
+          <div class="steptitle">①と②の結果を統合して $E(X)$ を求める</div>
+          <p>①＝0，②＝$\sqrt{2\pi\sigma^2}$ をもとの式に戻すと，</p>
+          <div class="mathblock">
+            \[
+            E(X)=\frac{1}{\sqrt{2\pi\sigma^2}}\Big[\,0+\mu\sqrt{2\pi\sigma^2}\,\Big]
+            =\frac{\mu\sqrt{2\pi\sigma^2}}{\sqrt{2\pi\sigma^2}}=\mu
+            \]
+          </div>
+          <p>分子と分母にある $\sqrt{2\pi\sigma^2}$ がちょうど打ち消し合い，最終的に $E(X)=\mu$ というきれいな結果が得られる。</p>
+        </div>
+      </div>
+
+      <div class="keypoints">
+        <div class="kp-title">Key Points まとめ</div>
+        <ul>
+          <li>連続型確率変数の期待値は $E(X)=\displaystyle\int_{-\infty}^{\infty} x\,f(x)\,dx$（離散型の和が積分に置き換わる）。</li>
+          <li>$y=x-\mu$ の置換は，分布の中心を原点に移し，対称性を利用しやすくするための定石。</li>
+          <li>奇関数を原点対称な区間で積分すると必ず 0 になる（正負の部分が打ち消し合う）。</li>
+          <li>ヒントの公式 $\displaystyle\int_{-\infty}^{\infty} e^{-ay^2}dy=\sqrt{\pi/a}$ を使うときは，指数を $-ay^2$ の形に揃えて $a$ を正しく読み取る。</li>
+          <li>結論：ガウス分布の期待値はその分布の中心 $\mu$ に一致する（$E(X)=\mu$）。</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>統計力学１・復習問題１ 穴埋めクイズ　/　元資料：復習問題１・復習問題１解答（更新日 2026年4月）</footer>
+
+</div>
+
+<script>
+/* ===================== QUIZ DATA ===================== */
+const KATAKANA = ['ア','イ','ウ','エ','オ','カ','キ','ク'];
+
+const quizData = {
+  t1: [
+    {
+      prompt: '(1-1)：熱力学が論じる物理量の間の関係式は，どのようなスケールの物理量について成り立つか。',
+      choices: ['巨視的','微視的','確率的','局所的'],
+      correctText: '巨視的',
+      note: '熱力学は温度・圧力・体積など，測定可能な巨視的物理量どうしの関係を現象論的に扱う。'
+    },
+    {
+      prompt: '(1-2)：統計力学は，力学や量子力学など系を構成する要素に成立する，どのようなスケールの法則に基づくか。',
+      choices: ['普遍的','微視的','巨視的','現象論的'],
+      correctText: '微視的',
+      note: '力学・量子力学は個々の粒子（原子・分子）の振る舞いを記述する微視的な法則である。'
+    },
+    {
+      prompt: '(1-3)：統計力学は，微視的な法則を出発点として，最終的に系のどのような性質を論ずるか。',
+      choices: ['局所的','量子論的','巨視的','微視的'],
+      correctText: '巨視的',
+      note: '統計力学の目的は，微視的法則から出発して，最終的に巨視的な性質（温度・圧力など）を導くことにある。'
+    }
+  ],
+  t2: [
+    {
+      prompt: '玉を2個取り出したとき，総得点 $X$ が取り得る値はどれか。',
+      choices: ['$X=0,\\,2,\\,4$', '$X=0,\\,1,\\,2$', '$X=2,\\,4,\\,6$', '$X=0,\\,2,\\,4,\\,6$'],
+      correctText: '$X=0,\\,2,\\,4$',
+      note: '取り出せる赤玉の個数は0,1,2個のいずれかで，それぞれ得点は0点,2点,4点に対応する。奇数の値は出てこない。'
+    },
+    {
+      prompt: '$P(X=0)$（2個とも白玉である確率）の値はどれか。',
+      choices: ['$\\dfrac{3}{10}$', '$\\dfrac{1}{5}$', '$\\dfrac{1}{10}$', '$\\dfrac{2}{5}$'],
+      correctText: '$\\dfrac{1}{10}$',
+      note: '$P(X=0)=\\dfrac{2}{5}\\cdot\\dfrac{1}{4}=\\dfrac{1}{10}$。1回目で白玉を取った後，残りは白玉1個・合計4個になる点に注意。'
+    },
+    {
+      prompt: '$P(X=2)$（赤玉1個・白玉1個である確率）の値はどれか。',
+      choices: ['$\\dfrac{2}{5}$', '$\\dfrac{1}{2}$', '$\\dfrac{3}{10}$', '$\\dfrac{3}{5}$'],
+      correctText: '$\\dfrac{3}{5}$',
+      note: '赤→白，白→赤の2通りの順番があり，それぞれ $\\dfrac{3}{10}$ なので合計 $2\\times\\dfrac{3}{10}=\\dfrac{3}{5}$。'
+    },
+    {
+      prompt: '$P(X=4)$（2個とも赤玉である確率）の値はどれか。',
+      choices: ['$\\dfrac{3}{10}$', '$\\dfrac{2}{5}$', '$\\dfrac{1}{10}$', '$\\dfrac{3}{5}$'],
+      correctText: '$\\dfrac{3}{10}$',
+      note: '$P(X=4)=\\dfrac{3}{5}\\cdot\\dfrac{2}{4}=\\dfrac{3}{10}$。1回目で赤玉を取った後，残りは赤玉2個・合計4個になる。'
+    },
+    {
+      prompt: '以上の結果から，期待値 $E(X)$ の値はどれか。',
+      choices: ['$2$', '$\\dfrac{12}{5}$', '$\\dfrac{5}{2}$', '$3$'],
+      correctText: '$\\dfrac{12}{5}$',
+      note: '$E(X)=0\\cdot\\dfrac{1}{10}+2\\cdot\\dfrac{3}{5}+4\\cdot\\dfrac{3}{10}=\\dfrac{12}{5}=2.4$。'
+    }
+  ],
+  t3: [
+    {
+      prompt: '$E(X)=\\displaystyle\\int_{-\\infty}^{\\infty} x f(x)\\,dx$ において $y=x-\\mu$ と置換すると，$x$ は $y$ を用いてどう表されるか。',
+      choices: ['$x=y-\\mu$', '$x=\\mu y$', '$x=y+\\mu$', '$x=y/\\mu$'],
+      correctText: '$x=y+\\mu$',
+      note: '$y=x-\\mu$ を $x$ について解くと $x=y+\\mu$。これにより指数部分が $(x-\\mu)^2=y^2$ という簡単な形になる。'
+    },
+    {
+      prompt: '積分 $\\displaystyle\\int_{-\\infty}^{\\infty} y\\,\\exp\\!\\left[-\\dfrac{y^2}{2\\sigma^2}\\right]dy$ の値はどれか。',
+      choices: ['$\\sigma$', '$\\mu$', '$1$', '$0$'],
+      correctText: '$0$',
+      note: '被積分関数は奇関数であり，原点対称な区間 $(-\\infty,\\infty)$ で積分すると正負が打ち消し合って0になる。'
+    },
+    {
+      prompt: '上の積分の値が0になる理由として最も適切なものはどれか。',
+      choices: [
+        '被積分関数が奇関数であり，積分区間が原点に関して対称だから',
+        '被積分関数が常に負の値を取るから',
+        '$\\sigma$ が十分小さいと仮定できるから',
+        '積分区間が無限大なので必ず発散し，0として扱う約束だから'
+      ],
+      correctText: '被積分関数が奇関数であり，積分区間が原点に関して対称だから',
+      note: '奇関数 $g(y)$ は $g(-y)=-g(y)$ を満たし，左右対称な区間で積分すると正の部分と負の部分が完全に打ち消し合う。'
+    },
+    {
+      prompt: 'ヒントの公式 $\\displaystyle\\int_{-\\infty}^{\\infty} e^{-ay^2}dy=\\sqrt{\\pi/a}$ を用いると，$\\displaystyle\\int_{-\\infty}^{\\infty}\\exp\\!\\left[-\\dfrac{y^2}{2\\sigma^2}\\right]dy$ の値はどれか。',
+      choices: ['$\\sqrt{2\\pi\\sigma^2}$', '$2\\pi\\sigma^2$', '$\\sqrt{\\pi\\sigma^2}$', '$\\sqrt{2\\pi/\\sigma^2}$'],
+      correctText: '$\\sqrt{2\\pi\\sigma^2}$',
+      note: '$a=\\dfrac{1}{2\\sigma^2}$ として公式に代入すると $\\sqrt{\\pi/a}=\\sqrt{\\pi\\times 2\\sigma^2}=\\sqrt{2\\pi\\sigma^2}$。'
+    },
+    {
+      prompt: '以上をすべて代入すると，ガウス分布の期待値 $E(X)$ の値はどれか。',
+      choices: ['$\\sigma$', '$0$', '$\\mu+\\sigma$', '$\\mu$'],
+      correctText: '$\\mu$',
+      note: '$E(X)=\\dfrac{1}{\\sqrt{2\\pi\\sigma^2}}\\left[0+\\mu\\sqrt{2\\pi\\sigma^2}\\right]=\\mu$。ガウス分布の期待値は分布の中心 $\\mu$ に一致する。'
+    }
+  ]
+};
+
+/* ===================== RENDER QUIZ ===================== */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+const scores = { t1:{c:0,t:0}, t2:{c:0,t:0}, t3:{c:0,t:0} };
+
+function buildQuiz(tabId){
+  const container = document.getElementById('quiz-'+tabId);
+  const items = quizData[tabId];
+  scores[tabId].t = items.length;
+
+  items.forEach((item, idx) => {
+    const qid = tabId+'-q'+idx;
+    const label = KATAKANA[idx];
+
+    // shuffle choices, track correct index
+    const order = shuffle(item.choices.map((c,i)=>i));
+    const correctOrigIdx = item.choices.indexOf(item.correctText);
+    const correctShuffledPos = order.indexOf(correctOrigIdx);
+
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = 'card-'+qid;
+
+    let choicesHtml = '';
+    order.forEach((origIdx, pos) => {
+      choicesHtml += `<button class="choice-btn" data-qid="${qid}" data-pos="${pos}" data-correct="${pos===correctShuffledPos}">
+        <span class="letter">${KATAKANA[pos]}</span>
+        <span class="choice-text">${item.choices[origIdx]}</span>
+      </button>`;
+    });
+
+    card.innerHTML = `
+      <div class="qhead">
+        <div class="qbadge">${label}</div>
+        <div class="qprompt">${item.prompt}</div>
+      </div>
+      <div class="choices" id="choices-${qid}">
+        ${choicesHtml}
+      </div>
+      <div class="feedback" id="fb-${qid}"></div>
+      <div class="qfoot">
+        <button class="reveal-btn" data-qid="${qid}">答えを見る ▾</button>
+      </div>
+      <div class="answer-panel" id="ans-${qid}">
+        <span class="ans-label">解答</span>
+        <div class="ans-value">${label}：${item.correctText}</div>
+        <div class="ans-note">${item.note}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  // attach choice click handlers
+  container.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const qid = btn.dataset.qid;
+      const choicesDiv = document.getElementById('choices-'+qid);
+      if(choicesDiv.dataset.answered === '1') return; // already answered
+      choicesDiv.dataset.answered = '1';
+
+      const isCorrect = btn.dataset.correct === 'true';
+      const fb = document.getElementById('fb-'+qid);
+
+      choicesDiv.querySelectorAll('.choice-btn').forEach(b => {
+        b.disabled = true;
+        if(b === btn){
+          b.classList.add(isCorrect ? 'correct' : 'wrong');
+        } else if(b.dataset.correct === 'true'){
+          b.classList.add('correct');
+        } else {
+          b.classList.add('dim');
+        }
+      });
+
+      fb.classList.add('show', isCorrect ? 'ok' : 'ng');
+      fb.textContent = isCorrect ? '○ 正解です！' : '✕ 不正解。正しい答えが緑色で示されています。';
+
+      const tabKey = qid.split('-')[0];
+      if(isCorrect){
+        scores[tabKey].c++;
+        updateScorePill(tabKey);
+      }
+    });
+  });
+
+  // attach reveal handlers
+  container.querySelectorAll('.reveal-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const qid = btn.dataset.qid;
+      const panel = document.getElementById('ans-'+qid);
+      const showing = panel.classList.contains('show');
+      panel.classList.toggle('show');
+      btn.textContent = showing ? '答えを見る ▾' : '答えを隠す ▴';
+    });
+  });
+}
+
+function updateScorePill(tabKey){
+  const pill = document.getElementById('score-'+tabKey);
+  pill.textContent = scores[tabKey].c + '/' + scores[tabKey].t;
+}
+
+['t1','t2','t3'].forEach(buildQuiz);
+
+/* ===================== TAB SWITCHING ===================== */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    if(window.MathJax && window.MathJax.typesetPromise){
+      window.MathJax.typesetPromise([document.getElementById(btn.dataset.tab)]);
+    }
+  });
+});
+
+/* initial typeset for first tab + ensure all get typeset once visible */
+if(window.MathJax){
+  window.MathJax.startup && window.MathJax.startup.promise.then(() => {
+    window.MathJax.typesetPromise();
+  });
+}
+</script>
+
+</body>
+</html>

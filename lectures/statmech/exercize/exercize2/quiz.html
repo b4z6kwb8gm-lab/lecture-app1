@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>統計力学１ 復習問題２ 穴埋めクイズ</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+<style>
+:root{
+  --bg:#0d1117;
+  --panel:#161b22;
+  --panel2:#1c2128;
+  --border:#30363d;
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --accent:#58a6ff;
+  --accent2:#79c0ff;
+  --green:#3fb950;
+  --red:#f85149;
+  --yellow:#d29922;
+  --purple:#bc8cff;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.75;
+  padding-bottom:60px;
+}
+header{
+  padding:28px 20px 18px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,#11161d,#0d1117);
+}
+header h1{
+  margin:0 0 6px;
+  font-size:1.5rem;
+  color:var(--accent2);
+  letter-spacing:.5px;
+}
+header p{
+  margin:0;
+  color:var(--muted);
+  font-size:.9rem;
+}
+.tabs{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin:22px auto 0;
+  max-width:900px;
+  flex-wrap:wrap;
+  padding:0 16px;
+}
+.tab-btn{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:10px 22px;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:.95rem;
+  font-weight:600;
+  transition:.2s;
+}
+.tab-btn:hover{ color:var(--text); border-color:var(--accent); }
+.tab-btn.active{
+  background:var(--accent);
+  color:#0d1117;
+  border-color:var(--accent);
+}
+.container{
+  max-width:880px;
+  margin:28px auto;
+  padding:0 18px;
+}
+.section{ display:none; }
+.section.active{ display:block; animation:fade .35s ease; }
+@keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+.lead{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px 20px;
+  margin-bottom:24px;
+  color:#c9d1d9;
+  font-size:.95rem;
+}
+.lead b{ color:var(--accent2); }
+
+.qcard{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px 22px;
+  margin-bottom:22px;
+  box-shadow:0 2px 10px rgba(0,0,0,.25);
+}
+.qhead{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+.qnum{
+  background:var(--accent);
+  color:#0d1117;
+  font-weight:700;
+  font-size:.85rem;
+  padding:3px 11px;
+  border-radius:999px;
+  flex-shrink:0;
+}
+.qtext{ font-size:1rem; color:var(--text); }
+.qtext .blank{
+  display:inline-block;
+  min-width:34px;
+  text-align:center;
+  border-bottom:2px dashed var(--yellow);
+  color:var(--yellow);
+  font-weight:700;
+  padding:0 4px;
+}
+.choices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:14px 0 6px;
+}
+@media (max-width:560px){ .choices{ grid-template-columns:1fr; } }
+.choice-btn{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:12px 14px;
+  border-radius:10px;
+  text-align:left;
+  cursor:pointer;
+  font-size:.92rem;
+  transition:.15s;
+}
+.choice-btn:hover{ border-color:var(--accent); background:#202733; }
+.choice-btn.correct{
+  background:rgba(63,185,80,.15);
+  border-color:var(--green);
+  color:#7ee08b;
+}
+.choice-btn.wrong{
+  background:rgba(248,81,73,.15);
+  border-color:var(--red);
+  color:#ff9089;
+}
+.choice-btn[disabled]{ cursor:default; }
+.feedback{
+  margin-top:10px;
+  font-weight:700;
+  font-size:.92rem;
+  min-height:1.3em;
+}
+.feedback.ok{ color:var(--green); }
+.feedback.ng{ color:var(--red); }
+
+.answer-toggle{
+  margin-top:12px;
+  background:none;
+  border:1px solid var(--purple);
+  color:var(--purple);
+  padding:7px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:.85rem;
+  font-weight:600;
+}
+.answer-toggle:hover{ background:rgba(188,140,255,.12); }
+.answer-box{
+  display:none;
+  margin-top:12px;
+  background:#11151c;
+  border-left:3px solid var(--purple);
+  border-radius:8px;
+  padding:12px 16px;
+  font-size:.9rem;
+  color:#c9d1d9;
+}
+.answer-box.show{ display:block; }
+.answer-box .ans-label{ color:var(--purple); font-weight:700; margin-right:6px; }
+
+h2.section-title{
+  color:var(--accent2);
+  border-left:4px solid var(--accent);
+  padding-left:12px;
+  font-size:1.25rem;
+  margin:0 0 18px;
+}
+h3.explain-title{
+  color:var(--yellow);
+  margin:38px 0 14px;
+  font-size:1.15rem;
+  border-bottom:1px solid var(--border);
+  padding-bottom:8px;
+}
+.step{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px 20px;
+  margin-bottom:16px;
+}
+.step .step-num{
+  display:inline-block;
+  background:var(--accent);
+  color:#0d1117;
+  font-weight:700;
+  font-size:.8rem;
+  border-radius:999px;
+  width:24px;
+  height:24px;
+  text-align:center;
+  line-height:24px;
+  margin-right:8px;
+}
+.step h4{
+  display:inline;
+  font-size:1rem;
+  color:var(--text);
+}
+.step p{ margin:10px 0 6px; color:#c9d1d9; font-size:.93rem; }
+.mathblock{
+  background:#0a0e14;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 18px;
+  margin:10px 0;
+  overflow-x:auto;
+}
+.pointbox{
+  background:rgba(88,166,255,.08);
+  border:1px solid var(--accent);
+  border-radius:10px;
+  padding:12px 16px;
+  margin:10px 0;
+  font-size:.9rem;
+}
+.pointbox .ptitle{ color:var(--accent2); font-weight:700; margin-bottom:4px; display:block; }
+.keypoints{
+  background:rgba(63,185,80,.07);
+  border:1px solid var(--green);
+  border-radius:12px;
+  padding:16px 20px;
+  margin-top:18px;
+}
+.keypoints .ktitle{
+  color:var(--green);
+  font-weight:700;
+  font-size:1.02rem;
+  margin-bottom:8px;
+  display:block;
+}
+.keypoints ul{ margin:0; padding-left:20px; color:#c9d1d9; font-size:.92rem; }
+.keypoints li{ margin-bottom:6px; }
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:.8rem;
+  margin-top:40px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>統計力学１　復習問題２　穴埋めクイズ</h1>
+  <p>小正準分布と1次元調和振動子の状態数 ― 選んで確認、考えて理解する</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="tab1">① 小正準分布と典型状態</button>
+  <button class="tab-btn" data-tab="tab2">② 調和振動子の状態数</button>
+</div>
+
+<div class="container">
+
+  <!-- ============ TAB 1 ============ -->
+  <section class="section active" id="tab1">
+    <h2 class="section-title">問題１：小正準分布における典型状態の確率</h2>
+    <div class="lead">
+      系が \((E, V, N)\) で指定されるエネルギーシェル \([E, E+\delta E]\) にあるとき，全状態数 \(W(E,V,N)\) は
+      典型状態数 \(W_{eq}\) と非典型状態数 \(W_{neq}\) からできています。小正準分布のもとで，
+      ランダムに選んだ状態が「典型状態」である確率がほぼ1になることを，順に穴埋めで確認していきましょう。
+    </div>
+
+    <!-- Q1 -->
+    <div class="qcard" data-qid="q1">
+      <div class="qhead"><span class="qnum">問1</span>
+        <div class="qtext">全状態数 \(W(E,V,N)\) を，典型状態数 \(W_{eq}\) と非典型状態数 \(W_{neq}\) を用いて表すと，
+        \(W(E,V,N) = \) <span class="blank">ア</span> となる。空欄「ア」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(W_{eq}(E,V,N) \times W_{neq}(E,V,N)\)</button>
+        <button class="choice-btn" data-correct="true">\(W_{eq}(E,V,N) + W_{neq}(E,V,N)\)</button>
+        <button class="choice-btn" data-correct="false">\(W_{eq}(E,V,N) - W_{neq}(E,V,N)\)</button>
+        <button class="choice-btn" data-correct="false">\(\dfrac{W_{eq}(E,V,N)}{W_{neq}(E,V,N)}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(W(E,V,N) = W_{eq}(E,V,N) + W_{neq}(E,V,N)\)<br>
+        <span class="ans-label">一言解説：</span>全状態は「典型状態」と「非典型状態」のどちらか一方に必ず分類されるので，単純な足し算になります（重複も漏れもない分割）。
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qcard" data-qid="q2">
+      <div class="qhead"><span class="qnum">問2</span>
+        <div class="qtext">小正準分布にしたがうとき，ある1つの微視的状態 \(j\) を取る確率 \(P_j\) は，\(P_j = \) <span class="blank">イ</span> である。空欄「イ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(\dfrac{W_{eq}(E,V,N)}{W(E,V,N)}\)</button>
+        <button class="choice-btn" data-correct="false">\(e^{-E/k_BT}\)</button>
+        <button class="choice-btn" data-correct="true">\(\dfrac{1}{W(E,V,N)}\)</button>
+        <button class="choice-btn" data-correct="false">\(\dfrac{\delta E}{E}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(P_j = \dfrac{1}{W(E,V,N)}\)<br>
+        <span class="ans-label">一言解説：</span>小正準分布の最大の特徴は「等重率の原理」。エネルギーシェル内のすべての微視的状態は等確率で実現するので，全状態数の逆数が各状態の確率になります。
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qcard" data-qid="q3">
+      <div class="qhead"><span class="qnum">問3</span>
+        <div class="qtext">選ばれた状態が典型状態である確率 \(P_{eq}\) を，状態数の比として書くと \(P_{eq} = \) <span class="blank">ウ</span> である。空欄「ウ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(\dfrac{W_{neq}(E,V,N)}{W(E,V,N)}\)</button>
+        <button class="choice-btn" data-correct="false">\(W_{eq}(E,V,N)\cdot P_j^{2}\)</button>
+        <button class="choice-btn" data-correct="false">\(1 - P_j\)</button>
+        <button class="choice-btn" data-correct="true">\(\dfrac{W_{eq}(E,V,N)}{W(E,V,N)}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(P_{eq} = \dfrac{W_{eq}(E,V,N)}{W(E,V,N)}\)<br>
+        <span class="ans-label">一言解説：</span>典型状態は \(W_{eq}\) 個あり，各状態の確率は \(P_j = 1/W\) なので，それを足し合わせると \(W_{eq}\times (1/W) = W_{eq}/W\) となります。
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qcard" data-qid="q4">
+      <div class="qhead"><span class="qnum">問4</span>
+        <div class="qtext">問1の関係を使って \(P_{eq}\) を \(W_{eq}\) と \(W_{neq}\) だけで表すと，\(P_{eq} = \) <span class="blank">エ</span> となる。空欄「エ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(\dfrac{W_{eq}}{W_{neq}}\)</button>
+        <button class="choice-btn" data-correct="false">\(\dfrac{W_{neq}}{W_{eq}+W_{neq}}\)</button>
+        <button class="choice-btn" data-correct="true">\(\dfrac{W_{eq}}{W_{eq}+W_{neq}}\)</button>
+        <button class="choice-btn" data-correct="false">\(W_{eq}-W_{neq}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(P_{eq} = \dfrac{W_{eq}}{W_{eq}+W_{neq}}\)<br>
+        <span class="ans-label">一言解説：</span>問3の式の分母 \(W\) を，問1で示した \(W_{eq}+W_{neq}\) に置き換えただけです。
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qcard" data-qid="q5">
+      <div class="qhead"><span class="qnum">問5</span>
+        <div class="qtext">\(P_{eq}\approx 1\) となる理由を支える，巨視的な系で成り立つ不等式は <span class="blank">オ</span> である。空欄「オ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(W_{eq} \ll W_{neq}\)</button>
+        <button class="choice-btn" data-correct="false">\(W_{eq} = W_{neq}\)</button>
+        <button class="choice-btn" data-correct="false">\(W(E,V,N) \ll 1\)</button>
+        <button class="choice-btn" data-correct="true">\(W_{neq} \ll W_{eq}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(W_{neq}(E,V,N) \ll W_{eq}(E,V,N)\)<br>
+        <span class="ans-label">一言解説：</span>巨視的な系では，マクロ量から区別できる「ありえない」状態（非典型状態）の数は，典型状態の数に比べて天文学的に小さくなります。
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="qcard" data-qid="q6">
+      <div class="qhead"><span class="qnum">問6</span>
+        <div class="qtext">問5の不等式を問4の式に代入すると，巨視的な系における \(P_{eq}\) の近似値は <span class="blank">カ</span> である。空欄「カ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(0\)</button>
+        <button class="choice-btn" data-correct="false">\(\dfrac{1}{2}\)</button>
+        <button class="choice-btn" data-correct="false">\(\infty\)</button>
+        <button class="choice-btn" data-correct="true">\(1\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(P_{eq} \simeq 1\)<br>
+        <span class="ans-label">一言解説：</span>分母 \(W_{eq}+W_{neq}\) が分子 \(W_{eq}\) とほぼ同じ大きさになるため，比はほぼ1。これが「小正準分布から状態を選ぶと，ほぼ必ず典型状態（＝平衡状態）が選ばれる」という統計力学の根幹の結論です。
+      </div>
+    </div>
+
+    <h3 class="explain-title">📘 初学者向けステップバイステップ解説（小正準分布と典型状態）</h3>
+
+    <div class="step">
+      <span class="step-num">1</span><h4>状態数を2種類に分ける発想</h4>
+      <p>系が \((E,V,N)\) を固定された条件下で取りうる微視的状態の総数を \(W(E,V,N)\) とします。この中には，マクロに見たときに「平衡状態」と見分けがつかない状態（典型状態，個数 \(W_{eq}\)）と，見分けがつく状態（非典型状態，個数 \(W_{neq}\)）があります。これは単に「全体＝AグループとBグループの合計」という，集合の分割の考え方です。</p>
+      <div class="mathblock">\[ W(E,V,N) = W_{eq}(E,V,N) + W_{neq}(E,V,N) \]</div>
+      <div class="pointbox"><span class="ptitle">ポイント</span>「典型」か「非典型」かは，全状態を漏れなく重複なく分ける2つのグループという意味です。足し算で表せるのはこのためです。</div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span><h4>小正準分布＝等重率の原理</h4>
+      <p>小正準分布の最大の仮定は「エネルギーシェル \([E,E+\delta E]\) 内のどの微視的状態も，同じ確率で実現する」というものです。これを「等重率の原理（principle of equal a priori probabilities）」と呼びます。状態が全部で \(W\) 個あり，どれも同じ確率なら，1つの状態を取る確率は当然 \(1/W\) になります。</p>
+      <div class="mathblock">\[ P_j = \frac{1}{W(E,V,N)} \quad (\text{どの } j \text{ についても同じ値}) \]</div>
+      <div class="pointbox"><span class="ptitle">ポイント</span>これはサイコロが「公平」であることを仮定するのと同じ発想です。6面サイコロで各面が出る確率が \(1/6\) なのと同じ理屈で，\(W\) 個の状態それぞれが \(1/W\) になります。</div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span><h4>「典型状態が選ばれる確率」を計算する</h4>
+      <p>典型状態は \(W_{eq}\) 個あり，どの状態も確率 \(1/W\) で実現します。「典型状態のどれかが選ばれる確率」は，排反な事象の確率の足し算なので，\(W_{eq}\) 個分の \(1/W\) を単純に合計すればよいことになります。</p>
+      <div class="mathblock">\[ P_{eq} = W_{eq}\times \frac{1}{W} = \frac{W_{eq}(E,V,N)}{W(E,V,N)} \]</div>
+      <p>さらにステップ1の関係を代入すると，すべて \(W_{eq}\) と \(W_{neq}\) だけの式に書き換えられます。</p>
+      <div class="mathblock">\[ P_{eq} = \frac{W_{eq}}{W_{eq}+W_{neq}} \]</div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span><h4>巨視的な系では非典型状態が圧倒的に少ない</h4>
+      <p>ここが直感的に分かりにくいですが，統計力学の本質的な主張です。気体の分子数 \(N\) は \(10^{23}\) 程度というとても大きな数です。このような巨視的な系では，「マクロに見て平衡からズレている状態」の組み合わせ数は，平衡状態の組み合わせ数に比べて，指数的に（つまり桁違いに）少なくなります。</p>
+      <div class="mathblock">\[ W_{neq}(E,V,N) \ll W_{eq}(E,V,N) \]</div>
+      <div class="pointbox"><span class="ptitle">ポイント</span>これはコイン投げのたとえで理解できます。コインを \(10^{23}\) 回投げて「表と裏がほぼ半々」になる組み合わせの数は，「ほとんど全部表」になる組み合わせの数よりも，比較にならないほど多いのです。</div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span><h4>結論：典型状態が選ばれる確率はほぼ1</h4>
+      <p>ステップ3の式の分母 \(W_{eq}+W_{neq}\) は，\(W_{neq}\) が非常に小さいため，ほぼ \(W_{eq}\) そのものとみなせます。したがって比はほぼ1になります。</p>
+      <div class="mathblock">\[ P_{eq} = \frac{W_{eq}}{W_{eq}+W_{neq}} \simeq \frac{W_{eq}}{W_{eq}} = 1 \]</div>
+      <p>これは「小正準分布にしたがってランダムに微視的状態を1つ選んでも，ほぼ確実に，平衡状態と見分けがつかない（典型的な）状態が選ばれる」ということを意味します。これが，巨視的な系がなぜ自発的に「平衡状態らしく見える」ようになるのかを説明する基礎になっています。</p>
+    </div>
+
+    <div class="keypoints">
+      <span class="ktitle">🔑 キーポイントまとめ</span>
+      <ul>
+        <li>全状態数は「典型状態」と「非典型状態」の合計：\(W=W_{eq}+W_{neq}\)。</li>
+        <li>小正準分布では「等重率の原理」により，各微視的状態の確率は \(P_j=1/W\) で全て等しい。</li>
+        <li>典型状態が選ばれる確率は \(P_{eq}=W_{eq}/W\) で，状態数の比そのもの。</li>
+        <li>巨視的な系（\(N\) が非常に大きい）では \(W_{neq}\ll W_{eq}\) が成り立つ。</li>
+        <li>したがって \(P_{eq}\simeq 1\)：ランダムに選んだ状態はほぼ必ず平衡状態に見える。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ TAB 2 ============ -->
+  <section class="section" id="tab2">
+    <h2 class="section-title">問題２：1次元調和振動子の相空間体積と状態数</h2>
+    <div class="lead">
+      ハミルトニアン \(H(x,p)=\dfrac{p^2}{2m}+\dfrac{1}{2}kx^2\) で表される1次元調和振動子について，
+      エネルギーが一定値以下となる相空間内の領域（楕円）の面積を求め，それを使って状態数の比較をします。
+    </div>
+
+    <!-- Q1 -->
+    <div class="qcard" data-qid="q1b">
+      <div class="qhead"><span class="qnum">問1</span>
+        <div class="qtext">\(H\le E\) が表す \((x,p)\) 平面上の図形は何か。空欄「ア」に入るものは？　「\(H\le E\) の領域は <span class="blank">ア</span> である」</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">円</button>
+        <button class="choice-btn" data-correct="true">楕円</button>
+        <button class="choice-btn" data-correct="false">放物線で囲まれた領域</button>
+        <button class="choice-btn" data-correct="false">直線で囲まれた長方形</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>楕円<br>
+        <span class="ans-label">一言解説：</span>\(\frac{p^2}{2m}+\frac{1}{2}kx^2\le E\) は \(\left(\frac{x}{a}\right)^2+\left(\frac{p}{b}\right)^2\le 1\) の形に書き換えられるので，これは楕円の内部を表します。
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qcard" data-qid="q2b">
+      <div class="qhead"><span class="qnum">問2</span>
+        <div class="qtext">楕円の \(x\) 軸方向の半軸の長さ \(a\) は <span class="blank">イ</span> である。空欄「イ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(\sqrt{2mE}\)</button>
+        <button class="choice-btn" data-correct="false">\(\sqrt{\dfrac{E}{2k}}\)</button>
+        <button class="choice-btn" data-correct="true">\(\sqrt{\dfrac{2E}{k}}\)</button>
+        <button class="choice-btn" data-correct="false">\(\dfrac{2E}{k}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(a=\sqrt{\dfrac{2E}{k}}\)<br>
+        <span class="ans-label">一言解説：</span>\(p=0\) とおくと \(\frac{1}{2}kx^2=E\) なので，\(x=\pm\sqrt{2E/k}\) が \(x\) 軸方向の端、つまり半軸 \(a\) になります。
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qcard" data-qid="q3b">
+      <div class="qhead"><span class="qnum">問3</span>
+        <div class="qtext">楕円の \(p\) 軸方向の半軸の長さ \(b\) は <span class="blank">ウ</span> である。空欄「ウ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(\sqrt{\dfrac{2E}{k}}\)</button>
+        <button class="choice-btn" data-correct="false">\(\sqrt{\dfrac{2E}{m}}\)</button>
+        <button class="choice-btn" data-correct="false">\(2mE\)</button>
+        <button class="choice-btn" data-correct="true">\(\sqrt{2mE}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(b=\sqrt{2mE}\)<br>
+        <span class="ans-label">一言解説：</span>\(x=0\) とおくと \(\frac{p^2}{2m}=E\) なので，\(p=\pm\sqrt{2mE}\) が \(p\) 軸方向の端、つまり半軸 \(b\) になります。
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qcard" data-qid="q4b">
+      <div class="qhead"><span class="qnum">問4</span>
+        <div class="qtext">楕円の面積の公式 \(\Gamma(E)=\pi a b\) に \(a,b\) を代入すると，\(\Gamma(E) = \) <span class="blank">エ</span> となる。空欄「エ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(2\pi E\sqrt{mk}\)</button>
+        <button class="choice-btn" data-correct="false">\(\pi E\sqrt{\dfrac{m}{k}}\)</button>
+        <button class="choice-btn" data-correct="false">\(2\pi\sqrt{mE}\)</button>
+        <button class="choice-btn" data-correct="true">\(2\pi E\sqrt{\dfrac{m}{k}}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(\Gamma(E)=\pi a b = \pi\sqrt{\dfrac{2E}{k}}\cdot\sqrt{2mE} = 2\pi E\sqrt{\dfrac{m}{k}}\)<br>
+        <span class="ans-label">一言解説：</span>\(ab=\sqrt{\frac{2E}{k}\cdot 2mE}=\sqrt{\frac{4mE^2}{k}}=2E\sqrt{m/k}\) と計算でき，これに \(\pi\) をかけます。
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qcard" data-qid="q5b">
+      <div class="qhead"><span class="qnum">問5</span>
+        <div class="qtext">エネルギーが \([E,E+\delta E]\) の範囲にある相空間の体積（面積）は <span class="blank">オ</span> である。空欄「オ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(2\pi E\sqrt{\dfrac{m}{k}}\)</button>
+        <button class="choice-btn" data-correct="false">\(\pi\sqrt{\dfrac{m}{k}}\,\delta E\)</button>
+        <button class="choice-btn" data-correct="true">\(2\pi\sqrt{\dfrac{m}{k}}\,\delta E\)</button>
+        <button class="choice-btn" data-correct="false">\(2\pi E\,\delta E\sqrt{\dfrac{m}{k}}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(\Gamma(E+\delta E)-\Gamma(E) = 2\pi\sqrt{\dfrac{m}{k}}\,\delta E\)<br>
+        <span class="ans-label">一言解説：</span>\(\Gamma(E)\) は \(E\) に比例する関数なので，微小区間の面積は \(\Gamma\) を \(E\) で微分して \(\delta E\) をかけたものになります：\(\frac{d\Gamma}{dE}=2\pi\sqrt{m/k}\)。
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="qcard" data-qid="q6b">
+      <div class="qhead"><span class="qnum">問6</span>
+        <div class="qtext">エネルギーが \([0,2E]\) の範囲にある相空間の体積は \(\Gamma(2E) = \) <span class="blank">カ</span> である。空欄「カ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(\Gamma(E)\)</button>
+        <button class="choice-btn" data-correct="false">\(4\Gamma(E)\)</button>
+        <button class="choice-btn" data-correct="true">\(2\Gamma(E)\)</button>
+        <button class="choice-btn" data-correct="false">\(\Gamma(E)^2\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>\(\Gamma(2E) = 2\pi(2E)\sqrt{\dfrac{m}{k}} = 2\Gamma(E)\)<br>
+        <span class="ans-label">一言解説：</span>\(\Gamma(E)\) は \(E\) に単純比例（一次関数で原点を通る）なので，\(E\) を2倍すれば \(\Gamma\) も2倍になります。
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="qcard" data-qid="q7b">
+      <div class="qhead"><span class="qnum">問7</span>
+        <div class="qtext">状態数は相空間体積に比例するという仮定のもとで，\([0,2E]\) の状態数は \([0,E]\) の状態数の <span class="blank">キ</span> 倍である。空欄「キ」に入るものは？</div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" data-correct="false">\(\sqrt{2}\)</button>
+        <button class="choice-btn" data-correct="true">\(2\)</button>
+        <button class="choice-btn" data-correct="false">\(4\)</button>
+        <button class="choice-btn" data-correct="false">\(\dfrac{1}{2}\)</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="answer-toggle">答えを見る</button>
+      <div class="answer-box">
+        <span class="ans-label">解答：</span>2倍<br>
+        <span class="ans-label">一言解説：</span>状態数 \(\propto \Gamma(E)\) であり \(\Gamma(2E)=2\Gamma(E)\) なので，状態数も同じ比率で2倍になります。1次元調和振動子では「状態数 \(\propto E\)」というシンプルな関係が成り立つ点がポイントです。
+      </div>
+    </div>
+
+    <h3 class="explain-title">📘 初学者向けステップバイステップ解説（調和振動子の相空間と状態数）</h3>
+
+    <div class="step">
+      <span class="step-num">1</span><h4>ハミルトニアンとエネルギー一定面の形を考える</h4>
+      <p>1次元調和振動子のハミルトニアンは運動エネルギー項と位置エネルギー項の和です。</p>
+      <div class="mathblock">\[ H(x,p) = \frac{p^2}{2m} + \frac{1}{2}kx^2 \]</div>
+      <p>「エネルギーが \(E\) 以下」という条件 \(H\le E\) を考えると，これは \(x\) と \(p\) の2変数についての2次形式の不等式になります。式を整理すると，楕円の標準形 \(\left(\frac{x}{a}\right)^2+\left(\frac{p}{b}\right)^2\le 1\) にぴったり合う形になることが分かります。つまり相空間（\(x\)-\(p\) 平面）上で，エネルギー一定面は楕円になります。</p>
+      <div class="pointbox"><span class="ptitle">ポイント</span>2次元の調和振動子の相空間における「エネルギー一定面」が楕円になるのは，運動エネルギー・位置エネルギーともに2乗の形（\(x^2,p^2\)）で入っているためです。</div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span><h4>楕円の半軸の長さを求める</h4>
+      <p>楕円の軸の長さを求めるには，もう一方の変数を0にして考えます。</p>
+      <p>① \(p=0\) のとき：\(\frac{1}{2}kx^2=E\) より \(x=\pm\sqrt{2E/k}\)。これが \(x\) 軸方向の半軸 \(a\)。</p>
+      <div class="mathblock">\[ a=\sqrt{\frac{2E}{k}} \]</div>
+      <p>② \(x=0\) のとき：\(\frac{p^2}{2m}=E\) より \(p=\pm\sqrt{2mE}\)。これが \(p\) 軸方向の半軸 \(b\)。</p>
+      <div class="mathblock">\[ b=\sqrt{2mE} \]</div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span><h4>楕円の面積公式を使って \(\Gamma(E)\) を求める</h4>
+      <p>楕円 \(\left(\frac{x}{a}\right)^2+\left(\frac{p}{b}\right)^2=1\) で囲まれる面積は \(\pi a b\) という公式があります（円の面積 \(\pi r^2\) を，\(x,p\) 軸で別々のスケール \(a,b\) に引き伸ばした一般形と考えると理解しやすいです）。これに先ほどの \(a,b\) を代入します。</p>
+      <div class="mathblock">\[
+      \Gamma(E)=\pi a b = \pi\sqrt{\frac{2E}{k}}\cdot\sqrt{2mE}
+      = \pi\sqrt{\frac{2E}{k}\times 2mE}
+      = \pi\sqrt{\frac{4mE^2}{k}}
+      = 2\pi E\sqrt{\frac{m}{k}}
+      \]</div>
+      <div class="pointbox"><span class="ptitle">ポイント</span>計算の途中で \(\sqrt{4mE^2/k}=2E\sqrt{m/k}\) となるのは，\(E^2\) の根号がそのまま \(E\) として外に出るためです（\(E>0\) なので絶対値の心配は不要）。</div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span><h4>微小区間 \([E,E+\delta E]\) の相空間体積</h4>
+      <p>「エネルギーが \([E,E+\delta E]\) にある領域の面積」は，「\(E+\delta E\) 以下の面積」から「\(E\) 以下の面積」を引けば求まります（これは外側の大きい楕円から内側の小さい楕円を引いて，その間の輪っか状の面積を求めるのと同じ発想です）。</p>
+      <div class="mathblock">\[
+      \Gamma(E+\delta E)-\Gamma(E)
+      = 2\pi(E+\delta E)\sqrt{\frac{m}{k}} - 2\pi E\sqrt{\frac{m}{k}}
+      = 2\pi\sqrt{\frac{m}{k}}\,\delta E
+      \]</div>
+      <p>\(\Gamma(E)\) が \(E\) の1次関数（傾き \(2\pi\sqrt{m/k}\) の直線）なので，微小区間の面積はその傾きに \(\delta E\) をかけるだけで求まります。</p>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span><h4>\([0,E]\) と \([0,2E]\) の状態数を比較する</h4>
+      <p>\(\Gamma(E)\) が \(E\) に単純に比例していることに着目します。</p>
+      <div class="mathblock">\[
+      \Gamma(2E) = 2\pi(2E)\sqrt{\frac{m}{k}} = 2\times\left(2\pi E\sqrt{\frac{m}{k}}\right) = 2\,\Gamma(E)
+      \]</div>
+      <p>「状態数は相空間体積に比例する」という古典論の仮定から，状態数の比も面積の比と同じになります。よって，</p>
+      <div class="mathblock">\[ \frac{(\,[0,2E] \text{の状態数}\,)}{(\,[0,E] \text{の状態数}\,)} = \frac{\Gamma(2E)}{\Gamma(E)} = 2 \]</div>
+      <p>つまり，エネルギーの上限を2倍にすると，取りうる状態数もちょうど2倍になります。</p>
+    </div>
+
+    <div class="keypoints">
+      <span class="ktitle">🔑 キーポイントまとめ</span>
+      <ul>
+        <li>調和振動子のエネルギー一定面 \(H=E\) は，相空間 \((x,p)\) 上で楕円を描く。</li>
+        <li>楕円の半軸は \(a=\sqrt{2E/k}\)（\(x\) 方向），\(b=\sqrt{2mE}\)（\(p\) 方向）。</li>
+        <li>楕円の面積公式 \(\pi ab\) より \(\Gamma(E)=2\pi E\sqrt{m/k}\)。これは \(E\) に比例する。</li>
+        <li>微小区間の相空間体積は \(\Gamma(E+\delta E)-\Gamma(E)=2\pi\sqrt{m/k}\,\delta E\)。</li>
+        <li>\(\Gamma(E)\propto E\) なので，エネルギー上限を2倍にすると状態数も2倍になる（\(\Gamma(2E)=2\Gamma(E)\)）。</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<footer>統計力学１　復習問題２　穴埋めクイズ ｜ 数式表示：MathJax 3.2.2</footer>
+
+<script>
+// タブ切り替え
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// 選択肢クリック処理
+document.querySelectorAll('.qcard').forEach(card=>{
+  const buttons = card.querySelectorAll('.choice-btn');
+  const feedback = card.querySelector('.feedback');
+  buttons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(btn.disabled) return;
+      buttons.forEach(b=>b.disabled=true);
+      const isCorrect = btn.dataset.correct === 'true';
+      if(isCorrect){
+        btn.classList.add('correct');
+        feedback.textContent = '✅ 正解！';
+        feedback.className = 'feedback ok';
+      } else {
+        btn.classList.add('wrong');
+        feedback.textContent = '❌ 不正解...正解はハイライトされた選択肢を確認、または「答えを見る」をクリック';
+        feedback.className = 'feedback ng';
+        buttons.forEach(b=>{ if(b.dataset.correct==='true') b.classList.add('correct'); });
+      }
+    });
+  });
+});
+
+// 答えを見るボタン
+document.querySelectorAll('.answer-toggle').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const box = btn.nextElementSibling;
+    box.classList.toggle('show');
+    btn.textContent = box.classList.contains('show') ? '答えを隠す' : '答えを見る';
+  });
+});
+</script>
+
+</body>
+</html>
