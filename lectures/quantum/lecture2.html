@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>量子力学1A 到達度評価｜6択クイズ演習</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --red:#e86f72;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:560px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:24px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 12px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card p{ margin:8px 0; font-size:14px; color:var(--ink); }
+
+  /* ---------- OPTIONS (6択) ---------- */
+  .options-grid{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin:14px 0;
+  }
+  .opt-btn{
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:8px;
+    padding:10px 14px;
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:13.5px;
+    text-align:left;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:background .15s, border-color .15s;
+  }
+  .opt-btn:hover:not(:disabled){
+    border-color:var(--teal);
+    background:rgba(114,217,196,0.05);
+  }
+  .opt-btn .opt-num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    color:var(--teal);
+    background:rgba(114,217,196,0.1);
+    padding:2px 6px;
+    border-radius:4px;
+    flex-shrink:0;
+  }
+  .opt-btn:disabled{
+    cursor:default;
+    opacity:0.7;
+  }
+  
+  /* 正解・不正解スタイル */
+  .opt-btn.correct{
+    border-color:var(--teal) !important;
+    background:rgba(114,217,196,0.15) !important;
+    opacity:1 !important;
+  }
+  .opt-btn.correct .opt-num{
+    background:var(--teal);
+    color:var(--bg);
+  }
+  .opt-btn.wrong{
+    border-color:var(--red) !important;
+    background:rgba(232,111,114,0.15) !important;
+    opacity:1 !important;
+  }
+  .opt-btn.wrong .opt-num{
+    background:var(--red);
+    color:#fff;
+  }
+
+  /* 解説・結果エリア */
+  .explain-area{
+    display:none;
+    margin-top:14px;
+    padding:12px 14px;
+    border-radius:8px;
+    font-size:13px;
+    line-height:1.6;
+    animation:fade .3s ease;
+  }
+  .explain-area.show{ display:block; }
+  .explain-area.is-correct{
+    border:1px solid var(--teal);
+    background:rgba(114,217,196,0.06);
+  }
+  .explain-area.is-wrong{
+    border:1px solid var(--red);
+    background:rgba(232,111,114,0.06);
+  }
+  .explain-title{
+    font-weight:700;
+    font-size:14px;
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .is-correct .explain-title{ color:var(--teal); }
+  .is-wrong .explain-title{ color:var(--red); }
+
+  .eq-wrap{
+    position:relative;
+    margin:8px 0;
+  }
+  .eq-scroll{
+    overflow-x:auto;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:8px;
+    padding:10px 12px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .eq-scroll mjx-container{ color:var(--ink) !important; }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+
+  .svg-fig{
+    width:100%;
+    max-width:260px;
+    margin:10px auto;
+    display:block;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics 1A — Interactive Quiz</div>
+    <h1>量子力学1A 6択クイズ演習</h1>
+    <p class="sub">期末試験の解法プロセスを6択問題で理解する</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">[1]</span>波束の重ね合わせ</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">[2]</span>ポテンシャル障壁</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">[3]</span>水素原子と球面調和関数</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ [1] 波束の重ね合わせ ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>[1] 波動関数と重み関数（フーリエ変換）</h2>
+      <p class="lead">波数空間の重ね合わせから実空間の波動関数 \(u(x)\) を導出する問題です。</p>
+
+      <!-- Q1(a) -->
+      <div class="card" id="q1a">
+        <h3><span class="tag">Q1</span>(a) 全波数帯域の重み \(\hat{u}(k) = \frac{1}{\sqrt{2\pi}}\)</h3>
+        <p>あらゆる波数が均一に重ね合わさっている場合の波動関数 \(u(x)\) として正しいものを選べ。</p>
+        
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q1a', 0)"><span class="opt-num">1</span>\(u(x) = 1\)</button>
+          <button class="opt-btn" onclick="checkAns('q1a', 1)"><span class="opt-num">2</span>\(u(x) = \delta(x)\)</button>
+          <button class="opt-btn" onclick="checkAns('q1a', 2)"><span class="opt-num">3</span>\(u(x) = \frac{1}{\sqrt{2\pi}} e^{ikx}\)</button>
+          <button class="opt-btn" onclick="checkAns('q1a', 3)"><span class="opt-num">4</span>\(u(x) = \frac{\sin x}{x}\)</button>
+          <button class="opt-btn" onclick="checkAns('q1a', 4)"><span class="opt-num">5</span>\(u(x) = \frac{1}{2\pi} x\)</button>
+          <button class="opt-btn" onclick="checkAns('q1a', 5)"><span class="opt-num">6</span>\(u(x) = 0\)</button>
+        </div>
+
+        <div class="explain-area" id="q1a-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">
+            \(u(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{ikx} dk\) は、ディラックのデルタ関数 \(\delta(x)\) の積分表示そのものです。位置の不確定性が0の完全局所化状態を表します。
+          </div>
+        </div>
+      </div>
+
+      <!-- Q1(b) -->
+      <div class="card" id="q1b">
+        <h3><span class="tag">Q2</span>(b) 帯域制限 \(\hat{u}(k) = 1 \; (|k| \le 1)\)</h3>
+        <p>波数幅が \(|k| \le 1\) に制限されている場合の波動関数 \(u(x)\) として正しいものを選べ。</p>
+        
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q1b', 0)"><span class="opt-num">1</span>\(u(x) = \sqrt{\frac{2}{\pi}} \cos x\)</button>
+          <button class="opt-btn" onclick="checkAns('q1b', 1)"><span class="opt-num">2</span>\(u(x) = \frac{1}{\sqrt{2\pi}} \frac{e^{ix}}{x}\)</button>
+          <button class="opt-btn" onclick="checkAns('q1b', 2)"><span class="opt-num">3</span>\(u(x) = \sqrt{\frac{2}{\pi}} \frac{\sin x}{x}\)</button>
+          <button class="opt-btn" onclick="checkAns('q1b', 3)"><span class="opt-num">4</span>\(u(x) = \frac{2}{\pi} \frac{\tan x}{x}\)</button>
+          <button class="opt-btn" onclick="checkAns('q1b', 4)"><span class="opt-num">5</span>\(u(x) = \frac{1}{\sqrt{2\pi}} \delta(x-1)\)</button>
+          <button class="opt-btn" onclick="checkAns('q1b', 5)"><span class="opt-num">6</span>\(u(x) = \sqrt{\frac{\pi}{2}} \sin x\)</button>
+        </div>
+
+        <div class="explain-area" id="q1b-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">
+            \(\int_{-1}^{1} e^{ikx} dk = \left[\frac{e^{ikx}}{ix}\right]_{-1}^{1} = \frac{2\sin x}{x}\) となるため、全体で \(\sqrt{\frac{2}{\pi}} \frac{\sin x}{x}\) となります。
+          </div>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：[2] ポテンシャル障壁 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [2] ポテンシャル障壁 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>[2] 1次元ポテンシャル障壁の散乱</h2>
+      <p class="lead">高さ \(V_0 = 2E\) の障壁に対するトンネル効果と透過・反射係数。</p>
+
+      <!-- Q2(b) -->
+      <div class="card" id="q2b">
+        <h3><span class="tag">Q3</span>(b) 障壁内部 (\(0 \le x \le a\)) の波動関数の形</h3>
+        <p>ポテンシャル \(V(x) = 2E\) である領域2における波動関数 \(u_2(x)\) の一般解として正しいものはどれか。</p>
+        
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q2b', 0)"><span class="opt-num">1</span>\(B_1 e^{ikx} + B_2 e^{-ikx}\)</button>
+          <button class="opt-btn" onclick="checkAns('q2b', 1)"><span class="opt-num">2</span>\(B_1 \cos(kx) + B_2 \sin(kx)\)</button>
+          <button class="opt-btn" onclick="checkAns('q2b', 2)"><span class="opt-num">3</span>\(B_1 e^{kx} + B_2 e^{-kx}\)</button>
+          <button class="opt-btn" onclick="checkAns('q2b', 3)"><span class="opt-num">4</span>\(B_1 e^{\sqrt{2}kx} + B_2 e^{-\sqrt{2}kx}\)</button>
+          <button class="opt-btn" onclick="checkAns('q2b', 4)"><span class="opt-num">5</span>\(B_1 \cosh(2kx) + B_2 \sinh(2kx)\)</button>
+          <button class="opt-btn" onclick="checkAns('q2b', 5)"><span class="opt-num">6</span>\(B_1 e^{i\sqrt{2}kx}\)</button>
+        </div>
+
+        <div class="explain-area" id="q2b-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">
+            Schrödinger方程式は \(-\frac{\hbar^2}{2m_e}\frac{d^2u}{dx^2} + 2Eu = Eu \implies \frac{d^2u}{dx^2} = k^2 u\) となるため、解は虚数単位のつかない指数関数 \(B_1 e^{kx} + B_2 e^{-kx}\) となります。
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2(d) -->
+      <div class="card" id="q2d">
+        <h3><span class="tag">Q4</span>(d) ポテンシャル障壁の透過確率 \(T\)</h3>
+        <p>この障壁を透過する確率 \(T = |C/A_1|^2\) の正確な式を選べ。</p>
+        
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q2d', 0)"><span class="opt-num">1</span>\(T = \frac{1}{1 + \sinh^2(ka)}\)</button>
+          <button class="opt-btn" onclick="checkAns('q2d', 1)"><span class="opt-num">2</span>\(T = \frac{1}{1 + 2\sinh^2(ka)}\)</button>
+          <button class="opt-btn" onclick="checkAns('q2d', 2)"><span class="opt-num">3</span>\(T = \frac{1}{1 + 4\cosh^2(ka)}\)</button>
+          <button class="opt-btn" onclick="checkAns('q2d', 3)"><span class="opt-num">4</span>\(T = e^{-2ka}\)</button>
+          <button class="opt-btn" onclick="checkAns('q2d', 4)"><span class="opt-num">5</span>\(T = \frac{2\sinh^2(ka)}{1 + 2\sinh^2(ka)}\)</button>
+          <button class="opt-btn" onclick="checkAns('q2d', 5)"><span class="opt-num">6</span>\(T = 0\)</button>
+        </div>
+
+        <div class="explain-area" id="q2d-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">
+            境界条件より \(A_1 = C e^{ika} [\cosh(ka) - i\sinh(ka)]\) となり、その絶対値2乗は \(|A_1/C|^2 = \cosh^2(ka) + \sinh^2(ka) = 1 + 2\sinh^2(ka)\) と計算されるため、逆数をとると \(T = \frac{1}{1 + 2\sinh^2(ka)}\) になります。
+          </div>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← [1] 波束</div>
+        <div class="navbtn next" data-goto="p3">次へ：[3] 水素原子 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [3] 水素原子と球面調和関数 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>[3] 3次元中心力場と水素原子</h2>
+      <p class="lead">球面座標系における波動関数と球面調和関数・極限挙動。</p>
+
+      <!-- Q3(d) -->
+      <div class="card" id="q3d">
+        <h3><span class="tag">Q5</span>(d) 球面調和関数 \(Y_{2,0}(\theta, \phi)\) の形</h3>
+        <p>\((l,m) = (2,0)\) の場合の球面調和関数 \(Y_{2,0}\)（\(\cos\theta\) の関数）として正しいものはどれか。</p>
+        
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q3d', 0)"><span class="opt-num">1</span>\(Y_{2,0} = \sqrt{\frac{3}{4\pi}} \cos\theta\)</button>
+          <button class="opt-btn" onclick="checkAns('q3d', 1)"><span class="opt-num">2</span>\(Y_{2,0} = \sqrt{\frac{5}{16\pi}} (3\cos^2\theta - 1)\)</button>
+          <button class="opt-btn" onclick="checkAns('q3d', 2)"><span class="opt-num">3</span>\(Y_{2,0} = \sqrt{\frac{15}{32\pi}} \sin^2\theta e^{2i\phi}\)</button>
+          <button class="opt-btn" onclick="checkAns('q3d', 3)"><span class="opt-num">4</span>\(Y_{2,0} = \sqrt{\frac{5}{4\pi}} (1 - 3\cos\theta)\)</button>
+          <button class="opt-btn" onclick="checkAns('q3d', 4)"><span class="opt-num">5</span>\(Y_{2,0} = \sqrt{\frac{1}{4\pi}}\)</button>
+          <button class="opt-btn" onclick="checkAns('q3d', 5)"><span class="opt-num">6</span>\(Y_{2,0} = \sqrt{\frac{5}{8\pi}} \sin\theta \cos\theta\)</button>
+        </div>
+
+        <div class="explain-area" id="q3d-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">
+            ルジャンドル多項式 \(P_2(\cos\theta) = \frac{1}{2}(3\cos^2\theta - 1)\) に規格化定数を乗じることで \(Y_{2,0} = \sqrt{\frac{5}{16\pi}} (3\cos^2\theta - 1)\) が得られます。
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3(e) -->
+      <div class="card" id="q3e">
+        <h3><span class="tag">Q6</span>(e) \(|Y_{2,0}|\) のプロット形状</h3>
+        <p>\(x-z\) 平面における \(|Y_{2,0}|\) の形状として適切な選択肢はどれか（右図のア〜オより）。</p>
+        
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q3e', 0)"><span class="opt-num">1</span>(ア) 4つ葉のクローバー型（\(d_{xz}\) 型）</button>
+          <button class="opt-btn" onclick="checkAns('q3e', 1)"><span class="opt-num">2</span>(イ) 完全な真円型（\(s\) 軌道型）</button>
+          <button class="opt-btn" onclick="checkAns('q3e', 2)"><span class="opt-num">3</span>(ウ) z軸メイン＋中央リング型（\(d_{z^2}\) 型）</button>
+          <button class="opt-btn" onclick="checkAns('q3e', 3)"><span class="opt-num">4</span>(エ) x軸方向のダンベル型（\(p_x\) 型）</button>
+          <button class="opt-btn" onclick="checkAns('q3e', 4)"><span class="opt-num">5</span>(オ) z軸方向のシンプルなダンベル型（\(p_z\) 型）</button>
+          <button class="opt-btn" onclick="checkAns('q3e', 5)"><span class="opt-num">6</span>該当なし</button>
+        </div>
+
+        <div class="explain-area" id="q3e-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">
+            \(Y_{2,0}\) は化学でも馴染み深い \(d_{z^2}\) 軌道の角度部分です。z軸方向に大きな上下ローブを持ち、\(\theta \approx 54.7^\circ\) で節（0）を通り、赤道（xy平面）付近に小さな輪っか（膨らみ）を持つ (ウ) が正解です。
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3(g) -->
+      <div class="card" id="q3g">
+        <h3><span class="tag">Q7</span>(g) 動径関数の原点極限 \(r \to 0\)</h3>
+        <p>\(\chi(r) = r R(r)\) の \(r \to 0\) における漸近挙動として正しいものを選べ。</p>
+        
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q3g', 0)"><span class="opt-num">1</span>\(\chi(r) \propto r^{-l}\)</button>
+          <button class="opt-btn" onclick="checkAns('q3g', 1)"><span class="opt-num">2</span>\(\chi(r) \propto r^l\)</button>
+          <button class="opt-btn" onclick="checkAns('q3g', 2)"><span class="opt-num">3</span>\(\chi(r) \propto r^{l+1}\)</button>
+          <button class="opt-btn" onclick="checkAns('q3g', 3)"><span class="opt-num">4</span>\(\chi(r) \propto e^{-\beta r}\)</button>
+          <button class="opt-btn" onclick="checkAns('q3g', 4)"><span class="opt-num">5</span>\(\chi(r) \propto \frac{1}{r}\)</button>
+          <button class="opt-btn" onclick="checkAns('q3g', 5)"><span class="opt-num">6</span>\(\chi(r) \propto \text{定数}\)</button>
+        </div>
+
+        <div class="explain-area" id="q3g-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">
+            \(r \to 0\) では遠心力項が支配的となり、\(r^2 \frac{d^2\chi}{dr^2} - l(l+1)\chi = 0\) を得ます。\(\chi(r) = r^s\) を試行すると \(s = l+1, -l\) となりますが、原点で波動関数が発散しない（規格化可能である）条件より \(s = l+1\) つまり \(\chi(r) \propto r^{l+1}\)（すなわち \(R(r) \propto r^l\)）となります。
+          </div>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← [2] 障壁</div>
+        <div></div>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // 正解インデックスデータベース
+  const answers = {
+    'q1a': 1, // index 1
+    'q1b': 2, // index 2
+    'q2b': 2, // index 2
+    'q2d': 1, // index 1
+    'q3d': 1, // index 1
+    'q3e': 2, // index 2
+    'q3g': 2  // index 2
+  };
+
+  function checkAns(qId, selectedIdx) {
+    const card = document.getElementById(qId);
+    const buttons = card.querySelectorAll('.opt-btn');
+    const expArea = document.getElementById(qId + '-exp');
+    const expTitle = expArea.querySelector('.explain-title');
+    const correctIdx = answers[qId];
+
+    // 全ボタンを無効化
+    buttons.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (idx === correctIdx) {
+        btn.classList.add('correct');
+      } else if (idx === selectedIdx) {
+        btn.classList.add('wrong');
+      }
+    });
+
+    // 判定と解説表示
+    expArea.classList.add('show');
+    if (selectedIdx === correctIdx) {
+      expArea.classList.add('is-correct');
+      expTitle.innerHTML = '<span>正解！</span>';
+    } else {
+      expArea.classList.add('is-wrong');
+      expTitle.innerHTML = '<span>不正解...</span>';
+    }
+
+    // MathJaxの再レンダリング処理（動的表示用）
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      MathJax.typesetPromise([expArea]);
+    }
+  }
+
+  // タブ切り替え処理
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+
+  function goTo(id){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === id));
+    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === id));
+    document.getElementById('panels').scrollIntoView({behavior:'smooth', block:'start'});
+    const activeTab = document.querySelector('.tab-btn.active');
+    if(activeTab) activeTab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => goTo(t.dataset.panel)));
+  document.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=> goTo(btn.dataset.goto));
+  });
+</script>
+</body>
+</html>
