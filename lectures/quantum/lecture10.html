@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>第10講｜中心力場と角運動量の量子化 体系的解説ノート</title>
+<title>第9講｜量子力学の5つの公理 体系的解説ノート</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -239,82 +239,289 @@ window.MathJax = {
 <div class="app">
 
   <header class="hero">
-    <div class="eyebrow">Quantum Mechanics — Lecture 10 Guide</div>
-    <h1>中心力場と角運動量の量子化</h1>
-    <p class="sub">両立する可観測量、極座標での変数分離、磁気量子数の導出</p>
+    <div class="eyebrow">Quantum Mechanics — Lecture 09 Guide</div>
+    <h1>量子力学の5つの公理</h1>
+    <p class="sub">状態の記述、演算子、Born則、波束の収縮、時間発展の体系的解説ノート</p>
   </header>
 
   <nav class="tabs" id="tabs">
-    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>両立する物理量</button>
-    <button class="tab-btn" data-panel="p2"><span class="num">02</span>中心力場と変数分離</button>
-    <button class="tab-btn" data-panel="p3"><span class="num">03</span>方位角と磁気量子数</button>
-    <button class="tab-btn" data-panel="p4"><span class="num">04</span>演習9＆極座標微分</button>
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>公理1&amp;2: 状態と演算子</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>公理3: Born則と期待値</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>公理4&amp;5: 収縮と時間発展</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>演習8 完全解説</button>
     <button class="tab-btn" data-panel="p5"><span class="num">05</span>要点まとめ</button>
   </nav>
 
   <main id="panels">
 
-    <!-- ============ 01 両立する物理量 ============ -->
+    <!-- ============ 01 公理1&2 ============ -->
     <section class="panel active" data-panel="p1">
-      <h2>01 両立する物理量（可換演算子と共通固有状態）</h2>
-      <p class="lead">なぜ交換関係 \([\hat{A}, \hat{B}] = 0\) が同時に測定可能（両立）であることと等価なのかの論理証明。</p>
+      <h2>01 公理1：状態の記述 ＆ 公理2：物理量と演算子</h2>
+      <p class="lead">量子状態の重ね合わせ原理と完全性関係、物理量を表すエルミート演算子の数学的基盤。</p>
 
       <div class="card">
-        <h3><span class="tag">理論証明</span>可換演算子が共通固有状態を持つ条件 [p.2]</h3>
-        <p>交換関係 \([\hat{A}, \hat{B}] = \hat{A}\hat{B} - \hat{B}\hat{A} = 0\) を満たす2つのエルミート演算子 \(\hat{A}, \hat{B}\) を考える[cite: 4]。演算子 \(\hat{A}\) の固有状態を \(u_i(x)\) （固有値 \(a_i\)）とすると[cite: 4]：</p>
+        <h3><span class="tag">公理 1</span>状態の記述（波動関数と完全性関係） [p.2]</h3>
+        <p>量子力学において、系の状態は波動関数 \(\psi(x,t)\) によって完全に記述される[cite: 3]。波動関数は、エネルギー固有値 \(E_n\) に対応する正規直交基底（固有関数） \(u_n(x)\) の重ね合わせとして次のように展開できる[cite: 3]：</p>
         <div class="eq-wrap">
           <div class="eq-scroll">
-            \[\hat{A} u_i(x) = a_i u_i(x)\]
+            \[ \psi(x,t) = \sum_{n} c_n u_n(x) \exp\left(-i \frac{E_n}{\hbar} t\right) \]
           </div>
         </div>
-        <p>この両辺に左から演算子 \(\hat{B}\) を作用させる[cite: 4]：</p>
+        <p>ここで基底 \(u_n(x)\) は正規直交性 \(\int_{-\infty}^{\infty} dx \, u_n^*(x) u_m(x) = \delta_{nm}\) を満たす[cite: 3]。展開係数 \(c_n\) （複素数）は、直交性を用いて初期状態 \(\psi(x,0)\) から抽出できる[cite: 3]：</p>
         <div class="eq-wrap">
           <div class="eq-scroll">
-            \[\hat{B} \hat{A} u_i(x) = a_i \hat{B} u_i(x)\]
+            \[ c_n = \int_{-\infty}^{\infty} dx \, \psi(x,0) u_n^*(x) \]
           </div>
         </div>
-        <p>ここで \([\hat{A}, \hat{B}] = 0 \iff \hat{B}\hat{A} = \hat{A}\hat{B}\) であることを用いて左辺を書き換える[cite: 4]：</p>
+        <p>これを \(t=0\) の展開式 \(\psi(x,0) = \sum_n c_n u_n(x)\) に再代入してみる[cite: 3]：</p>
         <div class="eq-wrap">
           <div class="eq-scroll">
-            \[\hat{A} \left[ \hat{B} u_i(x) \right] = a_i \left[ \hat{B} u_i(x) \right]\]
+            \[ \psi(x,0) = \sum_n \left[ \int_{-\infty}^{\infty} dx' \, \psi(x',0) u_n^*(x') \right] u_n(x) = \int_{-\infty}^{\infty} dx' \psi(x',0) \left[ \sum_n u_n^*(x') u_n(x) \right] \]
           </div>
         </div>
-        <p>この式は、状態 \(\hat{B}u_i(x)\) もまた演算子 \(\hat{A}\) の固有値 \(a_i\) に属する固有状態であることを示している[cite: 4]！</p>
-        
-        <p>固有値 \(a_i\) に縮退がない（非縮退）と仮定すると、\(a_i\) に属する固有状態は定数倍を除いてただ1つに定まるため、\(\hat{B}u_i(x)\) は \(u_i(x)\) の定数倍でなければならない[cite: 4]：</p>
+        <p>これが任意の \(\psi(x,0)\) で成り立つため、括弧内はデルタ関数でなければならない。これが**完全性関係（Closure relation）**である[cite: 3]：</p>
         <div class="note">
-          \[\hat{B} u_i(x) = b_i u_i(x) \qquad (b_i \text{ は定数})\]
+          \[ \sum_n u_n^*(x') u_n(x) = \delta(x - x') \]
         </div>
-        <p>したがって、\(u_i(x)\) は \(\hat{A}\) と \(\hat{B}\) の**共通固有状態**であることが証明された[cite: 4]。共通の固有状態を持つ物理量は「**両立する物理量（同時観測可能）**」と呼ばれる[cite: 4]。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">公理 2</span>物理量とエルミート演算子 [p.3]</h3>
+        <p>観察可能な物理量（可観測量：Observable）は**エルミート演算子**によって表され、物理量の測定値はその演算子の**固有値**に限られる[cite: 3]。エルミート演算子の固有値は必ず実数となり、測定結果が実数であることと整合する[cite: 3]。</p>
+        
+        <p><b>代表的なエルミート演算子の表式：</b>[cite: 3]</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \text{位置演算子: } \hat{x} \psi(x,t) = x \psi(x,t) \]</div></div>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \text{運動量演算子: } \hat{p} \psi(x,t) = -i\hbar \frac{d}{dx} \psi(x,t) \]</div></div>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \text{ハミルトニアン演算子: } \hat{H} = \frac{\hat{p}^2}{2m} + V(\hat{x}) = -\frac{\hbar^2}{2m}\frac{d^2}{dx^2} + V(x) \]</div></div>
+        <div class="insight">
+          ※これら位置・運動量のほか、角運動量演算子 \(\hat{\boldsymbol{L}} = \hat{\boldsymbol{r}} \times \hat{\boldsymbol{p}}\) やスピン演算子 \(\hat{\boldsymbol{S}}\) などもエルミート演算子である[cite: 3]。
+        </div>
       </div>
 
       <footer class="pagenav">
         <div></div>
-        <div class="navbtn next" data-goto="p2">次へ：02 中心力場と変数分離 →</div>
+        <div class="navbtn next" data-goto="p2">次へ：02 Born則と期待値 →</div>
       </footer>
     </section>
 
-    <!-- ============ 02 中心力場と変数分離 ============ -->
+    <!-- ============ 02 公理3 ============ -->
     <section class="panel" data-panel="p2">
-      <h2>02 中心力ポテンシャルと極座標での変数分離</h2>
-      <p class="lead">ハミルトニアンと角運動量演算子の可換性、および 3 次元極座標系での方程式の分離。</p>
+      <h2>02 公理3：Born則と期待値の計算</h2>
+      <p class="lead">確率解釈（Born則）、規格化の自立保持、およびサンドイッチ積分による期待値の証明。</p>
 
       <div class="card">
-        <h3><span class="tag">中心力場</span>ハミルトニアンと角運動量演算子 [p.3]</h3>
-        <p>ポテンシャルが距離 \(r\) のみに依存する中心力場 \(V = V(r)\) （例：水素原子）では、3次元極座標 \((r, \theta, \phi)\) を用いる[cite: 4]。ハミルトニアン \(\hat{H}\) は全角運動量 2 乗演算子 \(\hat{L}^2\) を用いて次のように表される[cite: 4]：</p>
+        <h3><span class="tag">公理 3</span>Born則（確率解釈）と規格化条件の保持 [p.4]</h3>
+        <p>状態 \(\psi(x,t)\) に対し、物理量を測定してエネルギー固有値 \(E_n\) が得られる確率は、展開係数 \(c_n\) の絶対値2乗で与えられる（**Bornの規則**）[cite: 3]：</p>
         <div class="eq-wrap">
           <div class="eq-scroll">
-            \[\hat{H} = -\frac{\hbar^2}{2m}\nabla^2 + V(r) = -\frac{\hbar^2}{2m}\left[ \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 \frac{\partial}{\partial r}\right) - \frac{\hat{L}^2(\theta,\phi)}{\hbar^2 r^2} \right] + V(r)\]
+            \[ P(E_n) = |c_n|^2 \qquad \left( \text{全確率の和: } \sum_n |c_n|^2 = 1 \right) \]
           </div>
         </div>
-        <p>ここで全角運動量 2 乗演算子 \(\hat{L}^2\) および \(z\) 成分演算子 \(\hat{L}_z\) の極座標表示は[cite: 4]：</p>
+        <p>Born則を認めると、全空間における波動関数の規格化 \(\int dx |\psi(x,t)|^2 = 1\) が時間発展によらず常に満たされることが自動的に証明される[cite: 3]：</p>
         <div class="eq-wrap">
           <div class="eq-scroll">
-            \[\hat{L}^2 = -\hbar^2 \left[ \frac{1}{\sin\theta}\frac{\partial}{\partial\theta}\left(\sin\theta \frac{\partial}{\partial\theta}\right) + \frac{1}{\sin^2\theta}\frac{\partial^2}{\partial\phi^2} \right], \quad \hat{L}_z = -i\hbar \frac{\partial}{\partial\phi}\]
+            \[
+            \begin{aligned}
+            \int_{-\infty}^{\infty} dx |\psi(x,t)|^2 &= \int_{-\infty}^{\infty} dx \left[ \sum_n c_n u_n(x) e^{-i\frac{E_n}{\hbar}t} \right]^* \left[ \sum_m c_m u_m(x) e^{-i\frac{E_m}{\hbar}t} \right] \\
+            &= \sum_{n,m} c_n^* c_m e^{i\frac{E_n - E_m}{\hbar}t} \underbrace{\int_{-\infty}^{\infty} dx u_n^*(x) u_m(x)}_{\delta_{nm}} \\
+            &= \sum_n |c_n|^2 = 1
+            \end{aligned}
+            \]
           </div>
         </div>
-        <p>演算子間の可換性を確認すると[cite: 4]：</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">期待値</span>量子力学における期待値公式の再現証明 [p.5, 6]</h3>
+        <p>確率論において、確率変数 \(X_i\) の期待値 \(\langle X \rangle\) は \(\langle X \rangle = \sum_i P_i X_i\) （試行回数を無限大に飛ばした平均値）である[cite: 3]。量子力学において時刻 \(t\) での演算子 \(\hat{A}\) の期待値は、以下のサンドイッチ積分で定義される[cite: 3]：</p>
         <div class="note">
-          \[[\hat{H}, \hat{L}^2] = 0, \quad [\hat{L}^2, \hat{L}_z] = 0, \quad [\hat{H}, \hat{L}_z] = 0\]
+          \[ \langle A \rangle_t = \int_{-\infty}^{\infty} dx \, \psi^*(x,t) \hat{A} \psi(x,t) \]
         </div>
-        <p>これら 3 つの演算子はすべて互いに可換であり**両立する**ため、エネルギー \(E\)、角運動量 2 乗の固有値 \(\hbar^2\lambda\)、\(z\) 成分の固有値 \(\hbar m_l\) に対する**同時固有状態** \(u(r,\theta,\phi)\) を持つ[cite: 4]。
+
+        <p><b>この積分が物理的平均値 \(\sum_i |c_i(t)|^2 a_i\) と厳密に一致することの代数的検証：</b>[cite: 3]</p>
+        <p>\(\hat{A}\) の固有関数を \(\varphi_i(x)\) （固有値 \(a_i\)）、展開を \(\psi(x,t) = \sum_j c_j(t) \varphi_j(x)\) と置く[cite: 3]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[
+            \begin{aligned}
+            \int dx \, \psi^*(x,t) \hat{A} \psi(x,t) &= \int dx \left[ \sum_i c_i(t) \varphi_i(x) \right]^* \hat{A} \left[ \sum_j c_j(t) \varphi_j(x) \right] \\
+            &= \sum_{i,j} c_i^*(t) c_j(t) \int dx \, \varphi_i^*(x) \underbrace{\hat{A} \varphi_j(x)}_{a_j \varphi_j(x)} \\
+            &= \sum_{i,j} c_i^*(t) c_j(t) a_j \underbrace{\int dx \, \varphi_i^*(x) \varphi_j(x)}_{\delta_{ij}} \\
+            &= \sum_i |c_i(t)|^2 a_i
+            \end{aligned}
+            \]
+          </div>
+        </div>
+        <p>これにより、積分形式の表現が確率解釈に基づく期待値と完全に合致することが確かめられた[cite: 3]。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← 01 状態と演算子</div>
+        <div class="navbtn next" data-goto="p3">次へ：03 収縮と時間発展 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 03 公理4&5 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>03 公理4：波動関数の収縮 ＆ 公理5：時間発展</h2>
+      <p class="lead">測定による不可逆な状態変化、縮退と両立する観測量、Schrödinger方程式の本質。</p>
+
+      <div class="card">
+        <h3><span class="tag">公理 4</span>波動関数の収縮 と 縮退・同時測定 [p.7, 8]</h3>
+        <p><b>1. 波動関数の収縮（波束の収縮）:</b>[cite: 3]<br>
+        測定前の重ね合わせ状態 \(\psi(x,t)\) に対し、物理量 \(A\) を測定して特定の値（固有値 \(a_n\)）が得られた瞬間、状態は対応する固有状態 \(u_n(x)\) へと飛躍的に変化する[cite: 3]。どの固有値が得られるかは確率的（確率 \(|c_n|^2\)）にしか分からない[cite: 3]。</p>
+
+        <p><b>2. 縮退（Degeneracy）と両立する可観測量:</b>[cite: 3]<br>
+        同一の固有値に対して異なる複数の固有状態が存在するとき、その固有値は**縮退している**という[cite: 3]（※1次元束縛系では縮退は起きない[cite: 3]）。縮退がある場合、1つの物理量 \(A\) を測定しただけでは状態を1つに特定できない[cite: 3]。</p>
+
+        <p>互いに可換な（同時測定可能な）物理量 \(A, B\) （**両立する観測量**）を順に測定し、固有値の組 \((a_i, b_j)\) を特定することで、同時固有状態 \(u_{ij}(x)\) を一意に決定することができる[cite: 3]：</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \hat{A} u_{ij}(x) = a_i u_{ij}(x), \qquad \hat{B} u_{ij}(x) = b_j u_{ij}(x) \]</div></div>
+        <div class="insight">
+          ※例えば水素原子において、エネルギー固有値 \(E_n\) だけでは状態が縮退しているが、角運動量演算子 \(\hat{L}^2, \hat{L}_z\) を同時に測定することで状態が一意に決定される（量子数 \(n, l, m_l\)）[cite: 3]。
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">公理 5</span>系の時間発展とSchrödinger方程式 [p.9]</h3>
+        <p>量子状態の非連続な「測定」以外の連続的な時間発展は、**時間に依存するSchrödinger方程式**によって記述される[cite: 3]：</p>
+        <div class="note">
+          \[ i\hbar \frac{\partial \psi(x,t)}{\partial t} = \hat{H} \psi(x,t) \]
+        </div>
+
+        <div class="insight">
+          <b>概念上の注意点（演算子の等価性ではない）：</b><br>
+          この方程式は「\(\hat{H} = i\hbar \frac{\partial}{\partial t}\)」という演算子の等式を意味している訳ではない[cite: 3]！（波動特性の \(\frac{\partial^2}{\partial t^2}\psi = v^2 \frac{\partial^2}{\partial x^2}\psi\) から \(\frac{\partial^2}{\partial t^2} = v^2 \frac{\partial^2}{\partial x^2}\) とは言えないのと同等[cite: 3]）。あくまで**状態 \(\psi(x,t)\) に作用した結果として両辺が等しくなる**という関係である[cite: 3]。<br><br>
+          ハミルトニアン演算子の真の具体的な表式は、あくまで物理的エネルギーに対応する演算子である[cite: 3]：
+          \[ \hat{H} = \frac{\hat{p}^2}{2m} + V(\hat{x}) = -\frac{\hbar^2}{2m}\frac{d^2}{dx^2} + V(x) \]
+        </div>
+
+        <p>ハミルトニアン \(\hat{H}\) が時間に直接依存しない場合、変数分離 \(\psi(x,t) = u(x) e^{-i\frac{E}{\hbar}t}\) により、**時間に依存しないSchrödinger方程式** \(\hat{H}u(x) = Eu(x)\) に帰着する[cite: 3]。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← 02 Born則と期待値</div>
+        <div class="navbtn next" data-goto="p4">次へ：04 演習8 完全解説 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 04 演習8 完全解説 ============ -->
+    <section class="panel" data-panel="p4">
+      <h2>04 演習問題8 詳細解説と定積分計算</h2>
+      <p class="lead">スライド p.10 演習問題8（無限井戸型ポテンシャルにおける位置演算子 \(\hat{x}\) の期待値 \(\langle x \rangle\)）の完全導出。</p>
+
+      <div class="card">
+        <h3><span class="tag">演習8</span>無限井戸型ポテンシャルでの \(\langle x \rangle\) の計算 [p.10]</h3>
+        <p>幅 \(L\) の無限井戸（\(0 < x < L\) で \(V=0\)、それ以外で \(V=\infty\)）における固有関数は次式で与えられる[cite: 3]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ u_n(x) = \sqrt{\frac{2}{L}} \sin\left(\frac{n\pi}{L} x\right) \quad (n = 1, 2, 3, \dots) \]
+          </div>
+        </div>
+
+        <p><b>1. 基底状態（\(n=1\)）における位置の期待値 \(\langle x \rangle_1\):</b>[cite: 3]</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \langle x \rangle_1 = \int_0^L dx \, u_1^*(x) x u_1(x) = \frac{2}{L} \int_0^L x \sin^2\left(\frac{\pi}{L} x\right) dx \]
+          </div>
+        </div>
+        <p>半角の公式 \(\sin^2\theta = \frac{1 - \cos(2\theta)}{2}\) を用いて積分を分解する：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \langle x \rangle_1 = \frac{2}{L} \int_0^L x \left[ \frac{1 - \cos\left(\frac{2\pi}{L}x\right)}{2} \right] dx = \frac{1}{L} \underbrace{\int_0^L x dx}_{\frac{L^2}{2}} - \frac{1}{L} \underbrace{\int_0^L x \cos\left(\frac{2\pi}{L}x\right) dx}_{I_1} \]
+          </div>
+        </div>
+        <p>第2項 \(I_1\) を部分積分で計算する：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[
+            \begin{aligned}
+            I_1 &= \left[ x \cdot \frac{L}{2\pi} \sin\left(\frac{2\pi}{L}x\right) \right]_0^L - \int_0^L \frac{L}{2\pi} \sin\left(\frac{2\pi}{L}x\right) dx \\
+            &= 0 - \left[ -\left(\frac{L}{2\pi}\right)^2 \cos\left(\frac{2\pi}{L}x\right) \right]_0^L = \left(\frac{L}{2\pi}\right)^2 (\cos(2\pi) - \cos 0) = 0
+            \end{aligned}
+            \]
+          </div>
+        </div>
+        <p>したがって、基底状態における期待値は井戸の中央となる：</p>
+        <div class="note">
+          \[ \langle x \rangle_1 = \frac{1}{L} \cdot \frac{L^2}{2} - 0 = \frac{L}{2} \]
+        </div>
+
+        <p><b>2. 第一励起状態（\(n=2\)）における位置の期待値 \(\langle x \rangle_2\):</b>[cite: 3]</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \langle x \rangle_2 = \frac{2}{L} \int_0^L x \sin^2\left(\frac{2\pi}{L} x\right) dx = \frac{1}{L} \int_0^L x \left[ 1 - \cos\left(\frac{4\pi}{L}x\right) \right] dx \]
+          </div>
+        </div>
+        <p>\(n=1\) と同様に三角振動項の定積分は 0 になるため：</p>
+        <div class="note">
+          \[ \langle x \rangle_2 = \frac{L}{2} \]
+        </div>
+
+        <div class="insight">
+          <b>物理的意味と対称性による直感的検算：</b><br>
+          ポテンシャル \(V(x)\) は井戸の中央 \(x = L/2\) に関して左右対称（偶対称）である。確率密度 \(|u_1(x)|^2\) および \(|u_2(x)|^2\) もまた \(x = L/2\) に関して完全に対称な関数となる。左右対称な分布の平均値（中心）は常に軸上に来るため、計算せずとも \(\langle x \rangle = L/2\) になることが確認できる！
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p3">← 03 収縮と時間発展</div>
+        <div class="navbtn next" data-goto="p5">次へ：05 要点まとめ →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 05 要点まとめ ============ -->
+    <section class="panel" data-panel="p5">
+      <h2>05 要点まとめシート</h2>
+      <p class="lead">第9講「量子力学の5つの公理」の全体系まとめ。</p>
+
+      <div class="card">
+        <h3><span class="tag gold">まとめ</span>量子力学の5つの公理 マスターロードマップ [p.1, 10]</h3>
+        
+        <p><b>1. 状態の記述（公理1）:</b>[cite: 3]<br>
+        ・系の状態は波動関数 \(\psi(x,t)\) で表される[cite: 3]。<br>
+        ・基底の重ね合わせ: \(\psi(x,t) = \sum_n c_n u_n(x) e^{-i\frac{E_n}{\hbar}t}\)[cite: 3]<br>
+        ・完全性関係: \(\sum_n u_n^*(x') u_n(x) = \delta(x - x')\)[cite: 3]</p>
+
+        <p><b>2. 物理量と演算子（公理2）:</b>[cite: 3]<br>
+        ・物理量はエルミート演算子（\(\hat{x}, \hat{p}, \hat{H}\) 等）で与えられ、測定値はその固有値（実数）となる[cite: 3]。</p>
+
+        <p><b>3. 測定確率と期待値（公理3）:</b>[cite: 3]<br>
+        ・Born則: 固有値 \(E_n\) を観測する確率は \(P(E_n) = |c_n|^2\)[cite: 3]（\(\sum |c_n|^2 = 1\)[cite: 3]）。<br>
+        ・期待値公式: \(\langle A \rangle_t = \int dx \, \psi^*(x,t) \hat{A} \psi(x,t) = \sum_i |c_i(t)|^2 a_i\)[cite: 3]</p>
+
+        <p><b>4. 波動関数の収縮と縮退（公理4）:</b>[cite: 3]<br>
+        ・測定の瞬間、状態は測定値に対応する固有状態 \(u_n(x)\) へ不可逆的に収縮する[cite: 3]。<br>
+        ・両立する観測量（可換演算子 \([\hat{A}, \hat{B}]=0\)）を順次測定することで、縮退した状態を特定できる[cite: 3]。</p>
+
+        <p><b>5. 時間発展（公理5）:</b>[cite: 3]<br>
+        ・連続的な時間変化はSchrödinger方程式 \(i\hbar \frac{\partial\psi}{\partial t} = \hat{H}\psi\) で記述される[cite: 3]。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p4">← 04 演習8 完全解説</div>
+        <div></div>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+
+  function goTo(id){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === id));
+    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === id));
+    document.getElementById('panels').scrollIntoView({behavior:'smooth', block:'start'});
+    const activeTab = document.querySelector('.tab-btn.active');
+    if(activeTab) activeTab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => goTo(t.dataset.panel)));
+  document.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=> goTo(btn.dataset.goto));
+  });
+</script>
+</body>
+</html>
