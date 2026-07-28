@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>量子力学1A 到達度評価｜公式ヒント付・ステップ別クイズ</title>
+<title>2025年度 量子力学1A 期末対策｜公式ヒント・図選択 6択演習</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -183,7 +183,6 @@ window.MathJax = {
     font-weight:700;
   }
 
-  /* ヒント・公式表示エリア */
   .formula-box{
     background:var(--bg-panel-2);
     border-left:3px solid var(--teal);
@@ -192,6 +191,8 @@ window.MathJax = {
     margin:10px 0 12px;
     font-size:12.5px;
     color:var(--ink-dim);
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
   .formula-box .title{
     color:var(--teal);
@@ -205,88 +206,124 @@ window.MathJax = {
 
   .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); }
 
-  /* ---------- OPTIONS (6択) ---------- */
+  /* ---------- OPTIONS ---------- */
   .options-grid{
     display:flex;
     flex-direction:column;
-    gap:8px;
-    margin:14px 0;
+    gap:10px;
+    margin:16px 0;
   }
   .opt-btn{
     background:var(--bg-panel-2);
-    border:1px solid var(--rule);
-    border-radius:8px;
-    padding:10px 12px;
+    border:1px solid rgba(255, 255, 255, 0.12);
+    border-radius:10px;
+    padding:12px 14px;
     color:var(--ink);
     font-family:"Zen Kaku Gothic New", sans-serif;
-    font-size:13px;
+    font-size:13.5px;
     text-align:left;
     cursor:pointer;
     display:flex;
     align-items:center;
-    gap:10px;
-    transition:background .15s, border-color .15s;
+    gap:12px;
+    transition:all .2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    line-height:1.5;
   }
   .opt-btn:hover:not(:disabled){
     border-color:var(--teal);
-    background:rgba(114,217,196,0.05);
+    background:rgba(114,217,196,0.08);
+    transform:translateY(-1px);
+    box-shadow: 0 4px 10px rgba(114,217,196,0.15);
   }
   .opt-btn .opt-num{
     font-family:"JetBrains Mono", monospace;
-    font-size:11px;
+    font-size:12px;
+    font-weight:700;
     color:var(--teal);
-    background:rgba(114,217,196,0.1);
-    padding:2px 6px;
-    border-radius:4px;
+    background:rgba(114,217,196,0.12);
+    border:1px solid var(--teal-dim);
+    padding:3px 8px;
+    border-radius:6px;
     flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:24px;
+  }
+  .opt-btn .opt-text{
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    overflow-x:auto;
   }
   .opt-btn:disabled{
     cursor:default;
-    opacity:0.7;
+    opacity:0.75;
   }
   
-  /* 正解・不正解スタイル */
   .opt-btn.correct{
     border-color:var(--teal) !important;
-    background:rgba(114,217,196,0.15) !important;
+    background:rgba(114,217,196,0.18) !important;
     opacity:1 !important;
+    box-shadow:0 0 12px rgba(114,217,196,0.3) !important;
   }
   .opt-btn.correct .opt-num{
     background:var(--teal);
     color:var(--bg);
+    border-color:var(--teal);
   }
   .opt-btn.wrong{
     border-color:var(--red) !important;
-    background:rgba(232,111,114,0.15) !important;
+    background:rgba(232,111,114,0.18) !important;
     opacity:1 !important;
+    box-shadow:0 0 12px rgba(232,111,114,0.3) !important;
   }
   .opt-btn.wrong .opt-num{
     background:var(--red);
     color:#fff;
+    border-color:var(--red);
   }
 
-  /* 解説・結果エリア */
+  .opt-fig-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:10px;
+    margin:16px 0;
+  }
+  .opt-btn-fig{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:10px;
+  }
+  .opt-btn-fig .opt-text{
+    flex-direction:column;
+    gap:6px;
+  }
+
   .explain-area{
     display:none;
-    margin-top:14px;
-    padding:12px 14px;
-    border-radius:8px;
-    font-size:13px;
-    line-height:1.6;
+    margin-top:16px;
+    padding:14px 16px;
+    border-radius:10px;
+    font-size:13.5px;
+    line-height:1.65;
     animation:fade .3s ease;
   }
   .explain-area.show{ display:block; }
   .explain-area.is-correct{
     border:1px solid var(--teal);
-    background:rgba(114,217,196,0.06);
+    background:rgba(114,217,196,0.08);
   }
   .explain-area.is-wrong{
     border:1px solid var(--red);
-    background:rgba(232,111,114,0.06);
+    background:rgba(232,111,114,0.08);
   }
   .explain-title{
     font-weight:700;
-    font-size:14px;
+    font-size:14.5px;
     margin-bottom:6px;
     display:flex;
     align-items:center;
@@ -295,14 +332,55 @@ window.MathJax = {
   .is-correct .explain-title{ color:var(--teal); }
   .is-wrong .explain-title{ color:var(--red); }
 
-  .summary-sec{ margin-bottom:20px; }
-  .summary-sec h3{
+  /* ---------- 要点ページ（要点サマリー）横スクロール強化CSS ---------- */
+  .summary-sec{
+    margin-bottom:16px;
+    width: 100%;
+  }
+  .summary-sec h4{
     font-family:"Zen Old Mincho", serif;
     color:var(--gold);
     font-size:15px;
     border-bottom:1px solid var(--gold-dim);
     padding-bottom:4px;
-    margin-bottom:10px;
+    margin:12px 0 8px;
+  }
+  /* 数式を含むブロックを強制横スクロール可能に指定 */
+  .summary-sec p{
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    margin: 6px 0;
+  }
+  .summary-sec p::-webkit-scrollbar {
+    height: 4px;
+  }
+  .summary-sec p::-webkit-scrollbar-thumb {
+    background: var(--teal-dim);
+    border-radius: 4px;
+  }
+
+  /* 横溢れ対策（横スクロール絶対保障） */
+  .eq-wrap{
+    position:relative;
+    margin:12px 0;
+    width:100%;
+  }
+  .eq-scroll{
+    overflow-x:auto !important;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+    max-width:100%;
+  }
+  .eq-scroll::-webkit-scrollbar{ height:4px; }
+  .eq-scroll::-webkit-scrollbar-thumb{ background:var(--teal-dim); border-radius:4px; }
+  .eq-scroll mjx-container, .summary-sec mjx-container{ 
+    color:var(--ink) !important; 
+    max-width:none !important; 
   }
 
   footer.pagenav{
@@ -332,363 +410,252 @@ window.MathJax = {
 <div class="app">
 
   <header class="hero">
-    <div class="eyebrow">Quantum Mechanics 1A — Guided Practice</div>
-    <h1>量子力学1A 演習ナビゲーター</h1>
-    <p class="sub">公式ヒント＋過去問対応ステップで迷わず解ける</p>
+    <div class="eyebrow">Quantum Mechanics 1A — Final Quiz</div>
+    <h1>期末過去問 公式ヒント＆図形選択 演習</h1>
+    <p class="sub">図を直接クリックして選べる直感的な選択式演習シート</p>
   </header>
 
   <nav class="tabs" id="tabs">
-    <button class="tab-btn active" data-panel="p1"><span class="num">[1]</span>波束の重ね合わせ</button>
-    <button class="tab-btn" data-panel="p2"><span class="num">[2]</span>ポテンシャル障壁</button>
-    <button class="tab-btn" data-panel="p3"><span class="num">[3]</span>水素原子と角度解</button>
-    <button class="tab-btn" data-panel="p4"><span class="num">[4]</span>要点まとめシート</button>
+    <button class="tab-btn active" data-panel="p1"><span class="num">[1]</span>大問1：フーリエ変換</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">[2]</span>大問2：障壁散乱</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">[3]</span>大問3：水素原子</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">[4]</span>直前要点確認</button>
   </nav>
 
   <main id="panels">
 
-    <!-- ============ [1] 波束の重ね合わせ ============ -->
+    <!-- ============ 大問1 ============ -->
     <section class="panel active" data-panel="p1">
-      <h2>[1] 波動関数と重み関数（フーリエ変換）</h2>
-      <p class="lead">逆フーリエ変換の定義式を使って、波数空間の表現を空間の波動関数へと変換します。</p>
+      <h2>大問[1] 波動関数のフーリエ変換と重ね合わせ</h2>
+      <p class="lead">重み関数から実空間の波動関数 \(u(x)\) を導出する問題です（PDF 2〜3ページ）[cite: 9]。</p>
 
-      <!-- Step 1 -->
-      <div class="card" id="q1_1">
-        <h3><span class="tag-q">問[1](a)</span><span class="tag-step">Step 1</span>定義式の代入</h3>
-        
+      <!-- Q1(a) -->
+      <div class="card" id="q1a">
+        <h3><span class="tag-q">大問[1](a)</span><span class="tag-step">Q1</span>全波数均一重ね合わせ</h3>
         <div class="formula-box">
-          <span class="title">使用する定義式（問題文より）</span>
-          \[ u(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} d k \, e^{i k x} \hat{u}(k) \]
+          <span class="title">使用する公式と定義</span>
+          \[ u(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} d k \, e^{i k x} \hat{u}(k), \qquad \delta(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} e^{i k x} d k \]
         </div>
-
-        <p>重み関数が \(\hat{u}(k) = \frac{1}{\sqrt{2\pi}}\)（定数）で与えられたとき、上の定義式に代入して整理した積分式はどれか。</p>
+        <p>\(\hat{u}(k) = \frac{1}{\sqrt{2\pi}}\) のときの波動関数 \(u(x)\) として正しいものを選べ[cite: 9]。</p>
         
         <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q1_1', 0)"><span class="opt-num">1</span>\(u(x) = \frac{1}{\pi} \int_{-\infty}^{\infty} d k \, e^{i k x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_1', 1)"><span class="opt-num">2</span>\(u(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} d k \, e^{i k x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_1', 2)"><span class="opt-num">3</span>\(u(x) = \sqrt{2\pi} \int_{-\infty}^{\infty} d k \, e^{i k x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_1', 3)"><span class="opt-num">4</span>\(u(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} d k \, e^{-i k x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_1', 4)"><span class="opt-num">5</span>\(u(x) = \int_{-1}^{1} d k \, e^{i k x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_1', 5)"><span class="opt-num">6</span>\(u(x) = \frac{1}{2\pi}\)</button>
+          <button class="opt-btn" onclick="checkAns('q1a', 0)"><span class="opt-num">1</span><span class="opt-text">\(u(x) = 1\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 1)"><span class="opt-num">2</span><span class="opt-text">\(u(x) = \delta(x)\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 2)"><span class="opt-num">3</span><span class="opt-text">\(u(x) = \frac{1}{\sqrt{2\pi}} e^{i x}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 3)"><span class="opt-num">4</span><span class="opt-text">\(u(x) = \frac{\sin x}{x}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 4)"><span class="opt-num">5</span><span class="opt-text">\(u(x) = \frac{1}{2\pi}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 5)"><span class="opt-num">6</span><span class="opt-text">\(u(x) = 0\)</span></button>
         </div>
 
-        <div class="explain-area" id="q1_1-exp">
+        <div class="explain-area" id="q1a-exp">
           <div class="explain-title"></div>
           <div class="explain-body">
-            \(\hat{u}(k)\) の位置に \(\frac{1}{\sqrt{2\pi}}\) を代入すると、定数項が \(\frac{1}{\sqrt{2\pi}} \times \frac{1}{\sqrt{2\pi}} = \frac{1}{2\pi}\) となり積分の前線へ出ます。
+            正解は **2** です[cite: 9]。\(u(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} e^{ikx} dk = \delta(x)\) となります[cite: 9]。
           </div>
         </div>
       </div>
 
-      <!-- Step 2 -->
-      <div class="card" id="q1_2">
-        <h3><span class="tag-q">問[1](a)</span><span class="tag-step">Step 2</span>デルタ関数の同定</h3>
-        
+      <!-- Q1(b) -->
+      <div class="card" id="q1b">
+        <h3><span class="tag-q">大問[1](b)</span><span class="tag-step">Q2</span>帯域制限 \(-1 \le k \le 1\) の重ね合わせ</h3>
         <div class="formula-box">
-          <span class="title">デルタ関数のフーリエ表現</span>
-          \[ \delta(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{i k x} d k \]
+          <span class="title">使用する公式</span>
+          \[ \int_{-1}^{1} e^{i k x} d k = \frac{2\sin x}{x} \]
         </div>
-
-        <p>Step 1 で得られた式 \(\frac{1}{2\pi} \int_{-\infty}^{\infty} e^{i k x} d k\) の積分結果として正しい表現を選べ。</p>
+        <p>\(\hat{u}(k) = 1 \; (|k| \le 1)\) のときの波動関数 \(u(x)\) として正しいものを選べ[cite: 9]。</p>
         
         <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q1_2', 0)"><span class="opt-num">1</span>\(u(x) = 1\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_2', 1)"><span class="opt-num">2</span>\(u(x) = \delta(x)\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_2', 2)"><span class="opt-num">3</span>\(u(x) = \theta(x)\)（ステップ関数）</button>
-          <button class="opt-btn" onclick="checkAns('q1_2', 3)"><span class="opt-num">4</span>\(u(x) = \infty\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_2', 4)"><span class="opt-num">5</span>\(u(x) = \frac{\sin x}{x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_2', 5)"><span class="opt-num">6</span>\(u(x) = 0\)</button>
+          <button class="opt-btn" onclick="checkAns('q1b', 0)"><span class="opt-num">1</span><span class="opt-text">\(u(x) = \sqrt{\frac{2}{\pi}} \frac{\cos x}{x}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1b', 1)"><span class="opt-num">2</span><span class="opt-text">\(u(x) = \sqrt{\frac{2}{\pi}} \frac{\sin x}{x}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1b', 2)"><span class="opt-num">3</span><span class="opt-text">\(u(x) = \frac{1}{\sqrt{2\pi}} \frac{e^{ix}}{x}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1b', 3)"><span class="opt-num">4</span><span class="opt-text">\(u(x) = \sqrt{\frac{\pi}{2}} \sin x\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1b', 4)"><span class="opt-num">5</span><span class="opt-text">\(u(x) = \frac{2}{\sqrt{2\pi}} \tan x\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1b', 5)"><span class="opt-num">6</span><span class="opt-text">\(u(x) = \delta(x-1)\)</span></button>
         </div>
 
-        <div class="explain-area" id="q1_2-exp">
+        <div class="explain-area" id="q1b-exp">
           <div class="explain-title"></div>
           <div class="explain-body">
-            この積分はディラックのデルタ関数 \(\delta(x)\) そのものです。すべての波数が等しく重なり合うと、原点 \(x=0\) に完全に局所化した状態になります。
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="card" id="q1_3">
-        <h3><span class="tag-q">問[1](b)</span><span class="tag-step">Step 3</span>有限積分の実行</h3>
-        
-        <div class="formula-box">
-          <span class="title">計算のヒント公式</span>
-          \[ \int_{-1}^{1} e^{i k x} d k = \left[ \frac{e^{i k x}}{i x} \right]_{-1}^{1} = \frac{e^{i x} - e^{-i x}}{i x} = \frac{2 \sin x}{x} \]
-        </div>
-
-        <p>\(\hat{u}(k) = 1 \; (|k| \le 1)\) のとき、\(u(x) = \frac{1}{\sqrt{2\pi}} \int_{-1}^{1} e^{i k x} d k\) を計算した最終結果はどれか。</p>
-        
-        <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q1_3', 0)"><span class="opt-num">1</span>\(u(x) = \sqrt{\frac{2}{\pi}} \frac{\cos x}{x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_3', 1)"><span class="opt-num">2</span>\(u(x) = \sqrt{\frac{2}{\pi}} \frac{\sin x}{x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_3', 2)"><span class="opt-num">3</span>\(u(x) = \frac{1}{\sqrt{2\pi}} \frac{e^{ix} + e^{-ix}}{x}\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_3', 3)"><span class="opt-num">4</span>\(u(x) = \sqrt{\frac{\pi}{2}} \sin x\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_3', 4)"><span class="opt-num">5</span>\(u(x) = \frac{2}{\sqrt{2\pi}} \tan x\)</button>
-          <button class="opt-btn" onclick="checkAns('q1_3', 5)"><span class="opt-num">6</span>\(u(x) = \frac{\sin x}{2\pi x}\)</button>
-        </div>
-
-        <div class="explain-area" id="q1_3-exp">
-          <div class="explain-title"></div>
-          <div class="explain-body">
-            オイラーの公式より \(e^{ix} - e^{-ix} = 2i \sin x\) です。係数 \(\frac{1}{\sqrt{2\pi}}\) とあわせて \(\frac{2}{\sqrt{2\pi}} \frac{\sin x}{x} = \sqrt{\frac{2}{\pi}} \frac{\sin x}{x}\) と導かれます。
+            正解は **2** です[cite: 9]。\(\frac{1}{\sqrt{2\pi}} \cdot \frac{2\sin x}{x} = \sqrt{\frac{2}{\pi}} \frac{\sin x}{x}\) と導かれます[cite: 9]。
           </div>
         </div>
       </div>
 
       <footer class="pagenav">
         <div></div>
-        <div class="navbtn next" data-goto="p2">次へ：[2] ポテンシャル障壁 →</div>
+        <div class="navbtn next" data-goto="p2">次へ：大問[2] 障壁散乱 →</div>
       </footer>
     </section>
 
-    <!-- ============ [2] ポテンシャル障壁 ============ -->
+    <!-- ============ 大問2 ============ -->
     <section class="panel" data-panel="p2">
-      <h2>[2] 1次元ポテンシャル障壁の散乱</h2>
-      <p class="lead">高さ \(V_0 = 2E\) の障壁に対する領域別の方程式と境界接続を展開します。</p>
+      <h2>大問[2] 1次元ポテンシャル障壁と散乱</h2>
+      <p class="lead">領域ごとの解と透過確率 \(T\) の導出（PDF 4〜8ページ）[cite: 9]。</p>
 
-      <!-- Step 4 -->
-      <div class="card" id="q2_1">
-        <h3><span class="tag-q">問[2](a)(b)</span><span class="tag-step">Step 4</span>障壁内部の方程式</h3>
-        
+      <!-- Q2(d) -->
+      <div class="card" id="q2d">
+        <h3><span class="tag-q">大問[2](d)</span><span class="tag-step">Q3</span>透過確率 \(T\) の公式</h3>
         <div class="formula-box">
-          <span class="title">領域2 (\(0 \le x \le a\)) のSchrödinger方程式</span>
-          \[ \left[ -\frac{\hbar^2}{2m_e} \frac{d^2}{dx^2} + 2E \right] u(x) = E u(x) \quad \left( k = \frac{\sqrt{2m_e E}}{\hbar} \right) \]
+          <span class="title">定義と双曲線関数の恒等式</span>
+          \[ T = \left|\frac{C}{A_1}\right|^2 = \frac{1}{\cosh^2(ka)}, \qquad \cosh^2(ka) = 1 + \sinh^2(ka) \]
         </div>
+        <p>透過確率 \(T\) として正しい式を選べ[cite: 9]。</p>
 
-        <p>上の式を整理したとき、\( \frac{d^2 u}{dx^2} \) の右辺として正しい形を選べ。</p>
-        
         <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q2_1', 0)"><span class="opt-num">1</span>\(\frac{d^2u}{dx^2} = -k^2 u\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_1', 1)"><span class="opt-num">2</span>\(\frac{d^2u}{dx^2} = k^2 u\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_1', 2)"><span class="opt-num">3</span>\(\frac{d^2u}{dx^2} = 2k^2 u\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_1', 3)"><span class="opt-num">4</span>\(\frac{d^2u}{dx^2} = -2k^2 u\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_1', 4)"><span class="opt-num">5</span>\(\frac{d^2u}{dx^2} = 0\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_1', 5)"><span class="opt-num">6</span>\(\frac{d^2u}{dx^2} = i k u\)</button>
+          <button class="opt-btn" onclick="checkAns('q2d', 0)"><span class="opt-num">1</span><span class="opt-text">\(T = \frac{1}{\sinh^2(ka)}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 1)"><span class="opt-num">2</span><span class="opt-text">\(T = \frac{1}{\cosh^2(ka)} = \frac{1}{1 + \sinh^2(ka)}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 2)"><span class="opt-num">3</span><span class="opt-text">\(T = \tanh^2(ka)\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 3)"><span class="opt-num">4</span><span class="opt-text">\(T = e^{-2ka}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 4)"><span class="opt-num">5</span><span class="opt-text">\(T = \frac{1}{1 + 2\sinh^2(ka)}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 5)"><span class="opt-num">6</span><span class="opt-text">\(T = 0\)</span></button>
         </div>
 
-        <div class="explain-area" id="q2_1-exp">
+        <div class="explain-area" id="q2d-exp">
           <div class="explain-title"></div>
           <div class="explain-body">
-            \(2E u\) を右辺へ移項すると \(E u - 2E u = -E u\) になります。両辺に \(-\frac{2m_e}{\hbar^2}\) を掛けると、右辺は \(+\frac{2m_e E}{\hbar^2} u = k^2 u\) （正の係数）になります。
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 5 -->
-      <div class="card" id="q2_2">
-        <h3><span class="tag-q">問[2](c)</span><span class="tag-step">Step 5</span>\(x=a\) での接続条件</h3>
-        
-        <div class="formula-box">
-          <span class="title">境界条件（値と1階微分の連続）</span>
-          \[ u_2(a) = u_3(a), \quad u'_2(a) = u'_3(a) \]
-          \[ \left[ \text{但し } u_2(x) = B_1 e^{kx} + B_2 e^{-kx}, \quad u_3(x) = C e^{ikx} \right] \]
-        </div>
-
-        <p>\(x=a\) における接続条件から導かれる連立方程式として正しい組を選べ。</p>
-        
-        <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q2_2', 0)"><span class="opt-num">1</span>\(B_1 e^{ka} + B_2 e^{-ka} = C e^{ika}\) かつ \(B_1 e^{ka} - B_2 e^{-ka} = i C e^{ika}\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_2', 1)"><span class="opt-num">2</span>\(B_1 e^{ka} + B_2 e^{-ka} = C\) かつ \(B_1 - B_2 = i C\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_2', 2)"><span class="opt-num">3</span>\(B_1 e^{ika} + B_2 e^{-ika} = C e^{ika}\) かつ \(i(B_1 - B_2) = iC\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_2', 3)"><span class="opt-num">4</span>\(B_1 e^{ka} - B_2 e^{-ka} = C e^{ika}\) かつ \(B_1 e^{ka} + B_2 e^{-ka} = C e^{ika}\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_2', 4)"><span class="opt-num">5</span>\(B_1 + B_2 = C e^{ika}\) かつ \(k(B_1 - B_2) = ikC e^{ika}\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_2', 5)"><span class="opt-num">6</span>\(B_1 e^{ka} = C e^{ika}\) かつ \(B_2 e^{-ka} = 0\)</button>
-        </div>
-
-        <div class="explain-area" id="q2_2-exp">
-          <div class="explain-title"></div>
-          <div class="explain-body">
-            微分式は \(k(B_1 e^{ka} - B_2 e^{-ka}) = ik C e^{ika}\) となり、両辺を共通係数 $k$ で割ることで \(B_1 e^{ka} - B_2 e^{-ka} = i C e^{ika}\) が得られます。
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 6 -->
-      <div class="card" id="q2_3">
-        <h3><span class="tag-q">問[2](d)</span><span class="tag-step">Step 6</span>振幅の比の絶対値2乗</h3>
-        
-        <div class="formula-box">
-          <span class="title">導出された振幅の関係と公式</span>
-          \[ A_1 = C e^{ika} \left[ \cosh(ka) - i \sinh(ka) \right] \]
-          \[ \text{双曲線関数の性質: } \cosh^2 x - \sinh^2 x = 1 \]
-        </div>
-
-        <p>上式から透過確率の分母となる \(\left| \frac{A_1}{C} \right|^2\) を計算した結果を選べ。</p>
-        
-        <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q2_3', 0)"><span class="opt-num">1</span>\(1 + \sinh^2(ka)\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_3', 1)"><span class="opt-num">2</span>\(1 + 2\sinh^2(ka)\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_3', 2)"><span class="opt-num">3</span>\(\cosh(2ka)\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_3', 3)"><span class="opt-num">4</span>\(1 - 2\sinh^2(ka)\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_3', 4)"><span class="opt-num">5</span>\(1 + 4\sinh^2(ka)\)</button>
-          <button class="opt-btn" onclick="checkAns('q2_3', 5)"><span class="opt-num">6</span>\(e^{2ka}\)</button>
-        </div>
-
-        <div class="explain-area" id="q2_3-exp">
-          <div class="explain-title"></div>
-          <div class="explain-body">
-            \(|e^{ika}|^2 = 1\) であり、\(|\cosh(ka) - i\sinh(ka)|^2 = \cosh^2(ka) + \sinh^2(ka)\) となります。\(\cosh^2(ka) = 1 + \sinh^2(ka)\) を代入すれば \(1 + 2\sinh^2(ka)\) と計算できます。
+            正解は **2** です[cite: 9]。\(|A_1/C|^2 = \cosh^2(ka)\) より \(T = \frac{1}{1+\sinh^2(ka)}\) となります[cite: 9]。
           </div>
         </div>
       </div>
 
       <footer class="pagenav">
-        <div class="navbtn prev" data-goto="p1">← [1] 波束</div>
-        <div class="navbtn next" data-goto="p3">次へ：[3] 水素原子 →</div>
+        <div class="navbtn prev" data-goto="p1">← 大問[1] フーリエ変換</div>
+        <div class="navbtn next" data-goto="p3">次へ：大問[3] 水素原子 →</div>
       </footer>
     </section>
 
-    <!-- ============ [3] 水素原子と角度解 ============ -->
+    <!-- ============ 大問3 ============ -->
     <section class="panel" data-panel="p3">
-      <h2>[3] 3次元中心力場と水素原子</h2>
-      <p class="lead">角度依存関数 \(\Phi(\phi)\), \(Y_{l,m}\) および動径関数 \(\chi(r)\) の限界挙動です。</p>
+      <h2>大問[3] 3次元中心力ポテンシャルと水素原子</h2>
+      <p class="lead">角度解 \(Y_{2,0}\) の図選択問題と動径関数の極限解析（PDF 10〜15ページ）[cite: 9]。</p>
 
-      <!-- Step 7 -->
-      <div class="card" id="q3_1">
-        <h3><span class="tag-q">問[3](a)〜(c)</span><span class="tag-step">Step 7</span>方位角関数 \(\Phi(\phi)\) の決定</h3>
-        
+      <!-- Q3(e) 図形選択ボタン問題 -->
+      <div class="card" id="q3e">
+        <h3><span class="tag-q">大問[3](e)</span><span class="tag-step">Q4</span>\(|Y_{2,0}|\) の概形選択（図をクリック）</h3>
         <div class="formula-box">
-          <span class="title">条件式</span>
-          \[ \text{微分方程式: } \frac{d\Phi}{d\phi} = i m \Phi \implies \text{一般解: } \Phi(\phi) = C e^{im\phi} \]
-          \[ \text{周期条件: } \Phi(\phi+2\pi) = \Phi(\phi), \quad \text{規格化: } \int_0^{2\pi} |\Phi(\phi)|^2 d\phi = 1 \]
+          <span class="title">導出された関数形と節の判定</span>
+          \[ |Y_{2,0}(\theta)| \propto |3\cos^2\theta - 1| \]
+          \[ z\text{軸上 } (\theta=0, \pi) \to 2 \, (\text{最大}), \quad x\text{軸上 } (\theta=\pi/2) \to 1, \quad \theta \approx 54.7^\circ \to 0 \, (\text{節円錐}) \]
+        </div>
+        <p>\(x-z\) 平面における \(|Y_{2,0}|\) の概形として正しい図形を選べ（PDF問題のア〜オより）[cite: 9]。</p>
+
+        <div class="opt-fig-grid">
+          <button class="opt-btn opt-btn-fig" onclick="checkAns('q3e', 0)">
+            <span class="opt-num">(ア)</span>
+            <span class="opt-text">
+              <svg width="70" height="70" viewBox="-40 -40 80 80"><path d="M0,0 C20,20 30,30 20,0 C30,-30 20,-20 0,0 C-20,-20 -30,-30 -20,0 C-30,30 -20,20 0,0" fill="none" stroke="#72d9c4" stroke-width="1.8"/></svg>
+              <span>4つ葉クローバー</span>
+            </span>
+          </button>
+          
+          <button class="opt-btn opt-btn-fig" onclick="checkAns('q3e', 1)">
+            <span class="opt-num">(イ)</span>
+            <span class="opt-text">
+              <svg width="70" height="70" viewBox="-40 -40 80 80"><circle cx="0" cy="0" r="22" fill="none" stroke="#72d9c4" stroke-width="1.8"/></svg>
+              <span>完全な真円</span>
+            </span>
+          </button>
+
+          <button class="opt-btn opt-btn-fig" onclick="checkAns('q3e', 2)">
+            <span class="opt-num">(ウ)</span>
+            <span class="opt-text">
+              <svg width="70" height="70" viewBox="-40 -40 80 80"><path d="M0,0 C12,-8 12,-30 0,-30 C-12,-30 -12,-8 0,0 C12,8 12,30 0,30 C-12,30 -12,8 0,0" fill="none" stroke="#72d9c4" stroke-width="1.8"/></svg>
+              <span>上下ダンベル</span>
+            </span>
+          </button>
+
+          <button class="opt-btn opt-btn-fig" onclick="checkAns('q3e', 3)">
+            <span class="opt-num">(エ)</span>
+            <span class="opt-text">
+              <svg width="70" height="70" viewBox="-40 -40 80 80"><path d="M0,0 C-8,12 -30,12 -30,0 C-30,-12 -8,-12 0,0 C8,12 30,12 30,0 C30,-12 8,-12 0,0" fill="none" stroke="#72d9c4" stroke-width="1.8"/></svg>
+              <span>左右ダンベル</span>
+            </span>
+          </button>
+
+          <button class="opt-btn opt-btn-fig" onclick="checkAns('q3e', 4)">
+            <span class="opt-num">(オ)</span>
+            <span class="opt-text">
+              <svg width="70" height="70" viewBox="-40 -40 80 80"><path d="M0,0 C10,-8 10,-30 0,-30 C-10,-30 -10,-8 0,0 C10,8 10,30 0,30 C-10,30 -10,8 0,0 M0,0 C14,-4 18,4 0,0 C-14,-4 -18,4 0,0" fill="none" stroke="#72d9c4" stroke-width="2"/></svg>
+              <span>\(d_{z^2}\) 型（主葉＋リング）</span>
+            </span>
+          </button>
         </div>
 
-        <p>条件をすべて満たす規格化済み関数 \(\Phi(\phi)\) として正しいものを選べ。</p>
-        
-        <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q3_1', 0)"><span class="opt-num">1</span>\(\Phi(\phi) = \frac{1}{2\pi} e^{im\phi}\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_1', 1)"><span class="opt-num">2</span>\(\Phi(\phi) = \frac{1}{\sqrt{2\pi}} e^{im\phi} \quad (m \in \mathbb{Z})\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_1', 2)"><span class="opt-num">3</span>\(\Phi(\phi) = \sqrt{2\pi} \cos(m\phi)\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_1', 3)"><span class="opt-num">4</span>\(\Phi(\phi) = \frac{1}{\sqrt{\pi}} e^{i m \phi/2}\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_1', 4)"><span class="opt-num">5</span>\(\Phi(\phi) = \frac{1}{\sqrt{2\pi}} e^{m\phi}\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_1', 5)"><span class="opt-num">6</span>\(\Phi(\phi) = \frac{1}{2} e^{im\phi}\)</button>
-        </div>
-
-        <div class="explain-area" id="q3_1-exp">
+        <div class="explain-area" id="q3e-exp">
           <div class="explain-title"></div>
           <div class="explain-body">
-            \(e^{im2\pi} = 1\) より \(m\) は整数。\(|C|^2 \int_0^{2\pi} d\phi = 2\pi |C|^2 = 1 \implies C = \frac{1}{\sqrt{2\pi}}\) と決定されます。
+            正解は **(オ)** です[cite: 9]。上下(\(z\)軸方向)に最も大きく伸び、中央(\(xy\)平面付近)にも小さなリング状の膨らみを持つ \(d_{z^2}\) 軌道特有の形状となります[cite: 9]。
           </div>
         </div>
       </div>
 
-      <!-- Step 8 -->
-      <div class="card" id="q3_2">
-        <h3><span class="tag-q">問[3](d)(e)</span><span class="tag-step">Step 8</span>球面調和関数のノード評価</h3>
-        
+      <!-- Q3(g) -->
+      <div class="card" id="q3g">
+        <h3><span class="tag-q">大問[3](g)</span><span class="tag-step">Q5</span>動径関数の原点極限 \(r \to 0\)</h3>
         <div class="formula-box">
-          <span class="title">球面調和関数 \(Y_{2,0}\) の形</span>
-          \[ Y_{2,0}(\theta) = \sqrt{\frac{5}{16\pi}} (3\cos^2\theta - 1) \]
+          <span class="title">支配的な Euler型方程式と試行解</span>
+          \[ \frac{d^2\chi}{dr^2} - \frac{l(l+1)}{r^2}\chi = 0 \implies \chi(r) = r^s \implies s(s-1) - l(l+1) = 0 \]
         </div>
+        <p>原点での発散を防ぐ境界条件を満たす解 \(\chi(r)\) として正しい形を選べ[cite: 9]。</p>
 
-        <p>\(Y_{2,0}\) の形と節（ゼロ点）に関する記述のうち正しいものを選べ。</p>
-        
         <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q3_2', 0)"><span class="opt-num">1</span>\(\theta = 0\) で0となり、z軸方向には電子が存在しない。</button>
-          <button class="opt-btn" onclick="checkAns('q3_2', 1)"><span class="opt-num">2</span>z軸方向（\(\theta=0, \pi\)）で最大値を持ち、\(\cos\theta = \pm 1/\sqrt{3}\) でゼロとなる（ウ：\(d_{z^2}\) 型）。</button>
-          <button class="opt-btn" onclick="checkAns('q3_2', 2)"><span class="opt-num">3</span>xy平面（\(\theta=\pi/2\)）で最大値を持ち、球対称な球状となる。</button>
-          <button class="opt-btn" onclick="checkAns('q3_2', 3)"><span class="opt-num">4</span>すべての角度 \(\theta\) で一定の値をとる。</button>
-          <button class="opt-btn" onclick="checkAns('q3_2', 4)"><span class="opt-num">5</span>節（ゼロ点）を全く持たない。</button>
-          <button class="opt-btn" onclick="checkAns('q3_2', 5)"><span class="opt-num">6</span>x軸とy軸の4方向に等しくローブが伸びる。</button>
+          <button class="opt-btn" onclick="checkAns('q3g', 0)"><span class="opt-num">1</span><span class="opt-text">\(\chi(r) \propto r^{-l}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3g', 1)"><span class="opt-num">2</span><span class="opt-text">\(\chi(r) \propto r^{l+1}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3g', 2)"><span class="opt-num">3</span><span class="opt-text">\(\chi(r) \propto r^l\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3g', 3)"><span class="opt-num">4</span><span class="opt-text">\(\chi(r) \propto e^{-\alpha r}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3g', 4)"><span class="opt-num">5</span><span class="opt-text">\(\chi(r) \propto \frac{1}{r}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3g', 5)"><span class="opt-num">6</span><span class="opt-text">\(\chi(r) \propto r^{2l}\)</span></button>
         </div>
 
-        <div class="explain-area" id="q3_2-exp">
+        <div class="explain-area" id="q3g-exp">
           <div class="explain-title"></div>
           <div class="explain-body">
-            \(\cos\theta = \pm 1\) で最大値 \(3(1)-1=2\) となり、\(3\cos^2\theta - 1 = 0 \implies \cos\theta = \pm 1/\sqrt{3}\)（約 \(54.7^\circ\)）の円錐方向でゼロ点（節）となります。これが $d_{z^2}$ 軌道の特性です。
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 9 -->
-      <div class="card" id="q3_3">
-        <h3><span class="tag-q">問[3](f)</span><span class="tag-step">Step 9</span>遠方極限 \(r \to \infty\) の物理的選択</h3>
-        
-        <div class="formula-box">
-          <span class="title">遠方極限の方程式と一般解 (\(E < 0\))</span>
-          \[ \frac{d^2\chi}{dr^2} = \beta^2 \chi \quad \left( \beta = \frac{\sqrt{-2m_e E}}{\hbar} > 0 \right) \implies \chi(r) = C_1 e^{-\beta r} + C_2 e^{\beta r} \]
-        </div>
-
-        <p>物理的な束縛条件（\(r \to \infty\) で \(\chi(r) \to 0\)）を満たす正解を選べ。</p>
-        
-        <div class="options-grid">
-          <button class="opt-btn" onclick="checkAns('q3_3', 0)"><span class="opt-num">1</span>\(\chi(r) \propto e^{\beta r}\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_3', 1)"><span class="opt-num">2</span>\(\chi(r) \propto e^{-\beta r}\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_3', 2)"><span class="opt-num">3</span>\(\chi(r) \propto \cos(\beta r)\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_3', 3)"><span class="opt-num">4</span>\(\chi(r) \propto \frac{1}{r^2}\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_3', 4)"><span class="opt-num">5</span>\(\chi(r) \propto r^{\beta}\)</button>
-          <button class="opt-btn" onclick="checkAns('q3_3', 5)"><span class="opt-num">6</span>\(\chi(r) \propto e^{-i \beta r}\)</button>
-        </div>
-
-        <div class="explain-area" id="q3_3-exp">
-          <div class="explain-title"></div>
-          <div class="explain-body">
-            波動関数が遠方で無限大へ発散しないため \(C_2 = 0\) となり、指数関数的に減衰する \(e^{-\beta r}\) 項のみが残ります。
+            正解は **2** です[cite: 9]。\(s = l+1, -l\) のうち \(r \to 0\) で有限にとどまる正の冪指数 \(s = l+1\) つまり \(\chi(r) \propto r^{l+1}\) が選択されます[cite: 9]。
           </div>
         </div>
       </div>
 
       <footer class="pagenav">
-        <div class="navbtn prev" data-goto="p2">← [2] 障壁</div>
-        <div class="navbtn next" data-goto="p4">次へ：要点まとめシート →</div>
+        <div class="navbtn prev" data-goto="p2">← 大問[2] 障壁散乱</div>
+        <div class="navbtn next" data-goto="p4">次へ：直前要点確認 →</div>
       </footer>
     </section>
 
-    <!-- ============ [4] 要点まとめシート ============ -->
+    <!-- ============ 直前要点確認タブ (CSS強化) ============ -->
     <section class="panel" data-panel="p4">
-      <h2>期末試験 要点・公式復習シート</h2>
-      <p class="lead">試験で出題されるメインテーマと重要公式の一覧です。</p>
+      <h2>期末試験 直前要点サマリー</h2>
+      <p class="lead">試験直前に全体の答えと重要公式を一目で総復習できるシート（横スクロール強化版）です。</p>
 
-      <!-- [1] の要点 -->
       <div class="card">
-        <h3><span class="tag-q">問[1] まとめ</span>波動関数とフーリエ変換</h3>
+        <h3><span class="tag gold">要点 1</span>大問[1] フーリエ変換の要点</h3>
         <div class="summary-sec">
-          <p><b>1. 逆フーリエ変換の基本公式:</b></p>
-          <p>\[ u(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} d k \, e^{i k x} \hat{u}(k) \]</p>
-          <p><b>2. ディラックのデルタ関数 \(\delta(x)\) のフーリエ表現:</b></p>
-          <p>\[ \delta(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{i k x} d k \]</p>
-          <p class="dim">★あらゆる波数が等しい重み（\(\hat{u}(k)=\text{定数}\)）で重なると、実空間では完全局所化したデルタ関数になる。</p>
-          <p><b>3. 矩形波束の変換（Sinc関数）:</b></p>
-          <p>波数幅が \(|k| \le 1\) に限られるとき、波動関数は \(u(x) = \sqrt{\frac{2}{\pi}} \frac{\sin x}{x}\) となる。</p>
+          <h4>(a) あらゆる波数の等割合重ね合わせ</h4>
+          <p>\[ u(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} e^{ikx} dk \implies \mathbf{u(x) = \delta(x)} \quad (\text{原点に完全局所化}) \]</p>
+          <h4>(b) 帯域制限 \(-1 \le k \le 1\) の重ね合わせ</h4>
+          <p>\[ u(x) = \frac{1}{\sqrt{2\pi}}\int_{-1}^1 e^{ikx} dk = \mathbf{\sqrt{\frac{2}{\pi}}\frac{\sin x}{x}} \quad (\text{Sinc関数型}) \]</p>
         </div>
       </div>
 
-      <!-- [2] の要点 -->
       <div class="card">
-        <h3><span class="tag-q">問[2] まとめ</span>1次元ポテンシャル障壁とトンネル効果</h3>
+        <h3><span class="tag gold">要点 2</span>大問[2] 1次元障壁散乱 (\(V_0 = 2E\)) の要点</h3>
         <div class="summary-sec">
-          <p><b>1. 領域ごとの解の型 (\(V_0 = 2E > E\)):</b></p>
-          <p>・障壁の外 (\(V=0\)): 振動解 \(e^{\pm i k x}\) （但し \(k = \frac{\sqrt{2m_e E}}{\hbar}\)）<br>
-          ・障壁の内部 (\(V=2E\)): 減衰/増大解 \(e^{\pm k x}\) （実数指数）</p>
-
-          <p><b>2. 境界接続（滑らかな接続）:</b></p>
-          <p>境界 \(x=0, a\) において、<b>① 波動関数の値 \(u(x)\) の連続</b>、<b>② 1階微分 \(u'(x)\) の連続</b> を課す。</p>
-
-          <p><b>3. 透過率 \(T\) と反射率 \(R\) の公式:</b></p>
-          <p>\[ T = \left|\frac{C}{A_1}\right|^2 = \frac{1}{1 + 2\sinh^2(ka)}, \quad R = \left|\frac{A_2}{A_1}\right|^2 = \frac{2\sinh^2(ka)}{1 + 2\sinh^2(ka)} \]</p>
+          <h4>透過率・反射率公式</h4>
+          <p>\[ \mathbf{T = \frac{1}{\cosh^2(ka)} = \frac{1}{1 + \sinh^2(ka)}}, \qquad \mathbf{R = \tanh^2(ka) = \frac{\sinh^2(ka)}{\cosh^2(ka)}} \quad (T+R=1) \]</p>
         </div>
       </div>
 
-      <!-- [3] の要点 -->
       <div class="card">
-        <h3><span class="tag-q">問[3] まとめ</span>3次元水素原子と球面調和関数</h3>
+        <h3><span class="tag gold">要点 3</span>大問[3] 水素原子と球面調和関数の要点</h3>
         <div class="summary-sec">
-          <p><b>1. 方位角関数 \(\Phi(\phi)\):</b></p>
-          <p>・方程式: \(\frac{d\Phi}{d\phi} = i m \Phi \implies \Phi(\phi) = \frac{1}{\sqrt{2\pi}} e^{im\phi}\)<br>
-          ・周期境界条件 \(\Phi(\phi+2\pi)=\Phi(\phi)\) より、磁気量子数 \(m\) は<b>整数</b>。</p>
-
-          <p><b>2. 球面調和関数 \(Y_{l,m}(\theta, \phi)\) の形状:</b></p>
-          <p>・\((l,m) = (2,0)\) のとき: \(Y_{2,0}(\theta) = \sqrt{\frac{5}{16\pi}} (3\cos^2\theta - 1)\)<br>
-          ・形状: <b>\(d_{z^2}\) 軌道</b>。z軸方向（\(\theta=0, \pi\)）に主ローブ、\(\theta \approx 54.7^\circ\) に節（ゼロ点円錐）を持つ。</p>
-
-          <p><b>3. 動径関数 \(\chi(r) = r R(r)\) の極限挙動:</b></p>
-          <p>・<b>遠方極限 (\(r \to \infty\)):</b> 束縛条件 (\(E < 0\)) より指数減衰 \(\chi(r) \propto e^{-\beta r}\) （\(\beta = \frac{\sqrt{-2m_e E}}{\hbar}\)）。<br>
-          ・<b>原点極限 (\(r \to 0\)):</b> 遠心力ポテンシャル項が支配的となり \(\chi(r) \propto r^{l+1}\) （即ち \(R(r) \propto r^l\)）。</p>
+          <h4>角度解と動径関数の極限</h4>
+          <p>・\(\Phi(\phi) = \mathbf{\frac{1}{\sqrt{2\pi}}e^{im\phi}}\), \quad \(Y_{2,0}(\theta) = \mathbf{\sqrt{\frac{5}{16\pi}}(3\cos^2\theta - 1)}\) \(\to\) 概形: **(オ)** (\(d_{z^2}\)型)</p>
+          <p>・遠方極限 (\(r \to \infty\)): \(\mathbf{\chi(r) \propto e^{-\alpha r}}\) \(\left(\alpha = \frac{\sqrt{-2m_e E}}{\hbar}\right)\)<br>
+          ・原点極限 (\(r \to 0\)): \(\mathbf{\chi(r) \propto r^{l+1}}\)</p>
         </div>
       </div>
 
       <footer class="pagenav">
-        <div class="navbtn prev" data-goto="p3">← [3] 水素原子</div>
+        <div class="navbtn prev" data-goto="p3">← 大問[3] 水素原子</div>
         <div></div>
       </footer>
     </section>
@@ -697,27 +664,21 @@ window.MathJax = {
 </div>
 
 <script>
-  // 正解インデックスデータベース
   const answers = {
-    'q1_1': 1, // index 1 (1/2pi)
-    'q1_2': 1, // index 1 (delta)
-    'q1_3': 1, // index 1 (sqrt(2/pi) sin(x)/x)
-    'q2_1': 1, // index 1 (k^2 u)
-    'q2_2': 0, // index 0
-    'q2_3': 1, // index 1 (1 + 2sinh^2)
-    'q3_1': 1, // index 1
-    'q3_2': 1, // index 1 (z軸最大 & d_z^2)
-    'q3_3': 1  // index 1 (exp(-beta r))
+    'q1a': 1, // index 1 (delta)
+    'q1b': 1, // index 1 (sqrt(2/pi) sin(x)/x)
+    'q2d': 1, // index 1 (1 / (1 + sinh^2))
+    'q3e': 4, // index 4 (オ: d_z^2型)
+    'q3g': 1  // index 1 (r^{l+1})
   };
 
   function checkAns(qId, selectedIdx) {
     const card = document.getElementById(qId);
-    const buttons = card.querySelectorAll('.opt-btn');
+    const buttons = card.querySelectorAll('.opt-btn, .opt-btn-fig');
     const expArea = document.getElementById(qId + '-exp');
     const expTitle = expArea.querySelector('.explain-title');
     const correctIdx = answers[qId];
 
-    // 全ボタンを無効化
     buttons.forEach((btn, idx) => {
       btn.disabled = true;
       if (idx === correctIdx) {
@@ -727,7 +688,6 @@ window.MathJax = {
       }
     });
 
-    // 判定と解説表示
     expArea.classList.add('show');
     if (selectedIdx === correctIdx) {
       expArea.classList.add('is-correct');
@@ -737,27 +697,65 @@ window.MathJax = {
       expTitle.innerHTML = '<span>不正解...</span>';
     }
 
-    // MathJaxの再レンダリング処理
     if (window.MathJax && window.MathJax.typesetPromise) {
       MathJax.typesetPromise([expArea]);
     }
   }
 
-  // タブ切り替え処理
-  const tabs = document.querySelectorAll('.tab-btn');
-  const panels = document.querySelectorAll('.panel');
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
 
-  function goTo(id){
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === id));
-    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === id));
-    document.getElementById('panels').scrollIntoView({behavior:'smooth', block:'start'});
-    const activeTab = document.querySelector('.tab-btn.active');
-    if(activeTab) activeTab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-  }
+    function goTo(id) {
+      tabs.forEach(function(t) {
+        if (t.getAttribute('data-panel') === id) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
 
-  tabs.forEach(t => t.addEventListener('click', () => goTo(t.dataset.panel)));
-  document.querySelectorAll('[data-goto]').forEach(btn=>{
-    btn.addEventListener('click', ()=> goTo(btn.dataset.goto));
+      panels.forEach(function(p) {
+        if (p.getAttribute('data-panel') === id) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      const mainContainer = document.getElementById('panels');
+      if (mainContainer) {
+        mainContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      const activeTab = document.querySelector('.tab-btn.active');
+      if (activeTab) {
+        activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        const targetPanel = this.getAttribute('data-panel');
+        if (targetPanel) {
+          goTo(targetPanel);
+        }
+      });
+    });
+
+    const navBtns = document.querySelectorAll('[data-goto]');
+    navBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const targetPanel = this.getAttribute('data-goto');
+        if (targetPanel) {
+          goTo(targetPanel);
+        }
+      });
+    });
   });
 </script>
 </body>
