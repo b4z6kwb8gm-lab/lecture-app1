@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>第10講｜中心力場と角運動量の量子化 体系的解説ノート</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:560px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:24px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 12px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card h3 .tag.gold{
+    background:var(--gold);
+  }
+  .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  .eq-wrap{
+    position:relative;
+    margin:12px 0;
+  }
+  .eq-scroll{
+    overflow-x:auto;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .eq-scroll mjx-container{ color:var(--ink) !important; }
+
+  .insight{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .note{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--teal-dim);
+    background:rgba(114,217,196,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;
+    color:var(--ink-dim);
+  }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics — Lecture 10 Guide</div>
+    <h1>中心力場と角運動量の量子化</h1>
+    <p class="sub">両立する可観測量、極座標での変数分離、磁気量子数の導出</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>両立する物理量</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>中心力場と変数分離</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>方位角と磁気量子数</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>演習9＆極座標微分</button>
+    <button class="tab-btn" data-panel="p5"><span class="num">05</span>要点まとめ</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ 01 両立する物理量 ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>01 両立する物理量（可換演算子と共通固有状態）</h2>
+      <p class="lead">なぜ交換関係 \([\hat{A}, \hat{B}] = 0\) が同時に測定可能（両立）であることと等価なのかの論理証明。</p>
+
+      <div class="card">
+        <h3><span class="tag">理論証明</span>可換演算子が共通固有状態を持つ条件 [p.2]</h3>
+        <p>交換関係 \([\hat{A}, \hat{B}] = \hat{A}\hat{B} - \hat{B}\hat{A} = 0\) を満たす2つのエルミート演算子 \(\hat{A}, \hat{B}\) を考える[cite: 4]。演算子 \(\hat{A}\) の固有状態を \(u_i(x)\) （固有値 \(a_i\)）とすると[cite: 4]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\hat{A} u_i(x) = a_i u_i(x)\]
+          </div>
+        </div>
+        <p>この両辺に左から演算子 \(\hat{B}\) を作用させる[cite: 4]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\hat{B} \hat{A} u_i(x) = a_i \hat{B} u_i(x)\]
+          </div>
+        </div>
+        <p>ここで \([\hat{A}, \hat{B}] = 0 \iff \hat{B}\hat{A} = \hat{A}\hat{B}\) であることを用いて左辺を書き換える[cite: 4]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\hat{A} \left[ \hat{B} u_i(x) \right] = a_i \left[ \hat{B} u_i(x) \right]\]
+          </div>
+        </div>
+        <p>この式は、状態 \(\hat{B}u_i(x)\) もまた演算子 \(\hat{A}\) の固有値 \(a_i\) に属する固有状態であることを示している[cite: 4]！</p>
+        
+        <p>固有値 \(a_i\) に縮退がない（非縮退）と仮定すると、\(a_i\) に属する固有状態は定数倍を除いてただ1つに定まるため、\(\hat{B}u_i(x)\) は \(u_i(x)\) の定数倍でなければならない[cite: 4]：</p>
+        <div class="note">
+          \[\hat{B} u_i(x) = b_i u_i(x) \qquad (b_i \text{ は定数})\]
+        </div>
+        <p>したがって、\(u_i(x)\) は \(\hat{A}\) と \(\hat{B}\) の**共通固有状態**であることが証明された[cite: 4]。共通の固有状態を持つ物理量は「**両立する物理量（同時観測可能）**」と呼ばれる[cite: 4]。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：02 中心力場と変数分離 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 02 中心力場と変数分離 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>02 中心力ポテンシャルと極座標での変数分離</h2>
+      <p class="lead">ハミルトニアンと角運動量演算子の可換性、および 3 次元極座標系での方程式の分離。</p>
+
+      <div class="card">
+        <h3><span class="tag">中心力場</span>ハミルトニアンと角運動量演算子 [p.3]</h3>
+        <p>ポテンシャルが距離 \(r\) のみに依存する中心力場 \(V = V(r)\) （例：水素原子）では、3次元極座標 \((r, \theta, \phi)\) を用いる[cite: 4]。ハミルトニアン \(\hat{H}\) は全角運動量 2 乗演算子 \(\hat{L}^2\) を用いて次のように表される[cite: 4]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\hat{H} = -\frac{\hbar^2}{2m}\nabla^2 + V(r) = -\frac{\hbar^2}{2m}\left[ \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 \frac{\partial}{\partial r}\right) - \frac{\hat{L}^2(\theta,\phi)}{\hbar^2 r^2} \right] + V(r)\]
+          </div>
+        </div>
+        <p>ここで全角運動量 2 乗演算子 \(\hat{L}^2\) および \(z\) 成分演算子 \(\hat{L}_z\) の極座標表示は[cite: 4]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\hat{L}^2 = -\hbar^2 \left[ \frac{1}{\sin\theta}\frac{\partial}{\partial\theta}\left(\sin\theta \frac{\partial}{\partial\theta}\right) + \frac{1}{\sin^2\theta}\frac{\partial^2}{\partial\phi^2} \right], \quad \hat{L}_z = -i\hbar \frac{\partial}{\partial\phi}\]
+          </div>
+        </div>
+        <p>演算子間の可換性を確認すると[cite: 4]：</p>
+        <div class="note">
+          \[[\hat{H}, \hat{L}^2] = 0, \quad [\hat{L}^2, \hat{L}_z] = 0, \quad [\hat{H}, \hat{L}_z] = 0\]
+        </div>
+        <p>これら 3 つの演算子はすべて互いに可換であり**両立する**ため、エネルギー \(E\)、角運動量 2 乗の固有値 \(\hbar^2\lambda\)、\(z\) 成分の固有値 \(\hbar m_l\) に対する**同時固有状態** \(u(r,\theta,\phi)\) を持つ[cite: 4]。

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>第11講｜角運動量の量子化と球面調和関数 体系的解説ノート</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:560px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:24px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 12px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card h3 .tag.gold{
+    background:var(--gold);
+  }
+  .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  .eq-wrap{
+    position:relative;
+    margin:12px 0;
+  }
+  .eq-scroll{
+    overflow-x:auto;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .eq-scroll mjx-container{ color:var(--ink) !important; }
+
+  .insight{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .note{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--teal-dim);
+    background:rgba(114,217,196,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;
+    color:var(--ink-dim);
+  }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics — Lecture 11 Guide</div>
+    <h1>角運動量の量子化と球面調和関数</h1>
+    <p class="sub">Legendre陪微分方程式、軌道量子数、球面調和関数の体系化</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>Legendre方程式</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>陪多項式と量子化</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>球面調和関数</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>演習10＆付録解説</button>
+    <button class="tab-btn" data-panel="p5"><span class="num">05</span>要点まとめ</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ 01 Legendre方程式 ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>01 \(\Theta(\theta)\) の微分方程式と Legende多項式</h2>
+      <p class="lead">極角 \(\theta\) に関する微分方程式の変数変換 \(x = \cos\theta\) から Legendre多項式の導出まで。</p>
+
+      <div class="card">
+        <h3><span class="tag">変数変換</span>\(x = \cos\theta\) による代数方程式への変換 [p.2]</h3>
+        <p>第10講で得られた \(\Theta(\theta)\) に関する微分方程式は以下の通りである[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\left[ \frac{1}{\sin\theta}\frac{d}{d\theta}\left(\sin\theta \frac{d}{d\theta}\right) + \lambda - \frac{m_l^2}{\sin^2\theta} \right] \Theta(\theta) = 0\]
+          </div>
+        </div>
+        <p>ここで変数変換 \(x = \cos\theta\) （\(\Theta(\theta) = f(x)\)）を行う[cite: 5]。合成関数の微分公式より[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\frac{d x}{d\theta} = -\sin\theta \implies \frac{d}{d\theta} = -\sin\theta \frac{d}{dx}\]
+          </div>
+        </div>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\frac{d^2}{d\theta^2} = \frac{d}{d\theta}\left(-\sin\theta \frac{d}{dx}\right) = -\cos\theta \frac{d}{dx} + \sin^2\theta \frac{d^2}{dx^2}\]
+          </div>
+        </div>
+        <p>これらを整理して展開すると、**Legendreの陪微分方程式**を得る[cite: 5]：</p>
+        <div class="note">
+          \[\left[ (1 - x^2)\frac{d^2}{dx^2} - 2x\frac{d}{dx} + \lambda - \frac{m_l^2}{1 - x^2} \right] f(x) = 0\]
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">\(m_l = 0\)</span>Legendre微分方程式と \(\lambda = l(l+1)\) [p.3, 4]</h3>
+        <p>\(m_l = 0\) の場合、方程式は通常の **Legendre（ルジャンドル）の微分方程式** となる[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[(1 - x^2)\frac{d^2 f}{dx^2} - 2x \frac{df}{dx} + \lambda f(x) = 0\]
+          </div>
+        </div>
+        <p>冪級数 \(f(x) = \sum_{n=0}^{\infty} a_n x^n\) を代入して整理すると、漸化式を得る[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[a_{n+2} = \frac{n(n+1) - \lambda}{(n+2)(n+1)} a_n\]
+          </div>
+        </div>
+        <p>大極限 \(n \gg 1\) では \(a_{n+2} \approx a_n\) となり、\(f(x)\) は \(\sum x^{2k} \sim \frac{1}{1-x^2}\) のように振る舞うため、端点 \(x = \pm 1\) （\(\theta = 0, \pi\)）で発散してしまう[cite: 5]。物理的に有限な値にとどまるため、級数は有限の次数 \(n = l\) で打ち切られなければならない[cite: 5]：</p>
+        <div class="note">
+          \[l(l+1) - \lambda = 0 \implies \lambda = l(l+1) \quad (l = 0, 1, 2, \dots)\]
+        </div>
+        <p>この打ち切り条件により定義される多項式解が **Legendre多項式 \(P_l(x)\)** であり、Rodrigues（ロドリゲス）の公式で表される[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[P_l(x) = \frac{1}{2^l l!} \frac{d^l}{dx^l} (x^2 - 1)^l\]
+          </div>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：02 陪多項式と量子化 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 02 陪多項式と量子化 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>02 Legendre陪多項式と角運動量の量子化</h2>
+      <p class="lead">\(m_l \neq 0\) での端点特異性の分離と、角運動量の大きさおよび \(z\) 成分の量子化条件。</p>
+
+      <div class="card">
+        <h3><span class="tag">\(m_l \neq 0\)</span>端点特異性の回避と陪多項式 [p.5, 6]</h3>
+        <p>\(m_l \neq 0\)（簡略化のため \(m_l = m\)）のとき、\(x \to \pm 1\) 付近で \(\frac{m^2}{1-x^2}\) の項が強く発散する[cite: 5]。\(x \approx 1\) 付近での挙動を解析すると \(f(x) \sim (1-x)^{\vert{}m\vert{}/2}\)、\(x \approx -1\) では \(f(x) \sim (1+x)^{\vert{}m\vert{}/2}\) と解かれる[cite: 5]。両端での特異性を分離するため、次のように置く[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[f(x) = (1 - x^2)^{\vert{}m\vert{}/2} u(x)\]
+          </div>
+        </div>
+        <p>これを代入すると、特異項が解消された \(u(x)\) に関する方程式が得られる[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[(1 - x^2)\frac{d^2 u}{dx^2} - 2x(1 + \vert{}m\vert{})\frac{du}{dx} + \left[ l(l+1) - \vert{}m\vert{}(\vert{}m\vert{}+1) \right] u(x) = 0\]
+          </div>
+        </div>
+        <p>この方程式は、Legendre微分方程式 \((1-x^2)P_l'' - 2xP_l' + l(l+1)P_l = 0\) を \(x\) で \(\vert{}m\vert{}\) 回微分した式と完全に一致する[cite: 5]（※付録1参照[cite: 5]）。したがって、\(u(x) \propto \frac{d^{\vert{}m\vert{}}}{dx^{\vert{}m\vert{}}} P_l(x)\) と同定され、**Legendreの陪多項式 \(P_l^{\vert{}m\vert{}}(x)\)** が定義される[cite: 5]：</p>
+        <div class="note">
+          \[P_l^{\vert{}m\vert{}}(x) = (1 - x^2)^{\vert{}m\vert{}/2} \frac{d^{\vert{}m\vert{}}}{dx^{\vert{}m\vert{}}} P_l(x) = \frac{1}{2^l l!} (1 - x^2)^{\vert{}m\vert{}/2} \frac{d^{l+\vert{}m\vert{}}}{dx^{l+\vert{}m\vert{}}} (x^2 - 1)^l\]
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">量子化</span>角運動量の量子化と幾何学的制限 [p.7]</h3>
+        <p>\((x^2 - 1)^l\) は \(x\) の \(2l\) 次多項式であるため、\(l + \vert{}m\vert{}\) 回微分してゼロにならないためには、微分の回数が \(2l\) を超えてはならない[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[l + \vert{}m\vert{} \le 2l \implies \vert{}m\vert{} \le l \iff -l \le m_l \le l\]
+          </div>
+        </div>
+        <p>これにより、方位角量子数（軌道角運動量量子数）\(l\) と 磁気量子数 \(m_l\) の量子化条件が導かれた[cite: 5]：</p>
+        <div class="note">
+          \[l = 0, 1, 2, \dots, \qquad m_l = -l, -(l-1), \dots, 0, \dots, (l-1), l\]
+        </div>
+        <p>固有値方程式としてまとめると[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\text{全角運動量 2 乗: } \hat{L}^2 Y_{l,m_l}(\theta,\phi) = \hbar^2 l(l+1) Y_{l,m_l}(\theta,\phi)\]
+          </div>
+        </div>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \text{\(z\) 成分角運動量: } \hat{L}_z Y_{l,m_l}(\theta,\phi) = \hbar m_l Y_{l,m_l}(\theta,\phi) \]
+          </div>
+        </div>
+        <div class="insight">
+          <b>なぜ \(\vert{}L_z\vert{} < \vert{}\boldsymbol{L}\vert{}\) なのか？（角運動量の不確定性）：</b><br>
+          角運動量の大きさは \(\vert{}\boldsymbol{L}\vert{} = \hbar\sqrt{l(l+1)}\) であり、\(z\) 成分の最大値は \((L_z)_{\text{max}} = \hbar l\) である[cite: 5]。常に \(\vert{}\boldsymbol{L}\vert{} > \vert{}L_z\vert{}\) となり、角運動量が完全に \(z\) 軸方向を向くことはできない[cite: 5]。もし \(L_z = \vert{}\boldsymbol{L}\vert{}\) となると \(L_x = L_y = 0\) と確定してしまい、交換関係 \([\hat{L}_x, \hat{L}_y] = i\hbar \hat{L}_z \neq 0\)（不確定性原理）に矛盾するためである[cite: 5]。
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← 01 Legendre方程式</div>
+        <div class="navbtn next" data-goto="p3">次へ：03 球面調和関数 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 03 球面調和関数 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>03 規格化された球面調和関数 \(Y_{l,m}(\theta, \phi)\)</h2>
+      <p class="lead">角度解 \(\Theta(\theta)\Phi(\phi)\) の規格化と、\(l=0,1,2\)（\(s, p, d\) 軌道）の具体形と空間分布。</p>
+
+      <div class="card">
+        <h3><span class="tag">規格化</span>球面調和関数の統一的表式 [p.8, 9]</h3>
+        <p>Legendre陪多項式の直交性積分 \(\int_{-1}^1 dx P_l^{\vert{}m\vert{}}(x) P_{l'}^{\vert{}m\vert{}}(x) = \delta_{ll'} \frac{2}{2l+1} \frac{(l+\vert{}m\vert{})!}{(l-\vert{}m\vert{})!}\) から規格化定数 \(N_{lm}\) を決定し、方位角解 \(\Phi(\phi) = \frac{1}{\sqrt{2\pi}} e^{im\phi}\) と合成する[cite: 5]。標準的な位相因子（Condon-Shortley位相 \((-1)^m\)）を含めた**球面調和関数 \(Y_{l,m}(\theta, \phi)\)** の一般式は以下の通りである[cite: 5]：</p>
+        <div class="note">
+          \[Y_{l,m}(\theta,\phi) = (-1)^{(m+\vert{}m\vert{})/2} \sqrt{\frac{(2l+1)(l-\vert{}m\vert{})!}{4\pi(l+\vert{}m\vert{})!}} P_l^{\vert{}m\vert{}}(\cos\theta) e^{im\phi}\]
+        </div>
+        <p>全立体角にわたる正規直交関係を満たす[cite: 5]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\int_0^{\pi} d\theta \sin\theta \int_0^{2\pi} d\phi \, Y_{l',m'}^*(\theta,\phi) Y_{l,m}(\theta,\phi) = \delta_{ll'} \delta_{mm'}\]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">具体形</span>\(l=0,1,2\) の球面調和関数一覧 [p.10, 11]</h3>
+        <p>\(m \ge 0\) に対する公式 \(Y_{l,m} = (-1)^m \sqrt{\frac{(2l+1)(l-m)!}{4\pi(l+m)!}} \frac{1}{2^l l!} (1-x^2)^{m/2} \frac{d^{l+m}}{dx^{l+m}}(x^2-1)^l e^{im\phi}\) （\(x=\cos\theta\)）より計算される具体形[cite: 5]：</p>
+
+        <p><b>① \(l=0\) （\(s\) 軌道：球対称）</b>[cite: 5]</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[Y_{0,0} = \frac{1}{\sqrt{4\pi}}\]</div></div>
+
+        <p><b>② \(l=1\) （\(p\) 軌道：ダンベル型）</b>[cite: 5]</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[Y_{1,0} = \sqrt{\frac{3}{4\pi}} \cos\theta, \qquad Y_{1,\pm 1} = \mp \sqrt{\frac{3}{8\pi}} \sin\theta e^{\pm i\phi}\]</div></div>
+
+        <p><b>③ \(l=2\) （\(d\) 軌道：クローバー／\(d_{z^2}\) 型）</b>[cite: 5]</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[Y_{2,0} = \sqrt{\frac{5}{16\pi}} (3\cos^2\theta - 1), \qquad Y_{2,\pm 1} = \mp \sqrt{\frac{15}{8\pi}} \cos\theta \sin\theta e^{\pm i\phi}, \qquad Y_{2,\pm 2} = \sqrt{\frac{15}{32\pi}} \sin^2\theta e^{\pm 2i\phi}\]</div></div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← 02 陪多項式と量子化</div>
+        <div class="navbtn next" data-goto="p4">次へ：04 演習10＆付録解説 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 04 演習10＆付録解説 ============ -->
+    <section class="panel" data-panel="p4">
+      <h2>04 演習問題10 詳細解説 ＆ 付録証明</h2>
+      <p class="lead">演習問題10の係数決定・検算プロセスと、付録1〜3の数学的証明。</p>
+
+      <div class="card">
+        <h3><span class="tag">演習10</span>Legendre多項式の導出と条件 \(P_l(1) = 1\) [p.13]</h3>
+        <p>漸化式 \(a_{n+2} = \frac{(n-l)(n+l+1)}{(n+2)(n+1)} a_n\) から各 \(l\) の多項式 \(f(x)\) を求め、端点条件 \(f(1) = 1\) により定数を決定する[cite: 5]。Rodriguesの微分形 \(P_l(x) = \frac{1}{2^l l!} \frac{d^l}{dx^l}(x^2 - 1)^l\) と完全一致することを検算する[cite: 5]。

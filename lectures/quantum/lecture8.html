@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>第8講｜一次元調和振動子 体系的解説ノート</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:560px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:24px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 12px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card h3 .tag.gold{
+    background:var(--gold);
+  }
+  .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  .eq-wrap{
+    position:relative;
+    margin:12px 0;
+  }
+  .eq-scroll{
+    overflow-x:auto;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .eq-scroll mjx-container{ color:var(--ink) !important; }
+
+  .insight{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .note{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--teal-dim);
+    background:rgba(114,217,196,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;
+    color:var(--ink-dim);
+  }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics — Lecture 08 Guide</div>
+    <h1>一次元調和振動子 体系的解説</h1>
+    <p class="sub">スライド全ページの論理・式変形・検算プロセスを完全網羅</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>導入と無次元化</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>Hermite方程式</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>収束性と量子化</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>演習7 完全解説</button>
+    <button class="tab-btn" data-panel="p5"><span class="num">05</span>要点まとめ</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ 01 導入と無次元化 ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>01 背景とSchrödinger方程式の無次元化</h2>
+      <p class="lead">なぜ調和振動子を学ぶのか？ 古典的背景から微分方程式の無次元化までの完全な導出過程。</p>
+
+      <div class="card">
+        <h3><span class="tag">古典・物理的背景</span>調和振動子の普遍性 [p.1, 2]</h3>
+        <p>古典力学において、バネの復元力 \(F = -kx\) を受ける物体の運動方程式は \(m \ddot{x} = -kx\) で与えられ、角振動数 \(\omega = \sqrt{k/m}\) の単振動をする[cite: 2]。このときポテンシャルエネルギーは以下で表される[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ V(x) = \frac{1}{2} k x^2 = \frac{1}{2} m \omega^2 x^2 \]
+          </div>
+        </div>
+        <div class="insight">
+          <b>なぜ重要なポテンシャルなのか？</b><br>
+          任意のポテンシャル \(V(x)\) を安定点（つり合いの点 \(x=0\), 即ち \(V'(0)=0\)）のまわりでテイラー展開すると[cite: 2]：
+          \[ V(x) = V(0) + \cancel{V'(0)x} + \frac{V''(0)}{2!}x^2 + \mathcal{O}(x^3) \]
+          基準のエネルギーを \(V(0)=0\) に選べば、微小振動においては第一非ゼロ項である 2 次の項（＝調和振動子）で近似できる[cite: 2]。ばねや振り子のみならず、分子間力（Lennard-Jonesポテンシャルの底付近）や場の量子論など、物理の至る所で現れる超重要モデルである[cite: 2]。
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">無次元化</span>無次元変数の導出ステップ [p.3]</h3>
+        <p>時間に依存しないSchrödinger方程式は以下の通りである[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \left[ -\frac{\hbar^2}{2m}\frac{d^2}{dx^2} + \frac{1}{2}m\omega^2 x^2 \right] u(x) = E u(x) \]
+          </div>
+        </div>
+        <p>定数 \(\hbar, m, \omega\) から「長さの次元 \([m]\)」を持つ物理量 \(\lambda\) を作ると[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ [\lambda] = [\hbar]^a [m]^b [\omega]^c \implies \lambda = \sqrt{\frac{\hbar}{m\omega}} \]
+          </div>
+        </div>
+        <p>無次元位置座標 \(\xi \equiv \frac{x}{\lambda}\) を導入し、微分演算子を変換する[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \frac{d}{dx} = \frac{d\xi}{dx}\frac{d}{d\xi} = \frac{1}{\lambda}\frac{d}{d\xi} \implies \frac{d^2}{dx^2} = \frac{1}{\lambda^2}\frac{d^2}{d\xi^2} \]
+          </div>
+        </div>
+        <p>これを元のSchrödinger方程式に代入して整理する[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \left[ -\frac{\hbar^2}{2m\lambda^2}\frac{d^2}{d\xi^2} + \frac{1}{2}m\omega^2\lambda^2\xi^2 \right] \Phi(\xi) = E \Phi(\xi) \]
+          </div>
+        </div>
+        <p>\(\lambda^2 = \frac{\hbar}{m\omega}\) を代入すると、第1項の係数は \(\frac{\hbar^2}{2m \cdot \frac{\hbar}{m\omega}} = \frac{\hbar\omega}{2}\)、第2項の係数は \(\frac{1}{2}m\omega^2 \cdot \frac{\hbar}{m\omega} = \frac{\hbar\omega}{2}\) となり、両辺が完璧に揃う[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \frac{\hbar\omega}{2} \left[ -\frac{d^2}{d\xi^2} + \xi^2 \right] \Phi(\xi) = E \Phi(\xi) \implies \left[ \frac{d^2}{d\xi^2} + (\epsilon - \xi^2) \right] \Phi(\xi) = 0 \]
+          </div>
+        </div>
+        <p>ここで無次元エネルギーパラメータ \(\epsilon\) を次のように定義した[cite: 2]：</p>
+        <div class="note">
+          \[ \epsilon \equiv \frac{2E}{\hbar\omega} \qquad \left( \iff E = \frac{\hbar\omega}{2}\epsilon \right) \]
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：02 Hermite方程式 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 02 Hermite方程式 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>02 漸近形とHermiteの微分方程式</h2>
+      <p class="lead">無限遠での波動関数の振る舞いを抽出し、多項式部分 \(H(\xi)\) に対する方程式を導出する。</p>
+
+      <div class="card">
+        <h3><span class="tag">漸近挙動</span>無限遠 \(|\xi| \to \infty\) での振る舞い [p.4]</h3>
+        <p>無次元方程式 \(\left[\frac{d^2}{d\xi^2} + (\epsilon - \xi^2)\right]\Phi(\xi) = 0\) において、遠方 \(|\xi| \gg \epsilon\) では \(\epsilon\) を無視できるため[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \left[ \frac{d^2}{d\xi^2} - \xi^2 \right] \Phi(\xi) \approx 0 \]
+          </div>
+        </div>
+        <p>解の形を \(\Phi(\xi) \sim e^{a\xi^2}\) と予想して代入してみる[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \Phi' = 2a\xi e^{a\xi^2}, \quad \Phi'' = (2a + 4a^2\xi^2) e^{a\xi^2} \implies (2a + 4a^2\xi^2 - \xi^2) e^{a\xi^2} \approx (4a^2 - 1)\xi^2 e^{a\xi^2} = 0 \]
+          </div>
+        </div>
+        <p>\(4a^2 - 1 = 0 \implies a = \pm 1/2\) となる[cite: 2]。束縛状態の物理的条件（無限遠で波動関数が発散しない \(\Phi(|\xi|\to\infty) \to 0\)）を満たすのは \(a = -1/2\) のみである[cite: 2]。したがって、一般解を次のように置く[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \Phi(\xi) = H(\xi) e^{-\xi^2/2} \]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">導出</span>Hermite微分方程式の変形 [p.5]</h3>
+        <p>\(\Phi(\xi) = H(\xi) e^{-\xi^2/2}\) を元の微分方程式に代入するため、1階および2階微分を計算する[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[
+            \begin{aligned}
+            \Phi' &= (H' - \xi H) e^{-\xi^2/2} \\
+            \Phi'' &= \left[ (H'' - H - \xi H') - \xi(H' - \xi H) \right] e^{-\xi^2/2} \\
+            &= \left[ H'' - 2\xi H' + (\xi^2 - 1) H \right] e^{-\xi^2/2}
+            \end{aligned}
+            \]
+          </div>
+        </div>
+        <p>これを \(\Phi'' + (\epsilon - \xi^2)\Phi = 0\) に代入する[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \left[ H'' - 2\xi H' + (\xi^2 - 1) H + (\epsilon - \xi^2) H \right] e^{-\xi^2/2} = 0 \]
+          </div>
+        </div>
+        <p>\(e^{-\xi^2/2} \neq 0\) より、\(H(\xi)\) が満たすべき **Hermite（エルミート）の微分方程式** が導かれる[cite: 2]：</p>
+        <div class="note">
+          \[ H'' - 2\xi H' + (\epsilon - 1) H = 0 \]
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← 01 導入と無次元化</div>
+        <div class="navbtn next" data-goto="p3">次へ：03 収束性と量子化 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 03 収束性と量子化 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>03 級数解の収束性とエネルギーの量子化</h2>
+      <p class="lead">なぜエネルギーは離散的になるのか？ 無限級数の発散証明から量子化条件への論理ステップ。</p>
+
+      <div class="card">
+        <h3><span class="tag">級数展開</span>冪級数解と漸化式 [p.6]</h3>
+        <p>\(H(\xi)\) を冪級数 \(H(\xi) = \sum_{n=0}^{\infty} a_n \xi^n\) と仮定してHermite方程式に代入する[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \sum_{n=2}^{\infty} n(n-1)a_n \xi^{n-2} - 2\xi \sum_{n=1}^{\infty} n a_n \xi^{n-1} + (\epsilon - 1) \sum_{n=0}^{\infty} a_n \xi^n = 0 \]
+          </div>
+        </div>
+        <p>第1項のダミーインデックスを \(n \to n+2\) にずらして \(\xi^n\) でまとめる[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \sum_{n=0}^{\infty} \left[ (n+2)(n+1)a_{n+2} + (\epsilon - 2n - 1)a_n \right] \xi^n = 0 \]
+          </div>
+        </div>
+        <p>これが任意の \(\xi\) で成立するために、各次数の係数が 0 でなければならない。これにより**漸化式**を得る[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ a_{n+2} = \frac{2n + 1 - \epsilon}{(n+2)(n+1)} a_n \]
+          </div>
+        </div>
+        <p class="dim">※ \(a_0\) を決めると偶数次のみの系列（偶関数解）、\(a_1\) を決めると奇数次のみの系列（奇関数解）が独立に決まる。これはポテンシャルの偶関数対称性（パリティ）と合致する[cite: 2]。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">発散証明</span>なぜ無限級数のままではダメなのか？ [p.7]</h3>
+        <p>\(n\) が非常に大きい（\(n \gg 1\)）とき、漸化式の比率は次のように振る舞う[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \frac{a_{n+2}}{a_n} = \frac{2n + 1 - \epsilon}{(n+2)(n+1)} \xrightarrow[n \to \infty]{} \frac{2n}{n^2} = \frac{2}{n} \]
+          </div>
+        </div>
+        <p>一方で、\(e^{\xi^2}\) のテイラー展開 \(\sum_{k=0}^{\infty} \frac{\xi^{2k}}{k!}\) の係数 \(c_{2k} = \frac{1}{k!}\) の比率を計算してみると：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \frac{c_{2k+2}}{c_{2k}} = \frac{k!}{(k+1)!} = \frac{1}{k+1} \approx \frac{1}{k} = \frac{2}{n} \quad (n=2k) \]
+          </div>
+        </div>
+        <p>つまり、無限級数がどこまでも続くと大極限で \(H(\xi) \sim e^{\xi^2}\) と振る舞ってしまう[cite: 2]！ すると全波動関数は[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \Phi(\xi) = H(\xi) e^{-\xi^2/2} \sim e^{\xi^2} e^{-\xi^2/2} = e^{+\xi^2/2} \xrightarrow[|\xi|\to\infty]{} \infty \]
+          </div>
+        </div>
+        <p>となり、物理的に許されない発散解となってしまう[cite: 2]。したがって、**\(H(\xi)\) は無限級数ではなく、途中の次数で打ち切られる有限多項式（Hermite多項式）でなければならない**[cite: 2]。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">量子化</span>固有値の打ち切り条件 [p.8, 9]</h3>
+        <p>級数が最高次 \(n = n_*\) で止まる（\(a_{n_*+2} = 0\) となる）ためには、分子が 0 になればよい[cite: 2]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ 2n_* + 1 - \epsilon = 0 \implies \epsilon = 2n_* + 1 \quad (n_* = 0, 1, 2, \dots) \]
+          </div>
+        </div>
+        <p>\(\epsilon = \frac{2E}{\hbar\omega}\) を代入してエネルギー \(E\) について解く[cite: 2]：</p>
+        <div class="note">
+          \[ \frac{2E}{\hbar\omega} = 2n_* + 1 \implies E_m = \hbar\omega \left( m + \frac{1}{2} \right) \quad (m = 0, 1, 2, \dots) \]
+        </div>
+        <div class="insight">
+          <b>零点エネルギー（Zero-point energy）：</b><br>
+          基底状態（\(m=0\)）であっても、エネルギーは 0 にならず \(E_0 = \frac{1}{2}\hbar\omega\) を持つ[cite: 2]。これは不確定性原理 \(\Delta x \cdot \Delta p \ge \hbar/2\) に起因し、量子力学粒子が完全に停止して一定点に留まることができないことを意味している。
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← 02 Hermite方程式</div>
+        <div class="navbtn next" data-goto="p4">次へ：04 演習7 完全解説 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 04 演習7 完全解説 ============ -->
+    <section class="panel" data-panel="p4">
+      <h2>04 演習問題7 詳細解説と検算</h2>
+      <p class="lead">スライド p.10 演習問題7（Hermite多項式の具体形と固有関数の直交性）のステップ解説。</p>
+
+      <div class="card">
+        <h3><span class="tag">演習7 問1</span>Hermite多項式 \(H(\xi)\) の具体的な導出 [p.10]</h3>
+        <p>初期条件 \(a_0 = a_1 = 1\) および漸化式 \(a_{n+2} = \frac{2n + 1 - \epsilon}{(n+2)(n+1)} a_n\) を用いて各 \(\epsilon\) で具体形を求める[cite: 2]。解を有限項で止める条件は \(\epsilon = 2n_* + 1\) である[cite: 2]。</p>
+
+        <p><b>① \(\epsilon = 1\) （\(n_* = 0\): 偶関数解）</b><br>
+        打ち切り次数 \(n_* = 0\) より \(a_2 = \frac{0+1-1}{2 \cdot 1} a_0 = 0\)。偶数系列は \(a_0 = 1\) のみで停止。奇数系列は条件より遮断するため[cite: 2]：</p>
+        <div class="note">\[ H_0(\xi) = 1 \]</div>
+
+        <p><b>② \(\epsilon = 3\) （\(n_* = 1\): 奇関数解）</b><br>
+        打ち切り次数 \(n_* = 1\) より \(a_3 = \frac{2+1-3}{3 \cdot 2} a_1 = 0\)。奇数系列は \(a_1 = 1\) のみで停止[cite: 2]：</p>
+        <div class="note">\[ H_1(\xi) = \xi \]</div>
+
+        <p><b>③ \(\epsilon = 5\) （\(n_* = 2\): 偶関数解）</b><br>
+        打ち切り次数 \(n_* = 2\) より \(a_2 = \frac{0+1-5}{2 \cdot 1} a_0 = -2 a_0 = -2\)。次項は \(a_4 = \frac{4+1-5}{4 \cdot 3} a_2 = 0\) で停止[cite: 2]：</p>
+        <div class="note">\[ H_2(\xi) = a_0 + a_2 \xi^2 = 1 - 2\xi^2 \]</div>
+
+        <p><b>④ \(\epsilon = 7\) （\(n_* = 3\): 奇関数解）</b><br>
+        打ち切り次数 \(n_* = 3\) より \(a_3 = \frac{2+1-7}{3 \cdot 2} a_1 = -\frac{4}{6} a_1 = -\frac{2}{3}\)。次項は \(a_5 = 0\) で停止[cite: 2]：</p>
+        <div class="note">\[ H_3(\xi) = a_1 \xi + a_3 \xi^3 = \xi - \frac{2}{3}\xi^3 \]</div>
+
+        <div class="insight">
+          <b>検算（Hermite微分方程式への代入確認）：</b><br>
+          \(H_2(\xi) = 1 - 2\xi^2\) を \(H'' - 2\xi H' + (\epsilon - 1)H = 0 \quad (\epsilon=5)\) に代入してみる：<br>
+          \(H_2' = -4\xi\), \(H_2'' = -4\)<br>
+          左辺 \(= (-4) - 2\xi(-4\xi) + (5 - 1)(1 - 2\xi^2) = -4 + 8\xi^2 + 4 - 8\xi^2 = 0\)。確かに完全に成立する！
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">演習7 問2</span>固有関数の直交性の証明 [p.10]</h3>
+        <p>異なるエネルギー固有値に属する固有関数 \(\Phi_n(\xi) = H_n(\xi) e^{-\xi^2/2}\) 同士の直交性を証明する[cite: 2]：</p>
+
+        <p><b>例：\(n=0\) (\(E_0 = \frac{1}{2}\hbar\omega\)) と \(n=1\) (\(E_1 = \frac{3}{2}\hbar\omega\)) の直交性積分の評価</b></p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[
+            \begin{aligned}
+            \langle \Phi_0 | \Phi_1 \rangle &= \int_{-\infty}^{\infty} \Phi_0(\xi) \Phi_1(\xi) d\xi \\
+            &= \int_{-\infty}^{\infty} (1 \cdot e^{-\xi^2/2}) \cdot (\xi \cdot e^{-\xi^2/2}) d\xi = \int_{-\infty}^{\infty} \xi e^{-\xi^2} d\xi
+            \end{aligned}
+            \]
+          </div>
+        </div>
+        <p>被積分関数 \(f(\xi) = \xi e^{-\xi^2}\) は \(f(-\xi) = -\xi e^{-(-\xi)^2} = -f(\xi)\) となり**奇関数**である。左右対称な区間 \((-\infty, \infty)\) での奇関数の定積分は厳密に 0 になる[cite: 2]：</p>
+        <div class="note">
+          \[ \int_{-\infty}^{\infty} \xi e^{-\xi^2} d\xi = 0 \implies \Phi_0 \text{ と } \Phi_1 \text{ は直交する} \]
+        </div>
+
+        <p><b>一般の \(n \neq m\) に対する代数的検算（Sturm-Liouville型自作証明）：</b><br>
+        \(\Phi_n'' + (\epsilon_n - \xi^2)\Phi_n = 0\) および \(\Phi_m'' + (\epsilon_m - \xi^2)\Phi_m = 0\) に対し、前者に \(\Phi_m\)、後者に \(\Phi_n\) を掛けて辺々引き算する：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \Phi_m \Phi_n'' - \Phi_n \Phi_m'' + (\epsilon_n - \epsilon_m)\Phi_n \Phi_m = 0 \implies \frac{d}{d\xi}(\Phi_m \Phi_n' - \Phi_n \Phi_m') = (\epsilon_m - \epsilon_n)\Phi_n \Phi_m \]
+          </div>
+        </div>
+        <p>これを全空間で積分すると、左辺は境界条件 \(\Phi_n(\pm\infty) = 0\) より 0 となるため、\(\epsilon_n \neq \epsilon_m\) である限り \(\int_{-\infty}^{\infty} \Phi_n \Phi_m d\xi = 0\) が常に保証される！</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p3">← 03 収束性と量子化</div>
+        <div class="navbtn next" data-goto="p5">次へ：05 要点まとめ →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 05 要点まとめ ============ -->
+    <section class="panel" data-panel="p5">
+      <h2>05 要点まとめシート</h2>
+      <p class="lead">第8講の論理構造と重要公式の全体系総まとめ。</p>
+
+      <div class="card">
+        <h3><span class="tag gold">まとめ</span>一次元調和振動子の解法ロードマップ [p.9]</h3>
+        
+        <p><b>1. 方程式と無次元化:</b></p>
+        <p>・ポテンシャル: \(V(x) = \frac{1}{2}m\omega^2 x^2\)[cite: 2]<br>
+        ・長さスケール: \(\lambda = \sqrt{\frac{\hbar}{m\omega}}\)[cite: 2]<br>
+        ・無次元Schrödinger方程式: \(\left[ \frac{d^2}{d\xi^2} + (\epsilon - \xi^2) \right] \Phi(\xi) = 0 \quad \left( \epsilon = \frac{2E}{\hbar\omega} \right)\)[cite: 2]</p>
+
+        <p><b>2. 漸近分離とHermite方程式:</b></p>
+        <p>・波動関数の分離: \(\Phi(\xi) = H(\xi) e^{-\xi^2/2}\)[cite: 2]<br>
+        ・Hermiteの微分方程式: \(H'' - 2\xi H' + (\epsilon - 1) H = 0\)[cite: 2]<br>
+        ・展開係数の漸化式: \(a_{n+2} = \frac{2n + 1 - \epsilon}{(n+2)(n+1)} a_n\)[cite: 2]</p>
+
+        <p><b>3. 収束条件とエネルギーの量子化:</b></p>
+        <p>・無限級数のままだと \(H(\xi) \sim e^{\xi^2} \implies \Phi(\xi) \sim e^{\xi^2/2} \to \infty\) となり発散するため、有限多項式で打ち切る必要がある[cite: 2]。<br>
+        ・打ち切り条件: \(\epsilon = 2m + 1 \quad (m = 0, 1, 2, \dots)\)[cite: 2]<br>
+        ・固有エネルギー: \(E_m = \hbar\omega \left( m + \frac{1}{2} \right)\)[cite: 2]<br>
+        ・基底状態エネルギー（零点エネルギー）: \(E_0 = \frac{1}{2}\hbar\omega \neq 0\)[cite: 2]</p>
+
+        <p><b>4. Hermite多項式 \(H_m(\xi)\) と固有関数の性質:</b></p>
+        <p>・固有関数: \(\Phi_m(\xi) = N_m H_m(\xi) e^{-\xi^2/2}\)[cite: 2]<br>
+        ・パリティ交互構造: \(m\) が偶数 $\to$ 偶関数、\(m\) が奇数 $\to$ 奇関数[cite: 2]<br>
+        ・直交性: \(\int_{-\infty}^{\infty} \Phi_n(\xi) \Phi_m(\xi) d\xi = 0 \quad (n \neq m)\)[cite: 2]</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p4">← 04 演習7 完全解説</div>
+        <div></div>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+
+  function goTo(id){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === id));
+    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === id));
+    document.getElementById('panels').scrollIntoView({behavior:'smooth', block:'start'});
+    const activeTab = document.querySelector('.tab-btn.active');
+    if(activeTab) activeTab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => goTo(t.dataset.panel)));
+  document.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=> goTo(btn.dataset.goto));
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>第9講｜量子力学の5つの公理 体系的解説ノート</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:560px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:24px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 12px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card h3 .tag.gold{
+    background:var(--gold);
+  }
+  .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  .eq-wrap{
+    position:relative;
+    margin:12px 0;
+  }
+  .eq-scroll{
+    overflow-x:auto;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .eq-scroll mjx-container{ color:var(--ink) !important; }
+
+  .insight{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .note{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--teal-dim);
+    background:rgba(114,217,196,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;
+    color:var(--ink-dim);
+  }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics — Lecture 09 Guide</div>
+    <h1>量子力学の5つの公理</h1>
+    <p class="sub">状態の記述、演算子、Born則、波束の収縮、時間発展の体系化</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>公理1&amp;2: 状態と演算子</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>公理3: Born則と期待値</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>公理4&amp;5: 収縮と時間発展</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>演習8 完全解説</button>
+    <button class="tab-btn" data-panel="p5"><span class="num">05</span>要点まとめ</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ 01 公理1&2 ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>01 公理1：状態の記述 ＆ 公理2：物理量と演算子</h2>
+      <p class="lead">量子状態の重ね合わせと完全性、物理量を担うエルミート演算子の数学的構造。</p>
+
+      <div class="card">
+        <h3><span class="tag">公理 1</span>状態の記述（波動関数と完全性関係） [p.2]</h3>
+        <p>量子力学において、系の状態は波動関数 \(\psi(x,t)\) によって完全に記述される[cite: 3]。波動関数はエネルギー固有値 \(E_n\) に対応する正規直交基底（固有関数） \(u_n(x)\) の重ね合わせとして展開できる[cite: 3]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\psi(x,t) = \sum_{n} c_n u_n(x) \exp\left(-i \frac{E_n}{\hbar} t\right)\]
+          </div>
+        </div>
+        <p>ここで \(u_n(x)\) は正規直交性 \(\int_{-\infty}^{\infty} dx \, u_n^*(x) u_m(x) = \delta_{nm}\) を満たす[cite: 3]。展開係数 \(c_n\) （複素数）は、初期状態 \(\psi(x,0)\) から直交性を用いて抽出できる[cite: 3]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[c_n = \int_{-\infty}^{\infty} dx \, \psi(x,0) u_n^*(x)\]
+          </div>
+        </div>
+        <p>これを \(t=0\) の展開式 \(\psi(x,0) = \sum_n c_n u_n(x)\) に再代入すると[cite: 3]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\psi(x,0) = \sum_n \left[ \int_{-\infty}^{\infty} dx' \, \psi(x',0) u_n^*(x') \right] u_n(x) = \int_{-\infty}^{\infty} dx' \psi(x',0) \left[ \sum_n u_n^*(x') u_n(x) \right]\]
+          </div>
+        </div>
+        <p>任意の \(\psi(x,0)\) でこの恒等式が成り立つため、基底の完全性を表す**完全性関係（Closure relation）**が導かれる[cite: 3]：</p>
+        <div class="note">
+          \[\sum_n u_n^*(x') u_n(x) = \delta(x - x')\]
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">公理 2</span>物理量とエルミート演算子 [p.3]</h3>
+        <p>観察可能な物理量（可観測量：Observable）は**エルミート演算子**によって表され、物理量の測定値はその固有値に限られる[cite: 3]。エルミート演算子の固有値は必ず**実数**となり、物理的な測定値と適合する[cite: 3]。</p>
+        
+        <p><b>主要な演算子の表現形式：</b>[cite: 3]</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\text{位置演算子: } \hat{x} \psi(x,t) = x \psi(x,t)\]
+          </div>
+        </div>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\text{運動量演算子: } \hat{p} \psi(x,t) = -i\hbar \frac{d}{dx} \psi(x,t)\]
+          </div>
+        </div>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\text{ハミルトニアン演算子: } \hat{H} = \frac{\hat{p}^2}{2m} + V(\hat{x}) = -\frac{\hbar^2}{2m}\frac{d^2}{dx^2} + V(x)\]
+          </div>
+        </div>
+        <div class="insight">
+          ※これら基本演算子の他、3次元運動における角運動量演算子 \(\hat{\boldsymbol{L}} = \hat{\boldsymbol{r}} \times \hat{\boldsymbol{p}}\) やスピン演算子 \(\hat{\boldsymbol{S}}\) などもエルミート演算子である[cite: 3]。
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：02 Born則と期待値 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 02 公理3 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>02 公理3：Born則と期待値の計算</h2>
+      <p class="lead">確率解釈（Bornの規則）、規格化の整合性、および量子力学における期待値の導出過程。</p>
+
+      <div class="card">
+        <h3><span class="tag">公理 3</span>Born則（確率解釈）と規格化 [p.4]</h3>
+        <p>状態 \(\psi(x,t)\) に対し、物理量を測定してエネルギー固有値 \(E_n\) が観測される確率は、展開係数 \(c_n\) の絶対値2乗で与えられる（**Bornの規則**）[cite: 3]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[P(E_n) = \vert{}c_n\vert{}^2 \qquad \left( \text{全確率の総和: } \sum_n \vert{}c_n\vert{}^2 = 1 \right)\]
+          </div>
+        </div>
+        <p>このBorn則を前提とすると、全空間における波動関数の規格化条件 \(\int dx \vert{}\psi(x,t)\vert{}^2 = 1\) が自然に保持されることが証明できる[cite: 3]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\begin{aligned}             \int_{-\infty}^{\infty} dx \vert{}\psi(x,t)\vert{}^2 &= \int_{-\infty}^{\infty} dx \left[ \sum_n c_n u_n(x) e^{-i\frac{E_n}{\hbar}t} \right]^* \left[ \sum_m c_m u_m(x) e^{-i\frac{E_m}{\hbar}t} \right] \\             &= \sum_{n,m} c_n^* c_m e^{i\frac{E_n - E_m}{\hbar}t} \underbrace{\int_{-\infty}^{\infty} dx u_n^*(x) u_m(x)}_{\delta_{nm}} \\             &= \sum_n \vert{}c_n\vert{}^2 = 1             \end{aligned}\]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">期待値</span>量子力学における期待値の公式導出 [p.5, 6]</h3>
+        <p>確率論における期待値 \(\langle X \rangle\) は、確率変数 \(X_i\) に確率 \(P_i\) を掛けて足し合わせた平均値 \(\langle X \rangle = \sum_i P_i X_i\) である[cite: 3]。数回程度の測定ではばらつくが、多数回試行を繰り返すことでこの値に収束する[cite: 3]。</p>
+        
+        <p>量子力学における演算子 \(\hat{A}\) の期待値 \(\langle A \rangle_t\) は、サンドイッチ形式の空間積分で与えられる[cite: 3]：</p>
+        <div class="note">
+          \[\langle A \rangle_t = \int_{-\infty}^{\infty} dx \, \psi^*(x,t) \hat{A} \psi(x,t)\]
+        </div>
+
+        <p><b>この積分公式が物理的平均値 \(\sum_i \vert{}c_i(t)\vert{}^2 a_i\) と一致することの数学的検証：</b>[cite: 3]</p>
+        <p>\(\hat{A}\) の固有状態を \(\varphi_i(x)\) （固有値 \(a_i\)）とし、\(\psi(x,t) = \sum_j c_j(t) \varphi_j(x)\) と展開して代入する[cite: 3]：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[\begin{aligned}             \int dx \psi^*(x,t) \hat{A} \psi(x,t) &= \int dx \left[ \sum_i c_i(t) \varphi_i(x) \right]^* \hat{A} \left[ \sum_j c_j(t) \varphi_j(x) \right] \\             &= \sum_{i,j} c_i^*(t) c_j(t) \int dx \, \varphi_i^*(x) \underbrace{\hat{A} \varphi_j(x)}_{a_j \varphi_j(x)} \\             &= \sum_{i,j} c_i^*(t) c_j(t) a_j \underbrace{\int dx \, \varphi_i^*(x) \varphi_j(x)}_{\delta_{ij}} \\             &= \sum_i \vert{}c_i(t)\vert{}^2 a_i             \end{aligned}\]
+          </div>
+        </div>
+        <p>これにより、空間積分形式の定義が期待値の直感的な定義 \(\sum (\text{確率}) \times (\text{固有値})\) と完全に一致することが証明される[cite: 3]。
