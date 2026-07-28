@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>第13講｜非束縛系とポテンシャル障壁の散乱</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:560px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:24px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 12px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card h3 .tag.gold{
+    background:var(--gold);
+  }
+  .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  /* 横溢れ対策 */
+  .eq-wrap{
+    position:relative;
+    margin:12px 0;
+    width:100%;
+  }
+  .eq-scroll{
+    overflow-x:auto !important;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+    max-width:100%;
+  }
+  .eq-scroll::-webkit-scrollbar{ height:4px; }
+  .eq-scroll::-webkit-scrollbar-thumb{ background:var(--teal-dim); border-radius:4px; }
+  .eq-scroll mjx-container{ color:var(--ink) !important; max-width:none !important; }
+
+  .insight{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .note{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--teal-dim);
+    background:rgba(114,217,196,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;
+    color:var(--ink-dim);
+  }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics — Lecture 13 Guide</div>
+    <h1>第13講｜非束縛系とポテンシャル障壁の散乱</h1>
+    <p class="sub">確率の流束密度、トンネル効果、透過率・反射率の完全導出</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>連続の式と確率流束</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>ポテンシャル障壁設定</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>透過率T・反射率R導出</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>極限と共鳴透過</button>
+    <button class="tab-btn" data-panel="p5"><span class="num">05</span>演習12 完全解説</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ 01 連続の式 ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>01 確率の流れの密度 \(\boldsymbol{j}\) と連続の式</h2>
+      <p class="lead">非束縛系における存在確率保存則 \(\frac{\partial\rho}{\partial t} + \nabla \cdot \boldsymbol{j} = 0\) の完全証明（p.2, 3）。</p>
+
+      <div class="card">
+        <h3><span class="tag">p.2</span>確率密度 \(\rho\) の時間変化と流束 \(\boldsymbol{j}\)</h3>
+        <p>確率密度 \(\rho = |\psi|^2 = \psi^* \psi\) の時間変化をSchrödinger方程式 \(i\hbar \frac{\partial\psi}{\partial t} = -\frac{\hbar^2}{2m}\nabla^2\psi + V\psi\) を用いて微分する[cite: 7]：</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \frac{\partial\rho}{\partial t} = \frac{\partial\psi^*}{\partial t}\psi + \psi^*\frac{\partial\psi}{\partial t} \]</div></div>
+        <div class="eq-wrap"><div class="eq-scroll">\[ = \left( \frac{i\hbar}{2m}\nabla^2\psi^* + \frac{i}{\hbar}V\psi^* \right)\psi + \psi^*\left( -\frac{i\hbar}{2m}\nabla^2\psi - \frac{i}{\hbar}V\psi \right) \]</div></div>
+        <p>ポテンシャル項 \(V\psi^*\psi\) は相殺し、次のように変形される[cite: 7]：</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \frac{\partial\rho}{\partial t} = -\nabla \cdot \left[ \frac{i\hbar}{2m} (\psi \nabla\psi^* - \psi^* \nabla\psi) \right] \]</div></div>
+        <p>ここで**確率の流れの密度 \(\boldsymbol{j}\)** を定義すると、連続の式を得る[cite: 7]：</p>
+        <div class="note">\[ \frac{\partial\rho}{\partial t} + \nabla \cdot \boldsymbol{j} = 0, \qquad \boldsymbol{j} = \frac{i\hbar}{2m}(\psi \nabla\psi^* - \psi^* \nabla\psi) = -\frac{\hbar}{m}\text{Im}\left[\psi^* \nabla\psi\right] \]</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">p.3</span>ガウスの発散定理による確率保存</h3>
+        <p>空間領域 \(V\) で体積分し、ガウスの定理を適用する[cite: 7]：</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \frac{\partial}{\partial t}\int_V \rho dV = -\int_S \boldsymbol{j} \cdot \boldsymbol{n} dS \implies \frac{\partial P_V}{\partial t} = -\int_S \boldsymbol{j} \cdot \boldsymbol{n} dS \]</div></div>
+        <p class="dim">※領域 \(V\) から粒子が流出すると領域内確率 \(P_V\) は減少する（確率の局所保存則）[cite: 7]。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：02 ポテンシャル障壁設定 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 02 障壁設定 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>02 ポテンシャル障壁と領域別の解</h2>
+      <p class="lead">幅 \(2a\)、高さ \(V_0\) の障壁に対する波動関数の設定（p.4, 5, 6）。</p>
+
+      <div class="card">
+        <h3><span class="tag">p.4, 5</span>ポテンシャル \(V(x)\) と各領域の解 (\(E < V_0\))</h3>
+        <div class="note">\[ V(x) = \begin{cases} V_0 & (|x| \le a) \\ 0 & (|x| > a) \end{cases} \]</div>
+        <p><b>領域1 (\(x < -a\)):</b> 入射波＋反射波[cite: 7]</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ u_1(x) = A_1 e^{ikx} + A_2 e^{-ikx} \qquad \left( k = \frac{\sqrt{2mE}}{\hbar} \right) \]</div></div>
+        <p><b>領域2 (\(|x| \le a\)):</b> 障壁内部（減衰・増大）[cite: 7]</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ u_2(x) = B_1 e^{\kappa x} + B_2 e^{-\kappa x} \qquad \left( \kappa = \frac{\sqrt{2m(V_0-E)}}{\hbar} \right) \]</div></div>
+        <p><b>領域3 (\(x > a\)):</b> 透過波のみ[cite: 7]</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ u_3(x) = C e^{ikx} \]</div></div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">p.6</span>境界条件（\(x = \pm a\) での滑らかな接続）</h3>
+        <div class="eq-wrap"><div class="eq-scroll">\[ x = -a: \quad A_1 e^{-ika} + A_2 e^{ika} = B_1 e^{-\kappa a} + B_2 e^{\kappa a} \]</div></div>
+        <div class="eq-wrap"><div class="eq-scroll">\[ ik(A_1 e^{-ika} - A_2 e^{ika}) = \kappa(B_1 e^{-\kappa a} - B_2 e^{\kappa a}) \]</div></div>
+        <div class="eq-wrap"><div class="eq-scroll">\[ x = +a: \quad C e^{ika} = B_1 e^{\kappa a} + B_2 e^{-\kappa a} \]</div></div>
+        <div class="eq-wrap"><div class="eq-scroll">\[ ik C e^{ika} = \kappa(B_1 e^{\kappa a} - B_2 e^{-\kappa a}) \]</div></div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← 01 確率流束</div>
+        <div class="navbtn next" data-goto="p3">次へ：03 透過率T・反射率R →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 03 透過率・反射率 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>03 透過率 \(T\) と反射率 \(R\) の導出</h2>
+      <p class="lead">流束密度比による透過率 \(T = j_T/j_I\) と反射率 \(R = j_R/j_I\) の計算（p.7）。</p>
+
+      <div class="card">
+        <h3><span class="tag">p.7</span>流束密度と係数関係</h3>
+        <p>各流束は \(j_I = \frac{\hbar k}{m}|A_1|^2, \, j_R = \frac{\hbar k}{m}|A_2|^2, \, j_T = \frac{\hbar k}{m}|C|^2\)[cite: 7]。境界条件より[cite: 7]：</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ A_1 = \frac{e^{2ika}C}{2}\left[ 2\cosh(2\kappa a) - i\left(\frac{k}{\kappa} - \frac{\kappa}{k}\right)\sinh(2\kappa a) \right] \]</div></div>
+        <div class="eq-wrap"><div class="eq-scroll">\[ A_2 = \frac{C}{2}\left[ -i\left(\frac{k}{\kappa} + \frac{\kappa}{k}\right)\sinh(2\kappa a) \right] \]</div></div>
+        
+        <p><b>透過率 \(T\) の導出：</b>[cite: 7]</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ T = \left|\frac{C}{A_1}\right|^2 = \frac{4}{4\cosh^2(2\kappa a) + \left(\frac{k}{\kappa} - \frac{\kappa}{k}\right)^2 \sinh^2(2\kappa a)} \]</div></div>
+        <p>\(\cosh^2(2\kappa a) = 1 + \sinh^2(2\kappa a)\) を代入して整理すると[cite: 7]：</p>
+        <div class="note">\[ T = \frac{4k^2\kappa^2}{4k^2\kappa^2 + (k^2 + \kappa^2)^2 \sinh^2(2\kappa a)} \]</div>
+        <div class="note">\[ R = \frac{(k^2 + \kappa^2)^2 \sinh^2(2\kappa a)}{4k^2\kappa^2 + (k^2 + \kappa^2)^2 \sinh^2(2\kappa a)} \qquad (\text{※ } T + R = 1 \text{ 確率保存}) \]</div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← 02 障壁設定</div>
+        <div class="navbtn next" data-goto="p4">次へ：04 極限と共鳴透過 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 04 極限と共鳴透過 ============ -->
+    <section class="panel" data-panel="p4">
+      <h2>04 厚い障壁極限 ＆ 高エネルギー（\(E \ge V_0\)）共鳴透過</h2>
+      <p class="lead">厚い壁でのトンネル効果指数減衰と、Ramsauer-Townsend効果（p.8, 9）。</p>
+
+      <div class="card">
+        <h3><span class="tag">p.8</span>厚い障壁極限 \(2a\kappa \gg 1\)</h3>
+        <p>\(\sinh(2\kappa a) \approx \frac{1}{2} e^{2\kappa a}\) と近似すると[cite: 7]：</p>
+        <div class="note">\[ T \approx \frac{16 k^2 \kappa^2}{(k^2 + \kappa^2)^2} e^{-4\kappa a} \]</div>
+        <p class="dim">※壁幅 \(2a\) が増すか、ポテンシャル高さ \(V_0\) が増すと透過率は指数関数的に減衰する[cite: 7]。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">p.9</span>\(E \ge V_0\) （共鳴透過：Ramsauer-Townsend効果）</h3>
+        <p>\(\kappa = i q\) （\(q = \frac{\sqrt{2m(E-V_0)}}{\hbar}\)）と置き、\(\sinh(2iqa) = i\sin(2qa)\) を代入する[cite: 7]：</p>
+        <div class="note">\[ T = \frac{4k^2 q^2}{4k^2 q^2 + (k^2 - q^2)^2 \sin^2(2qa)} \]</div>
+        <p>\(2qa = n\pi \iff 2a = n \frac{\lambda}{2}\) のとき \(\sin(2qa) = 0\) となり、**完全透過 \(T=1, R=0\)** となる（**Ramsauer-Townsend効果**）[cite: 7]。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p3">← 03 透過率T</div>
+        <div class="navbtn next" data-goto="p5">次へ：05 演習12 完全解説 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 05 演習12 ============ -->
+    <section class="panel" data-panel="p5">
+      <h2>05 演習問題12 完全導出</h2>
+      <p class="lead">4つの境界条件から係数 \(B_1, B_2, A_1, A_2\) を \(C\) で表す計算プロセス（p.12）。</p>
+
+      <div class="card">
+        <h3><span class="tag">p.12</span>演習12：未定係数の連立方程式の完全解法</h3>
+        <p>\(x=+a\) の2式：\(B_1 e^{\kappa a} + B_2 e^{-\kappa a} = C e^{ika}\)、\(B_1 e^{\kappa a} - B_2 e^{-\kappa a} = i\frac{k}{\kappa} C e^{ika}\) を足し引きする[cite: 7]：</p>
+        <div class="note">\[ B_1 = e^{ika} \frac{C e^{-\kappa a}}{2}\left(1 + i\frac{k}{\kappa}\right), \qquad B_2 = e^{ika} \frac{C e^{\kappa a}}{2}\left(1 - i\frac{k}{\kappa}\right) \]</div>
+        <p>これを \(x=-a\) の2式に代入して整理すると \(A_1, A_2\) が導かれる[cite: 7]：</p>
+        <div class="note">\[ A_1 = \frac{e^{2ika}C}{2}\left[ 2\cosh(2\kappa a) - i\left(\frac{k}{\kappa} - \frac{\kappa}{k}\right)\sinh(2\kappa a) \right] \]</div>
+        <div class="note">\[ A_2 = \frac{C}{2}\left[ -i\left(\frac{k}{\kappa} + \frac{\kappa}{k}\right)\sinh(2\kappa a) \right] \]</div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p4">← 04 極限と共鳴</div>
+        <div></div>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+
+    function goTo(id) {
+      tabs.forEach(function(t) {
+        if (t.getAttribute('data-panel') === id) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
+
+      panels.forEach(function(p) {
+        if (p.getAttribute('data-panel') === id) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      const mainContainer = document.getElementById('panels');
+      if (mainContainer) {
+        mainContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      const activeTab = document.querySelector('.tab-btn.active');
+      if (activeTab) {
+        activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        const targetPanel = this.getAttribute('data-panel');
+        if (targetPanel) {
+          goTo(targetPanel);
+        }
+      });
+    });
+
+    const navBtns = document.querySelectorAll('[data-goto]');
+    navBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const targetPanel = this.getAttribute('data-goto');
+        if (targetPanel) {
+          goTo(targetPanel);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
