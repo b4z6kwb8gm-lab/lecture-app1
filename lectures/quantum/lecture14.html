@@ -55,7 +55,6 @@ window.MathJax = {
     flex-direction:column;
   }
 
-  /* ---------- HERO ---------- */
   .hero{
     position:relative;
     padding:30px 20px 18px;
@@ -83,7 +82,6 @@ window.MathJax = {
     font-size:13.5px;
   }
 
-  /* ---------- TABS ---------- */
   .tabs{
     display:flex;
     overflow-x:auto;
@@ -123,7 +121,6 @@ window.MathJax = {
   }
   .tab-btn.active .num{ color:var(--teal); }
 
-  /* ---------- PANELS ---------- */
   main{
     flex:1;
     padding:22px 18px 60px;
@@ -170,35 +167,37 @@ window.MathJax = {
     border-radius:5px;
     font-weight:700;
   }
-  .card h3 .tag.gold{
-    background:var(--gold);
-  }
   .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
-  .card p.dim{ color:var(--ink-dim); font-size:13px; }
 
-  /* 横溢れ対策 */
-  .eq-wrap{
-    position:relative;
-    margin:12px 0;
-    width:100%;
+  /* 徹底強化版 横スクロールCSS */
+  .eq-wrap, .note, .formula-box, .insight, .summary-sec {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
-  .eq-scroll{
-    overflow-x:auto !important;
-    overflow-y:hidden;
-    background:var(--bg-panel-2);
-    border:1px solid var(--rule);
-    border-radius:10px;
-    padding:14px 16px;
-    -webkit-overflow-scrolling:touch;
-    max-width:100%;
+  .eq-scroll, .note, .formula-box, .insight {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    background: var(--bg-panel-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+    -webkit-overflow-scrolling: touch !important;
+    max-width: 100% !important;
   }
-  .eq-scroll::-webkit-scrollbar{ height:4px; }
-  .eq-scroll::-webkit-scrollbar-thumb{ background:var(--teal-dim); border-radius:4px; }
-  .eq-scroll mjx-container{ color:var(--ink) !important; max-width:none !important; }
+  .eq-scroll::-webkit-scrollbar, .note::-webkit-scrollbar, .insight::-webkit-scrollbar { height: 4px; }
+  .eq-scroll::-webkit-scrollbar-thumb, .note::-webkit-scrollbar-thumb, .insight::-webkit-scrollbar-thumb { background: var(--teal-dim); border-radius: 4px; }
+  
+  mjx-container[jax="CHTML"][display="true"],
+  mjx-container[jax="SVG"][display="true"],
+  mjx-math {
+    display: inline-block !important;
+    max-width: none !important;
+    min-width: max-content !important;
+    color: var(--ink) !important;
+  }
 
   .insight{
-    margin:14px 0 4px;
-    padding:12px 14px;
     border-left:3px solid var(--gold);
     background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
     border-radius:0 8px 8px 0;
@@ -208,8 +207,6 @@ window.MathJax = {
   .insight b{ color:var(--gold); font-weight:700; }
 
   .note{
-    margin:14px 0 4px;
-    padding:12px 14px;
     border-left:3px solid var(--teal-dim);
     background:rgba(114,217,196,0.05);
     border-radius:0 8px 8px 0;
@@ -259,23 +256,17 @@ window.MathJax = {
 
   <main id="panels">
 
-    <!-- ============ 01 デルタ関数規格化 ============ -->
     <section class="panel active" data-panel="p1">
       <h2>01 Diracのデルタ関数と非束縛系の規格化</h2>
       <p class="lead">超関数 \(\delta(x)\) の積分表示と、連続固有値に対するデルタ関数規格化（p.2, 3, 4）。</p>
 
       <div class="card">
         <h3><span class="tag">p.2, 3</span>デルタ関数の積分表示導出</h3>
-        <p>\(a \to \infty\) の極限における \(\frac{\sin(ax)}{\pi x}\) の振る舞いから、デルタ関数の積分表示を導出する[cite: 8]：</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \int_{-\infty}^{\infty} dx \, e^{ikx} = \frac{1}{ik}\lim_{a \to \infty}(e^{ika} - e^{-ika}) = \frac{2}{k}\lim_{a \to \infty}\sin(ak) = 2\pi \delta(k) \]</div></div>
         <div class="note">\[ \frac{1}{2\pi}\int_{-\infty}^{\infty} e^{ikx} dx = \delta(k) \]</div>
       </div>
 
       <div class="card">
         <h3><span class="tag">p.4</span>デルタ関数規格化</h3>
-        <p>自由粒子平面波 \(u_k(x) = A_k e^{ikx}\) の直交性を計算する[cite: 8]：</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \int_{-\infty}^{\infty} dx \, u_{k'}^*(x) u_k(x) = A_{k'}^* A_k \int_{-\infty}^{\infty} dx \, e^{i(k-k')x} = 2\pi A_{k'}^* A_k \delta(k - k') \]</div></div>
-        <p>\(A_k = \frac{1}{\sqrt{2\pi}}\) と選ぶことで、連続固有値の規格化条件（**デルタ関数規格化**）を得る[cite: 8]：</p>
         <div class="note">\[ \int_{-\infty}^{\infty} dx \, u_{k'}^*(x) u_k(x) = \delta(k - k') \qquad \left( \iff \delta_{nm} \text{ の連続版} \right) \]</div>
       </div>
 
@@ -285,22 +276,18 @@ window.MathJax = {
       </footer>
     </section>
 
-    <!-- ============ 02 フーリエ変換 ============ -->
     <section class="panel" data-panel="p2">
       <h2>02 フーリエ変換と波束の構築</h2>
       <p class="lead">重み関数 \(\hat{u}(k)\) による重ね合わせと、Parsvalの等式による規格化の保持（p.5, 6）。</p>
 
       <div class="card">
         <h3><span class="tag">p.5</span>波束の重ね合わせとFourier変換</h3>
-        <p>実空間の波束 \(u(x)\) と波数空間の重み関数 \(\hat{u}(k)\) は相互にフーリエ変換の関係にある[cite: 8]：</p>
         <div class="note">\[ u(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} dk \, \hat{u}(k) e^{ikx}, \qquad \hat{u}(k) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} dx \, u(x) e^{-ikx} \]</div>
       </div>
 
       <div class="card">
         <h3><span class="tag">p.6</span>Gauss型重み関数 \(\hat{u}(k)\) の規格化</h3>
-        <p>中心 \(k_0\)、幅 \(\sigma\) のガウス型分布 \(\hat{u}(k) = A \exp\left[-\frac{(k-k_0)^2}{2\sigma^2}\right]\) を設定する[cite: 8]。Gauss積分 \(\int_{-\infty}^\infty e^{-a y^2} dy = \sqrt{\frac{\pi}{a}}\) より[cite: 8]：</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \int_{-\infty}^{\infty} |\hat{u}(k)|^2 dk = |A|^2 \int_{-\infty}^{\infty} \exp\left[-\frac{(k-k_0)^2}{\sigma^2}\right] dk = |A|^2 \sigma\sqrt{\pi} = 1 \implies |A|^2 = \frac{1}{\sqrt{\pi}\sigma} \]</div></div>
-        <p>Parsvalの等式 \(\int |u(x)|^2 dx = \int |\hat{u}(k)|^2 dk = 1\) により、\(u(x)\) も同時に自動規格化される[cite: 8]。</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \int_{-\infty}^{\infty} |\hat{u}(k)|^2 dk = |A|^2 \sigma\sqrt{\pi} = 1 \implies |A|^2 = \frac{1}{\sqrt{\pi}\sigma} \]</div></div>
       </div>
 
       <footer class="pagenav">
@@ -309,20 +296,15 @@ window.MathJax = {
       </footer>
     </section>
 
-    <!-- ============ 03 Gauss波束 ============ -->
     <section class="panel" data-panel="p3">
       <h2>03 Gauss型波束の時間発展と確率密度</h2>
       <p class="lead">分散関係 \(\omega(k) = \frac{\hbar k^2}{2m}\) の積分計算と、広がっていく確率密度（p.7）。</p>
 
       <div class="card">
         <h3><span class="tag">p.7</span>\(\psi(x,t)\) の時間発展と確率密度 \(|\psi(x,t)|^2\)</h3>
-        <p>位相因子 \(e^{-i\omega t}\) （\(\omega = \frac{\hbar k^2}{2m}\)）を伴う積分（付録2参照）を実行した結果[cite: 8]：</p>
         <div class="note">\[ \psi(x,t) = \frac{A\sigma}{\sqrt{1 + i\frac{\hbar\sigma^2}{m}t}} \exp\left[ -\frac{\sigma^2 x^2 + i\frac{\hbar k_0^2}{m}t - 2ik_0 x}{2\left(1 + i\frac{\hbar\sigma^2}{m}t\right)} \right] \]</div>
-        <p>絶対値2乗をとって確率密度 \(|\psi(x,t)|^2\) を計算し、平方完成する[cite: 8]：</p>
         <div class="eq-wrap"><div class="eq-scroll">\[ |\psi(x,t)|^2 = \frac{1}{\sqrt{\pi}\sigma_x(t)} \exp\left[ -\left(\frac{x - vt}{\sigma_x(t)}\right)^2 \right] \]</div></div>
-        <p>ここで群速度 \(v\) と時間依存する波束の幅 \(\sigma_x(t)\) は以下のように定義される[cite: 8]：</p>
         <div class="note">\[ v \equiv \frac{\hbar k_0}{m}, \qquad \sigma_x(t) \equiv \frac{\sqrt{1 + \frac{\hbar^2\sigma^4}{m^2}t^2}}{\sigma} \]</div>
-        <p class="dim">※波束の中心は一定速度 \(v\) で進行しながら、その空間的な広がり \(\sigma_x(t)\) は時間の経過とともに増大する（波束の拡散）[cite: 8]。</p>
       </div>
 
       <footer class="pagenav">
@@ -331,27 +313,18 @@ window.MathJax = {
       </footer>
     </section>
 
-    <!-- ============ 04 分散と不確定性 ============ -->
     <section class="panel" data-panel="p4">
       <h2>04 期待値、分散、最小不確定性の証明</h2>
       <p class="lead">\(\langle x \rangle, \langle p \rangle\)、分散 \(\Delta x^2, \Delta p^2\) の計算と最小波束の証明（p.8, 9, 10）。</p>
 
       <div class="card">
         <h3><span class="tag">p.8</span>期待値 \(\langle x \rangle\) と \(\langle p \rangle\) の計算</h3>
-        <p><b>位置の期待値（変数変換 \(y = x - vt\)）：</b>[cite: 8]</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \langle x \rangle = \int_{-\infty}^{\infty} x |\psi(x,t)|^2 dx = \frac{1}{\sqrt{\pi}\sigma_x(t)} \int_{-\infty}^{\infty} (y + vt) e^{-y^2/\sigma_x^2(t)} dy = 0 + vt = vt \]</div></div>
-        <p><b>運動量の期待値（変数変換 \(k' = k - k_0\)）：</b>[cite: 8]</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \langle p \rangle = \hbar \int_{-\infty}^{\infty} k |\hat{u}(k)|^2 dk = \hbar |A|^2 \int_{-\infty}^{\infty} (k' + k_0) e^{-k'^2/\sigma^2} dk' = \hbar k_0 \]</div></div>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \langle x \rangle = vt, \qquad \langle p \rangle = \hbar k_0 \]</div></div>
       </div>
 
       <div class="card">
         <h3><span class="tag">p.9, 10</span>分散と最小不確定性関係 \(\Delta x \Delta p\)</h3>
-        <p>ガウス積分の微分公式 \(\int_{-\infty}^\infty y^2 e^{-a y^2} dy = \frac{1}{2}\sqrt{\frac{\pi}{a^3}}\) を利用する[cite: 8]：</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \Delta x^2 = \langle (x - vt)^2 \rangle = \frac{\sigma_x^2(t)}{2} \implies \Delta x = \frac{\sigma_x(t)}{\sqrt{2}} = \frac{1}{\sqrt{2}\sigma}\sqrt{1 + \frac{\hbar^2\sigma^4}{m^2}t^2} \]</div></div>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \Delta p^2 = \hbar^2 \langle (k - k_0)^2 \rangle = \frac{\hbar^2\sigma^2}{2} \implies \Delta p = \frac{\hbar\sigma}{\sqrt{2}} \]</div></div>
-        <p>積をとって不確定性関係を検証する[cite: 8]：</p>
         <div class="note">\[ \Delta x \Delta p = \frac{\hbar}{2}\sqrt{1 + \frac{\hbar^2\sigma^4}{m^2}t^2} \ge \frac{\hbar}{2} \]</div>
-        <p class="dim">※特に時刻 \(t=0\) において等号 \(\Delta x \Delta p = \frac{\hbar}{2}\) （理論的最小値）が成立する（**最小波束**）[cite: 8]。</p>
       </div>
 
       <footer class="pagenav">
@@ -360,29 +333,18 @@ window.MathJax = {
       </footer>
     </section>
 
-    <!-- ============ 05 全付録 ============ -->
     <section class="panel" data-panel="p5">
       <h2>05 第14講 全付録（1〜2）数学的完全証明</h2>
       <p class="lead">デルタ関数の超関数的性質と、Gauss波束のガウス積分導出（p.12, 13）。</p>
 
       <div class="card">
         <h3><span class="tag">付録 1</span>デルタ関数の公式の証明 [p.12]</h3>
-        <p><b>1. \(\delta(-x) = \delta(x)\) の証明：</b>[cite: 8]</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \int_{-\infty}^{\infty} \delta(-x)f(x) dx = \int_{\infty}^{-\infty} \delta(y)f(-y) (-dy) = \int_{-\infty}^{\infty} \delta(y)f(-y) dy = f(0) \]</div></div>
-        
-        <p><b>2. \(\delta(ax) = \frac{1}{|a|}\delta(x)\) の証明 (\(y=ax\)）：</b>[cite: 8]</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \int_{-\infty}^{\infty} \delta(ax)f(x) dx = \int_{-a\infty}^{a\infty} \delta(y)f\left(\frac{y}{a}\right) \frac{dy}{a} = \frac{1}{|a|}f(0) \]</div></div>
-
-        <p><b>3. \(\delta[f(x)] = \sum_i \frac{1}{|f'(a_i)|}\delta(x - a_i)\) の証明：</b>[cite: 8]<br>
-        \(f(a_i)=0\) となるゼロ点近号で \(f(x) \approx f'(a_i)(x-a_i)\) と一次展開して置換積分を適用する[cite: 8]。</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ \int_{-\infty}^{\infty} \delta(ax)f(x) dx = \frac{1}{|a|}f(0), \qquad \delta[f(x)] = \sum_i \frac{1}{|f'(a_i)|}\delta(x - a_i) \]</div></div>
       </div>
 
       <div class="card">
         <h3><span class="tag">付録 2</span>Gauss波束の指数部分の平方完成完全展開 [p.13]</h3>
-        <p>指数関数内部を \(k\) について整理する[cite: 8]：</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ -\frac{(k-k_0)^2}{2\sigma^2} + i\left(kx - \frac{\hbar k^2}{2m}t\right) = -a k^2 + b k - \frac{k_0^2}{2\sigma^2} = -a\left(k - \frac{b}{2a}\right)^2 + \frac{b^2}{4a} - \frac{k_0^2}{2\sigma^2} \]</div></div>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \text{但し } a = \frac{1}{2\sigma^2} + i\frac{\hbar t}{2m}, \qquad b = \frac{k_0}{\sigma^2} + ix \]</div></div>
-        <p>\(k\) に関するガウス積分を実行すると \(\sqrt{\frac{\pi}{a}}\) が現れ、残る定数項 \(\exp\left[\frac{b^2}{4a} - \frac{k_0^2}{2\sigma^2}\right]\) を展開・整理することで目的の \(\psi(x,t)\) の正確な式が抽出される[cite: 8]。</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ -\frac{(k-k_0)^2}{2\sigma^2} + i\left(kx - \frac{\hbar k^2}{2m}t\right) = -a\left(k - \frac{b}{2a}\right)^2 + \frac{b^2}{4a} - \frac{k_0^2}{2\sigma^2} \]</div></div>
       </div>
 
       <footer class="pagenav">

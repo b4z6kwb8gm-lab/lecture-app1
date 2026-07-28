@@ -55,7 +55,6 @@ window.MathJax = {
     flex-direction:column;
   }
 
-  /* ---------- HERO ---------- */
   .hero{
     position:relative;
     padding:30px 20px 18px;
@@ -83,7 +82,6 @@ window.MathJax = {
     font-size:13.5px;
   }
 
-  /* ---------- TABS ---------- */
   .tabs{
     display:flex;
     overflow-x:auto;
@@ -123,7 +121,6 @@ window.MathJax = {
   }
   .tab-btn.active .num{ color:var(--teal); }
 
-  /* ---------- PANELS ---------- */
   main{
     flex:1;
     padding:22px 18px 60px;
@@ -170,35 +167,38 @@ window.MathJax = {
     border-radius:5px;
     font-weight:700;
   }
-  .card h3 .tag.gold{
-    background:var(--gold);
-  }
   .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
   .card p.dim{ color:var(--ink-dim); font-size:13px; }
 
-  /* 横溢れ対策 */
-  .eq-wrap{
-    position:relative;
-    margin:12px 0;
-    width:100%;
+  /* 徹底強化版 横スクロールCSS */
+  .eq-wrap, .note, .formula-box, .insight, .summary-sec {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
-  .eq-scroll{
-    overflow-x:auto !important;
-    overflow-y:hidden;
-    background:var(--bg-panel-2);
-    border:1px solid var(--rule);
-    border-radius:10px;
-    padding:14px 16px;
-    -webkit-overflow-scrolling:touch;
-    max-width:100%;
+  .eq-scroll, .note, .formula-box, .insight {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    background: var(--bg-panel-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+    -webkit-overflow-scrolling: touch !important;
+    max-width: 100% !important;
   }
-  .eq-scroll::-webkit-scrollbar{ height:4px; }
-  .eq-scroll::-webkit-scrollbar-thumb{ background:var(--teal-dim); border-radius:4px; }
-  .eq-scroll mjx-container{ color:var(--ink) !important; max-width:none !important; }
+  .eq-scroll::-webkit-scrollbar, .note::-webkit-scrollbar, .insight::-webkit-scrollbar { height: 4px; }
+  .eq-scroll::-webkit-scrollbar-thumb, .note::-webkit-scrollbar-thumb, .insight::-webkit-scrollbar-thumb { background: var(--teal-dim); border-radius: 4px; }
+  
+  mjx-container[jax="CHTML"][display="true"],
+  mjx-container[jax="SVG"][display="true"],
+  mjx-math {
+    display: inline-block !important;
+    max-width: none !important;
+    min-width: max-content !important;
+    color: var(--ink) !important;
+  }
 
   .insight{
-    margin:14px 0 4px;
-    padding:12px 14px;
     border-left:3px solid var(--gold);
     background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
     border-radius:0 8px 8px 0;
@@ -208,8 +208,6 @@ window.MathJax = {
   .insight b{ color:var(--gold); font-weight:700; }
 
   .note{
-    margin:14px 0 4px;
-    padding:12px 14px;
     border-left:3px solid var(--teal-dim);
     background:rgba(114,217,196,0.05);
     border-radius:0 8px 8px 0;
@@ -259,7 +257,6 @@ window.MathJax = {
 
   <main id="panels">
 
-    <!-- ============ 01 Legendre方程式 ============ -->
     <section class="panel active" data-panel="p1">
       <h2>01 \(\Theta(\theta)\) の微分方程式と Legende多項式</h2>
       <p class="lead">極角 \(\theta\) に関する微分方程式の変数変換 \(x = \cos\theta\) から Legendre多項式の導出まで（p.2〜4）。</p>
@@ -288,7 +285,6 @@ window.MathJax = {
       </footer>
     </section>
 
-    <!-- ============ 02 陪多項式と量子化 ============ -->
     <section class="panel" data-panel="p2">
       <h2>02 Legendre陪多項式と角運動量の量子化</h2>
       <p class="lead">\(m_l \neq 0\) での特異性分離と、角運動量量子数 \(l, m_l\) の決定（p.5〜7）。</p>
@@ -306,7 +302,6 @@ window.MathJax = {
         <p>\((x^2-1)^l\) は \(2l\) 次式であるため、\(l+|m|\) 回微分してゼロにならない条件より \(|m| \le l\) が必要となる[cite: 5]。量子化された固有値は[cite: 5]：</p>
         <div class="note">\[ l = 0, 1, 2, \dots, \qquad m_l = -l, -(l-1), \dots, 0, \dots, (l-1), l \]</div>
         <div class="eq-wrap"><div class="eq-scroll">\[ \hat{L}^2 Y_{l,m_l} = \hbar^2 l(l+1) Y_{l,m_l}, \qquad \hat{L}_z Y_{l,m_l} = \hbar m_l Y_{l,m_l} \]</div></div>
-        <p class="dim">※全角運動量の大きさ \(|\boldsymbol{L}| = \hbar\sqrt{l(l+1)}\) に対し、\(z\) 成分の最大値は \(\hbar l\) である[cite: 5]。\(|\boldsymbol{L}| > |L_z|\) であるため、角運動量ベクトルが完全に向きを固定することはできず、\(L_x, L_y\) は不確定に振る舞う[cite: 5]。</p>
       </div>
 
       <footer class="pagenav">
@@ -315,7 +310,6 @@ window.MathJax = {
       </footer>
     </section>
 
-    <!-- ============ 03 球面調和関数 ============ -->
     <section class="panel" data-panel="p3">
       <h2>03 規格化された球面調和関数 \(Y_{l,m}(\theta, \phi)\)</h2>
       <p class="lead">球面調和関数の規格化表式と \(l=0, 1, 2\)（\(s, p, d\) 軌道）の形（p.8〜11）。</p>
@@ -344,7 +338,6 @@ window.MathJax = {
       </footer>
     </section>
 
-    <!-- ============ 04 演習問題10 ============ -->
     <section class="panel" data-panel="p4">
       <h2>04 演習問題10 詳細解説と検算</h2>
       <p class="lead">漸化式によるLegendre多項式の導出と条件 \(P_l(1) = 1\) による定数決定（p.13, 14）。</p>
@@ -352,7 +345,6 @@ window.MathJax = {
       <div class="card">
         <h3><span class="tag">p.13,14</span>演習問題10：Legendre多項式の具体形と検算</h3>
         <p>漸化式 \(a_{n+2} = \frac{(n-l)(n+l+1)}{(n+2)(n+1)} a_n\) より各 \(l\) の解を求め、端点条件 \(f(1) = 1\) より定数を決定する[cite: 5]：</p>
-
         <p><b>① \(l=0\):</b> \(a_2 = 0 \implies f(x) = A\)。\(f(1)=1 \implies A=1 \implies P_0(x) = 1\)[cite: 5]</p>
         <p><b>② \(l=1\):</b> \(a_3 = 0 \implies f(x) = Bx\)。\(f(1)=1 \implies B=1 \implies P_1(x) = x\)[cite: 5]</p>
         <p><b>③ \(l=2\):</b> \(a_2 = -3A, a_4 = 0 \implies f(x) = A(1 - 3x^2)\)。\(f(1) = -2A = 1 \implies A = -1/2 \implies P_2(x) = \frac{1}{2}(3x^2 - 1)\)[cite: 5]</p>
@@ -365,7 +357,6 @@ window.MathJax = {
       </footer>
     </section>
 
-    <!-- ============ 05 全付録（1〜3） ============ -->
     <section class="panel" data-panel="p5">
       <h2>05 第11講 全付録（1〜3）数学的完全証明</h2>
       <p class="lead">Leibniz則微分、Legendre多項式・陪多項式の規格化積分の完全導出（p.15〜17）。</p>
@@ -373,22 +364,17 @@ window.MathJax = {
       <div class="card">
         <h3><span class="tag">付録 1</span>Legendre微分方程式の \(m\) 回微分 [p.15]</h3>
         <p>Leibnizの微分公式 \((uv)^{(m)} = \sum \binom{m}{k} u^{(k)} v^{(m-k)}\) を \((1-x^2)P_l'' - 2xP_l' + l(l+1)P_l = 0\) に適用する[cite: 5]：</p>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \left[(1-x^2)P_l''\right]^{(m)} = (1-x^2)P_l^{(m+2)} - 2mx P_l^{(m+1)} - m(m-1) P_l^{(m)} \]</div></div>
-        <div class="eq-wrap"><div class="eq-scroll">\[ \left[-2x P_l'\right]^{(m)} = -2x P_l^{(m+1)} - 2m P_l^{(m)} \]</div></div>
-        <p>足し合わせると、目的の陪微分方程式が得られる[cite: 5]：</p>
         <div class="eq-wrap"><div class="eq-scroll">\[ (1-x^2) P_l^{(m+2)} - 2x(m+1) P_l^{(m+1)} + [l(l+1) - m(m+1)] P_l^{(m)} = 0 \]</div></div>
       </div>
 
       <div class="card">
         <h3><span class="tag">付録 2, 3</span>規格化積分 \(\int_{-1}^1 [P_l(x)]^2 dx = \frac{2}{2l+1}\) の証明 [p.16, 17]</h3>
-        <p>Rodriguesの公式を代入し、\(l\) 回部分積分を繰り返す（端点 \(x=\pm 1\) で \((x^2-1)^l\) の微分は 0）[cite: 5]：</p>
         <div class="eq-wrap"><div class="eq-scroll">\[
         \begin{aligned}
         \int_{-1}^1 [P_l(x)]^2 dx &= \frac{1}{(2^l l!)^2} \int_{-1}^1 \left[\frac{d^l}{dx^l}(x^2-1)^l\right] \left[\frac{d^l}{dx^l}(x^2-1)^l\right] dx \\
-        &= \frac{(-1)^l}{(2^l l!)^2} \int_{-1}^1 (x^2-1)^l \frac{d^{2l}}{dx^{2l}}(x^2-1)^l dx = \frac{(2l)!}{(2^l l!)^2} \int_{-1}^1 (1-x^2)^l dx
+        &= \frac{(-1)^l}{(2^l l!)^2} \int_{-1}^1 (x^2-1)^l \frac{d^{2l}}{dx^{2l}}(x^2-1)^l dx = \frac{(2l)!}{(2^l l!)^2} \int_{-1}^1 (1-x^2)^l dx = \frac{2}{2l+1}
         \end{aligned}
         \]</div></div>
-        <p>\(x = \cos\theta\) と置いて \(\int_0^\pi \sin^{2l+1}\theta d\theta = \frac{2(2^l l!)^2}{(2l+1)!}\) を適用すると、\(\frac{2}{2l+1}\) と導かれる[cite: 5]。</p>
       </div>
 
       <footer class="pagenav">
