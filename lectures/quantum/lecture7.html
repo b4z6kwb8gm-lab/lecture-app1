@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>第7講｜有限井戸型ポテンシャル</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:26px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 18px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  .well-figure{
+    width:100%;
+    display:block;
+    filter:drop-shadow(0 0 18px rgba(114,217,196,0.10));
+  }
+  .well-caption{
+    margin-top:6px;
+    font-size:11.5px;
+    color:var(--ink-faint);
+    text-align:center;
+    font-family:"JetBrains Mono", monospace;
+    letter-spacing:0.02em;
+  }
+  .well-caption b{ color:var(--gold); font-weight:500; }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:16px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card p{ margin:8px 0; font-size:14px; color:var(--ink); }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  .eq-wrap{
+    position:relative;
+    margin:12px 0;
+  }
+  .eq-scroll{
+    overflow-x:auto;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .eq-scroll::-webkit-scrollbar{ height:4px; }
+  .eq-scroll::-webkit-scrollbar-thumb{ background:var(--teal-dim); border-radius:4px; }
+  .eq-scroll mjx-container{ color:var(--ink) !important; }
+  .eq-label{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    color:var(--ink-faint);
+    text-align:right;
+    display:block;
+    margin-top:3px;
+  }
+  .eq-wrap.scrollable::after{
+    content:"⇄ 横にスクロール";
+    position:absolute;
+    right:6px;
+    bottom:-16px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:9.5px;
+    color:var(--ink-faint);
+    opacity:0;
+    transition:opacity .2s;
+  }
+  .eq-wrap.scrollable.show-hint::after{ opacity:1; }
+
+  .insight{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .note{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--teal-dim);
+    background:rgba(114,217,196,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;
+    color:var(--ink-dim);
+  }
+
+  .flow{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:14px 0;
+    font-family:"JetBrains Mono", monospace;
+    font-size:12px;
+    color:var(--ink-dim);
+    flex-wrap:wrap;
+  }
+  .flow .arrow{ color:var(--teal); }
+  .flow .step{
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    padding:5px 9px;
+    border-radius:7px;
+  }
+
+  table.solset{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+    margin-top:8px;
+  }
+  table.solset th, table.solset td{
+    border:1px solid var(--rule);
+    padding:7px 8px;
+    text-align:center;
+  }
+  table.solset th{
+    background:var(--bg-panel-2);
+    color:var(--ink-dim);
+    font-weight:500;
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px;
+  }
+  table.solset td.hi{ color:var(--gold); font-weight:700; }
+
+  .well-mini{ width:100%; margin:10px 0 4px; }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+
+  .badge-row{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;}
+  .badge{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--ink-faint);
+    border:1px solid var(--rule);
+    padding:3px 8px;
+    border-radius:20px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics — Lecture 07</div>
+    <h1>有限井戸型ポテンシャル</h1>
+    <p class="sub">束縛状態のエネルギー固有値と、壁の外側へ漏れ出す波動関数を追う</p>
+
+    <svg class="well-figure" viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.2" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <!-- walls -->
+      <rect x="0" y="14" width="118" height="90" fill="#22314f"/>
+      <rect x="282" y="14" width="118" height="90" fill="#22314f"/>
+      <!-- V0 dotted line -->
+      <line x1="0" y1="14" x2="400" y2="14" stroke="#5c6c8a" stroke-dasharray="3 4" stroke-width="1"/>
+      <!-- baseline -->
+      <line x1="0" y1="104" x2="400" y2="104" stroke="var(--rule)" stroke-width="1"/>
+      <!-- wavefunction: bump inside, decaying tails leaking into walls -->
+      <path d="M 40,100 C 70,99 95,80 118,55 C 150,20 250,20 282,55 C 305,80 330,99 360,100"
+            fill="none" stroke="#72d9c4" stroke-width="2.4" filter="url(#glow)">
+        <animate attributeName="stroke-opacity" values="0.65;1;0.65" dur="3.4s" repeatCount="indefinite"/>
+      </path>
+      <!-- boundary markers -->
+      <line x1="118" y1="14" x2="118" y2="104" stroke="#8ea0bf" stroke-width="1" stroke-dasharray="2 3"/>
+      <line x1="282" y1="14" x2="282" y2="104" stroke="#8ea0bf" stroke-width="1" stroke-dasharray="2 3"/>
+      <text x="112" y="118" fill="#8ea0bf" font-size="10" font-family="JetBrains Mono, monospace">-L</text>
+      <text x="278" y="118" fill="#8ea0bf" font-size="10" font-family="JetBrains Mono, monospace">L</text>
+      <text x="4" y="11" fill="#8ea0bf" font-size="9" font-family="JetBrains Mono, monospace">V₀</text>
+    </svg>
+    <div class="well-caption">壁の内側で振動、壁の外側では指数関数的に減衰 —— <b>これが染み出し</b></div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>設定</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>一般解</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>偶関数解</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>奇関数解</button>
+    <button class="tab-btn" data-panel="p5"><span class="num">05</span>固有値</button>
+    <button class="tab-btn" data-panel="p6"><span class="num">06</span>まとめ</button>
+    <button class="tab-btn" data-panel="p7"><span class="num">07</span>演習</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ 01 設定 ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>問題設定</h2>
+      <p class="lead">無限井戸との違いはただ一つ ―― 壁の高さが有限であること。この一点が、波動関数が壁の外へ漏れ出すという量子力学らしい現象を生む。</p>
+
+      <div class="card">
+        <h3><span class="tag">V(x)</span>ポテンシャルの形</h3>
+        <p>幅 \(2L\) の井戸の内側ではポテンシャルが 0、外側では有限の高さ \(V_0\) を持つ。</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ V(x)=\begin{cases} 0 & (|x|\le L) \\ V_0 & (|x|>L) \end{cases} \]
+          </div>
+        </div>
+        <p class="dim">無限井戸型では外側が「壁」＝進入不可だったが、今回は「高い丘」程度。古典力学ならエネルギー \(E<V_0\) の粒子は丘を越えられず、井戸の中を往復するだけで終わる。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">Ĥ</span>時間に依存しないSchrödinger方程式</h3>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ \left[-\frac{\hbar^2}{2m}\frac{d^2}{dx^2}+V(x)\right]u(x)=Eu(x) \]
+          </div>
+        </div>
+        <p>ポテンシャルが領域ごとに違う式なので、方程式も2つに分裂する。</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ -\frac{\hbar^2}{2m}\frac{d^2u}{dx^2}=Eu(x) \quad (|x|\le L) \]
+          </div>
+        </div>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ -\frac{\hbar^2}{2m}\frac{d^2u}{dx^2}+V_0u(x)=Eu(x) \quad (|x|>L) \]
+          </div>
+        </div>
+      </div>
+
+      <div class="insight">
+        <b>着目する状況：</b> エネルギー固有値が \(E<V_0\) の場合を考える。これが「束縛状態」――粒子が井戸から逃げ出せないエネルギー領域。この後の全ての議論は \(E<V_0\) を前提にする。
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：波動関数の一般解 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 02 一般解 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>波動関数の一般解</h2>
+      <p class="lead">領域ごとの方程式をそれぞれ解き、境界条件でつなぐ ―― という2段構えの戦略。まずは各領域の一般解を作る。</p>
+
+      <div class="card">
+        <h3><span class="tag">内側</span>|x| ≤ L</h3>
+        <p>右辺の係数が負なので、解は三角関数（振動解）。</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ \frac{d^2u}{dx^2}=-\frac{2mE}{\hbar^2}u \equiv -k^2u \qquad (k^2>0) \]
+          </div>
+        </div>
+        <p>一般解：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ u(x)=A\cos(kx)+B\sin(kx) \]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">外側</span>|x| > L</h3>
+        <p>今度は右辺の係数が正。解は指数関数（振動せず単調に増減）になる。</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ \frac{d^2u}{dx^2}=\frac{2m}{\hbar^2}(V_0-E)u \equiv \kappa^2u \qquad (\kappa^2>0) \]
+          </div>
+        </div>
+        <p>一般解：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ u(x)=Ce^{-\kappa x}+De^{\kappa x} \]
+          </div>
+        </div>
+        <p>ここで束縛条件 \(u(|x|\to\infty)=0\) を課すと、発散する項が落ちる：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ u(x)=\begin{cases} Ce^{-\kappa x} & (x>L) \\ De^{\kappa x} & (x<-L) \end{cases} \]
+          </div>
+        </div>
+      </div>
+
+      <div class="insight">
+        <b>ここが無限井戸との決定的な違い：</b> 壁の高さが有限なので、外側の解は「恒等的に0」ではなく、指数関数的に減衰しながらも0でない値を持ちうる。この非ゼロの裾野が、後で「染み出し」と呼ばれる現象の正体。
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← 設定</div>
+        <div class="navbtn next" data-goto="p3">次へ：偶関数解 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 03 偶関数解 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>偶関数解</h2>
+      <p class="lead">ポテンシャルは \(x\to-x\) で対称だから、解は偶関数か奇関数のどちらかに分類できる。まずは偶関数 \(u(-x)=u(x)\) の場合。</p>
+
+      <div class="card">
+        <h3><span class="tag">対称性</span>係数を絞り込む</h3>
+        <p>偶関数であるためには \(B=0\)、かつ外側の左右で \(D=C\) が必要。残る解は：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ u(x)=\begin{cases} A\cos(kx) & (|x|\le L) \\ Ce^{-\kappa|x|} & (|x|>L) \end{cases} \]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">接続</span>境界条件 at x = L</h3>
+        <p>内側の解と外側の解を \(x=L\) で「滑らかに」つなぐ。まず値そのものが一致すること（連続性）：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ A\cos(kL)=Ce^{-\kappa L} \tag{1} \]
+          </div>
+        </div>
+        <p>次に傾き（一階微分）も一致すること：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ kA\sin(kL)=\kappa Ce^{-\kappa L} \tag{2} \]
+          </div>
+        </div>
+        <div class="note">なぜ微分の連続性まで要求するのか？　もし \(u'(x)\) が \(x=L\) で不連続に飛ぶと、\(u''(x)\) はそこでデルタ関数のように発散してしまい、有限なポテンシャルに対する方程式 \(u''=(\text{有限})\times u\) と矛盾する。だから少なくとも一階微分は連続でなければならない。</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(2)÷(1)</span>超越方程式を得る</h3>
+        <p>2式を割り算すると \(A,C\) が消え、\(k,\kappa\) だけの関係式が残る：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ \kappa=k\tan(kL) \;\;\Longrightarrow\;\; \kappa L=kL\tan(kL) \tag{3} \]
+          </div>
+        </div>
+        <p class="dim">\(k,\kappa\) はどちらもエネルギー \(E\) の関数なので、(3) は事実上 \(E\) だけを未知数とする方程式。これを解けば偶関数解のエネルギー固有値が求まる。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← 一般解</div>
+        <div class="navbtn next" data-goto="p4">次へ：奇関数解 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 04 奇関数解 ============ -->
+    <section class="panel" data-panel="p4">
+      <h2>奇関数解</h2>
+      <p class="lead">残るもう一方の対称性 \(u(-x)=-u(x)\) を考える。手順は偶関数解と全く並行――だからこそ違いに注目すると理解が速い。</p>
+
+      <div class="card">
+        <h3><span class="tag">対称性</span>係数を絞り込む</h3>
+        <p>奇関数であるためには \(A=0\)、かつ \(D=-C\)。残る解は：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ u(x)=\begin{cases} B\sin(kx) & (|x|\le L) \\ Ce^{-\kappa x} & (x>L) \\ -Ce^{\kappa x} & (x<-L) \end{cases} \]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">接続</span>境界条件 at x = L</h3>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ B\sin(kL)=Ce^{-\kappa L} \tag{1'} \]
+          </div>
+        </div>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ kB\cos(kL)=-\kappa Ce^{-\kappa L} \tag{2'} \]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(2')÷(1')</span>超越方程式を得る</h3>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ \kappa=-k\cot(kL) \;\;\Longrightarrow\;\; \kappa L=-kL\cot(kL) \tag{3'} \]
+          </div>
+        </div>
+        <p class="dim">符号がマイナスなのは偶関数解との違いのしるし。この符号のせいで、偶関数解と奇関数解では固有値が現れる \(R\) の範囲が半周期ずれる（次のタブで図的に確認する）。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p3">← 偶関数解</div>
+        <div class="navbtn next" data-goto="p5">次へ：固有値を求める →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 05 固有値 ============ -->
+    <section class="panel" data-panel="p5">
+      <h2>エネルギー固有値 ―― 図的に解く</h2>
+      <p class="lead">(3)・(3') はどちらも三角関数を含む超越方程式で、代数的には解けない。そこで幾何学的なトリックを使う。</p>
+
+      <div class="card">
+        <h3><span class="tag">合体</span>もう一つの関係式を作る</h3>
+        <p>\(k^2=\dfrac{2mE}{\hbar^2}\)、\(\kappa^2=\dfrac{2m}{\hbar^2}(V_0-E)\) を辺々足すと \(E\) が消え、\(V_0\) だけが残る：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ (\kappa L)^2+(kL)^2=\frac{2mL^2V_0}{\hbar^2}\equiv R^2 \]
+          </div>
+        </div>
+        <p>\(X\equiv kL,\;Y\equiv\kappa L\) と置くと、これは半径 \(R\) の円の方程式になる：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ X^2+Y^2=R^2 \]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">交点</span>2曲線の交点 = エネルギー固有値</h3>
+        <p>境界条件の式 (3)(3') も同じ \(X,Y\) で書き直せる：</p>
+        <div class="eq-wrap scrollable">
+          <div class="eq-scroll">
+            \[ \text{偶関数解：}\; Y=X\tan X \qquad\qquad \text{奇関数解：}\; Y=-X\cot X \]
+          </div>
+        </div>
+        <p>つまり固有値問題は「半径 \(R\) の円」と「\(\tan\)・\(\cot\) の曲線」の、<b style="color:var(--gold)">第一象限内での交点</b>を数える問題に姿を変える。\(R\) は \(V_0\)（井戸の深さ）を表すパラメータなので、<b style="color:var(--gold)">円の半径 = 井戸の深さ</b> というイメージで捉えるとよい。</p>
+
+        <svg class="well-mini" viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="150" x2="290" y2="150" stroke="#5c6c8a" stroke-width="1"/>
+          <line x1="30" y1="150" x2="30" y2="10" stroke="#5c6c8a" stroke-width="1"/>
+          <text x="292" y="154" fill="#8ea0bf" font-size="9" font-family="JetBrains Mono, monospace">X</text>
+          <text x="20" y="12" fill="#8ea0bf" font-size="9" font-family="JetBrains Mono, monospace">Y</text>
+          <!-- circles (varying R) -->
+          <path d="M 30,110 A 80,80 0 0 1 110,30" fill="none" stroke="#3f6f68" stroke-width="1.4"/>
+          <path d="M 30,70 A 120,120 0 0 1 150,-10" fill="none" stroke="#3f6f68" stroke-width="1.4" clip-path="inset(0px 0px 0px 0px)"/>
+          <!-- tan curve approx -->
+          <path d="M 30,150 C 60,148 80,140 95,110 C 108,85 108,55 110,30" fill="none" stroke="#e8875f" stroke-width="1.8"/>
+          <path d="M 175,150 C 190,120 195,80 205,55 C 212,38 218,25 222,15" fill="none" stroke="#e8875f" stroke-width="1.8"/>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#5c6c8a" stroke-dasharray="2 3" stroke-width="1"/>
+          <text x="140" y="163" fill="#8ea0bf" font-size="9" font-family="JetBrains Mono, monospace">π/2</text>
+          <circle cx="97" cy="107" r="3" fill="#e8c15f"/>
+        </svg>
+        <p class="dim" style="text-align:center;margin-top:-4px;">円と \(\tan X\) 曲線（第一象限）の交点＝許される \(E\)（模式図）</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">個数</span>解の数はV₀（＝R）で決まる</h3>
+        <table class="solset">
+          <tr><th>R の範囲</th><th>解の個数</th></tr>
+          <tr><td>\(0 < R < \pi/2\)</td><td class="hi">1個</td></tr>
+          <tr><td>\(\pi/2 \le R < 3\pi/2\)</td><td class="hi">2個</td></tr>
+          <tr><td>\(3\pi/2 \le R < 5\pi/2\)</td><td class="hi">3個</td></tr>
+          <tr><td>\((n-1)\pi/2 \le R < n\pi/2\)</td><td class="hi">n個</td></tr>
+        </table>
+      </div>
+
+      <div class="insight">
+        <b>この結果が意味すること：</b> \(R\) は \(\sqrt{2mL^2V_0}/\hbar\) なので、\(V_0\) がどれほど小さくても \(R>0\) である限り区間 \(0<R<\pi/2\) には必ず入り、<b>解は必ず1個以上存在する</b>。つまり1次元の有限井戸は、どんなに浅くても少なくとも1つの束縛状態（基底状態）を持つ ―― 3次元の井戸とは対照的な、1次元特有の性質。
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p4">← 奇関数解</div>
+        <div class="navbtn next" data-goto="p6">次へ：固有関数とまとめ →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 06 まとめ ============ -->
+    <section class="panel" data-panel="p6">
+      <h2>固有関数と物理的まとめ</h2>
+      <p class="lead">偶関数解と奇関数解は円上で交互に現れる。エネルギーの低い順に並べると、きれいな交互パターンが見える。</p>
+
+      <div class="card">
+        <h3><span class="tag">並び</span>エネルギー準位の構造</h3>
+        <table class="solset">
+          <tr><th>状態</th><th>対称性</th><th>node（節）</th><th>\(kL\) の範囲</th></tr>
+          <tr><td class="hi">基底状態</td><td>偶</td><td>0個</td><td>\(0<k_1L<\pi/2\)</td></tr>
+          <tr><td class="hi">第1励起状態</td><td>奇</td><td>1個</td><td>\(\pi/2<k_2L<\pi\)</td></tr>
+          <tr><td class="hi">第2励起状態</td><td>偶</td><td>2個</td><td>\(\pi<k_3L<3\pi/2\)</td></tr>
+          <tr><td class="hi">第3励起状態</td><td>奇</td><td>3個</td><td>\(3\pi/2<k_4L<2\pi\)</td></tr>
+        </table>
+        <p class="dim">節（波動関数が0になる点）の数がエネルギー準位の順に1つずつ増えていくのは、無限井戸のときと同じ普遍的な規則。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">図</span>波動関数の形（染み出しの可視化）</h3>
+        <svg class="well-mini" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="6" width="70" height="80" fill="#1a2540"/>
+          <rect x="230" y="6" width="70" height="80" fill="#1a2540"/>
+          <line x1="0" y1="50" x2="300" y2="50" stroke="var(--rule)" stroke-width="1"/>
+          <path d="M 30,50 C 55,49 75,32 100,22 C 130,12 170,12 200,22 C 225,32 245,49 270,50"
+                fill="none" stroke="#72d9c4" stroke-width="2"/>
+          <line x1="70" y1="6" x2="70" y2="86" stroke="#5c6c8a" stroke-dasharray="2 3" stroke-width="1"/>
+          <line x1="230" y1="6" x2="230" y2="86" stroke="#5c6c8a" stroke-dasharray="2 3" stroke-width="1"/>
+        </svg>
+        <p class="dim" style="text-align:center;">基底状態：壁の内側（白背景）では余弦カーブ、外側（暗い帯）では0に向かって減衰しつつも消えない</p>
+      </div>
+
+      <div class="insight">
+        <b>この講の核心：</b> 固有関数は、古典力学なら絶対に粒子が存在できないはずの領域（\(|x|>L\)、つまり \(V>E\) の領域）でも、ゼロでない値を持つ。これが「波動関数の染み出し」であり、量子トンネル効果の土台になる現象。
+      </div>
+
+      <div class="note">
+        まとめると：①固有関数は壁の外側でも0でない値を取る（染み出し）。②\(V_0\) がどれほど小さくても束縛状態は必ず1個存在し、それは偶関数解（基底状態）。③\(V_0\) が大きくなるほど、奇関数解・偶関数解が交互に現れて束縛状態の数が増える。④エネルギー固有値は離散的で、許される個数は \(V_0\) の値（＝\(R\)）で決まる。
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p5">← 固有値</div>
+        <div class="navbtn next" data-goto="p7">次へ：演習問題 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 07 演習 ============ -->
+    <section class="panel" data-panel="p7">
+      <h2>演習問題6</h2>
+      <p class="lead">この講で得た結果を、極限を取ることで検算してみよう。</p>
+
+      <div class="card">
+        <h3><span class="tag">Q</span>問題</h3>
+        <p>本講義で扱った有限井戸型ポテンシャルの問題において、\(V_0\to\infty\) の極限をとるとき、実現される固有関数と固有値がどうなるかを考察せよ。</p>
+      </div>
+
+      <div class="note">
+        <b>考える手がかり（ヒントのみ・答えは書かない）：</b><br>
+        ・\(R=\sqrt{2mL^2V_0}/\hbar\) は \(V_0\) が増えるとどうなるか。<br>
+        ・\(\kappa=\sqrt{2m(V_0-E)}/\hbar\) はどうなるか、それは外側の減衰の速さに何を意味するか。<br>
+        ・第5タブの「解の個数」の表で \(R\to\infty\) の場合、境界条件の式 (3)(3') はどの単純な形に近づくか。<br>
+        ・その極限が、第4講以前に扱った「無限井戸型ポテンシャル」の結果と一致するかどうかを確認してみよう。
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p6">← まとめ</div>
+        <div></div>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+
+  function goTo(id){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === id));
+    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === id));
+    document.getElementById('panels').scrollIntoView({behavior:'smooth', block:'start'});
+    const activeTab = document.querySelector('.tab-btn.active');
+    if(activeTab) activeTab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => goTo(t.dataset.panel)));
+  document.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=> goTo(btn.dataset.goto));
+  });
+
+  // horizontal-scroll hint for wide equations
+  function checkScrollables(){
+    document.querySelectorAll('.eq-wrap.scrollable').forEach(wrap=>{
+      const box = wrap.querySelector('.eq-scroll');
+      if(box.scrollWidth > box.clientWidth + 4){
+        wrap.classList.add('show-hint');
+      } else {
+        wrap.classList.remove('show-hint');
+      }
+    });
+  }
+  window.addEventListener('load', ()=> setTimeout(checkScrollables, 700));
+  window.addEventListener('resize', checkScrollables);
+  document.addEventListener('scroll', checkScrollables, true);
+</script>
+</body>
+</html>
