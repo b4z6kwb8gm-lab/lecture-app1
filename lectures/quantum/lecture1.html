@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>量子力学1A 到達度評価｜詳細解説と解答</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:560px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:24px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 12px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:16px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card p{ margin:8px 0; font-size:14px; color:var(--ink); }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  .eq-wrap{
+    position:relative;
+    margin:12px 0;
+  }
+  .eq-scroll{
+    overflow-x:auto;
+    overflow-y:hidden;
+    background:var(--bg-panel-2);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .eq-scroll::-webkit-scrollbar{ height:4px; }
+  .eq-scroll::-webkit-scrollbar-thumb{ background:var(--teal-dim); border-radius:4px; }
+  .eq-scroll mjx-container{ color:var(--ink) !important; }
+
+  .insight{
+    margin:14px 0 4px;
+    padding:12px 14px;
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .ans-box{
+    margin:12px 0 4px;
+    padding:12px 14px;
+    border:1px solid var(--teal);
+    background:rgba(114,217,196,0.06);
+    border-radius:8px;
+    font-size:13.5px;
+    color:var(--ink);
+  }
+  .ans-box b{ color:var(--teal); font-weight:700; }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+
+  .svg-fig{
+    width:100%;
+    max-width:320px;
+    margin:12px auto;
+    display:block;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics 1A — Final Exam</div>
+    <h1>量子力学1A 到達度評価 解答・解説</h1>
+    <p class="sub">試験問題の論理構造と体系的ステップ解説</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">[1]</span>波束の重ね合わせ</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">[2]</span>ポテンシャル障壁</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">[3]</span>水素原子と球面調和関数</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ [1] 波動関数の重ね合わせ ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>[1] 波動関数と重み関数（フーリエ変換）</h2>
+      <p class="lead">波数空間における重み関数 \(\hat{u}(k)\) から実空間の波動関数 \(u(x)\) を逆フーリエ変換により求める問題。</p>
+
+      <div class="card">
+        <h3><span class="tag">(a)</span>全波数帯域の均一な重ね合わせ</h3>
+        <p>重み関数：\(\hat{u}(k) = \frac{1}{\sqrt{2\pi}}\)</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ u(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} d k \, e^{i k x} \left(\frac{1}{\sqrt{2\pi}}\right) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{i k x} d k \]
+          </div>
+        </div>
+        <p>ディラックのデルタ関数の表現式 \(\delta(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} e^{ikx} dk\) を適用する。</p>
+        <div class="ans-box">
+          <b>解：</b> \( u(x) = \delta(x) \)
+        </div>
+        <p class="dim">あらゆる波数が等しい重みで存在する状態は、空間的に完全に局所化したデルタ関数に対応する（位置の不確定性が0）。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(b)</span>有限領域 \(|k| \le 1\) の重ね合わせ</h3>
+        <p>重み関数：\(\hat{u}(k) = 1 \; (|k| \le 1), \quad 0 \; (|k| > 1)\)</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[
+            \begin{aligned}
+            u(x) &= \frac{1}{\sqrt{2\pi}} \int_{-1}^{1} 1 \cdot e^{i k x} d k 
+            = \frac{1}{\sqrt{2\pi}} \left[ \frac{e^{i k x}}{i x} \right]_{-1}^{1} \\
+            &= \frac{1}{\sqrt{2\pi}} \frac{e^{i x} - e^{-i x}}{i x} 
+            = \frac{1}{\sqrt{2\pi}} \frac{2 i \sin x}{i x}
+            \end{aligned}
+            \]
+          </div>
+        </div>
+        <div class="ans-box">
+          <b>解：</b> \( u(x) = \sqrt{\frac{2}{\pi}} \frac{\sin x}{x} \)
+        </div>
+        <p class="dim">Sinc関数型の波動関数となる。波数幅を制限することで空間的な広がりが生じる（不確定性原理の一例）。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：[2] ポテンシャル障壁 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [2] ポテンシャル障壁 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>[2] 1次元ポテンシャル障壁の散乱</h2>
+      <p class="lead">高さ \(V_0 = 2E\) の障壁に対する電子のトンネル効果と反射・透過係数の導出。</p>
+
+      <div class="card">
+        <h3><span class="tag">(a)</span>領域ごとのSchrödinger方程式</h3>
+        <p>入射エネルギー \(E\) に対し、各領域のポテンシャルを適用：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \text{領域1 } (x < 0): \quad -\frac{\hbar^2}{2m_e}\frac{d^2 u}{dx^2} = E u(x) \]
+          </div>
+        </div>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \text{領域2 } (0 \le x \le a): \quad -\frac{\hbar^2}{2m_e}\frac{d^2 u}{dx^2} + 2E u(x) = E u(x) \implies -\frac{\hbar^2}{2m_e}\frac{d^2 u}{dx^2} = -E u(x) \]
+          </div>
+        </div>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ \text{領域3 } (x > a): \quad -\frac{\hbar^2}{2m_e}\frac{d^2 u}{dx^2} = E u(x) \]
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(b)</span>各領域の波動関数の解</h3>
+        <p>\(k = \frac{\sqrt{2m_e E}}{\hbar}\) と置くと、領域2では \(\frac{d^2 u}{dx^2} = k^2 u\) となるため解は指数関数となる。</p>
+        <div class="ans-box">
+          <b>解：</b><br>
+          ・領域1 (\(x < 0\)): \(u_1(x) = A_1 e^{ikx} + A_2 e^{-ikx}\)<br>
+          ・領域2 (\(0 \le x \le a\)): \(u_2(x) = B_1 e^{kx} + B_2 e^{-kx}\)<br>
+          ・領域3 (\(x > a\)): \(u_3(x) = C e^{ikx}\)（右進波のみ）
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(c)</span>境界条件による係数の決定</h3>
+        <p>\(x=0\) および \(x=a\) における \(u(x)\) と \(u'(x)\) の連続性：</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[
+            \begin{cases}
+            A_1 + A_2 = B_1 + B_2 & (x=0 \text{ 連続}) \\
+            ik(A_1 - A_2) = k(B_1 - B_2) \implies i(A_1 - A_2) = B_1 - B_2 & (x=0 \text{ 微分連続}) \\
+            B_1 e^{ka} + B_2 e^{-ka} = C e^{ika} & (x=a \text{ 連続}) \\
+            k(B_1 e^{ka} - B_2 e^{-ka}) = ik C e^{ika} \implies B_1 e^{ka} - B_2 e^{-ka} = i C e^{ika} & (x=a \text{ 微分連続})
+            \end{cases}
+            \]
+          </div>
+        </div>
+        <p>\(x=a\) の関係より \(B_1, B_2\) を \(C\) で表すと：</p>
+        <p>\(B_1 = \frac{1+i}{2} C e^{(i-1)ka}\), \quad \(B_2 = \frac{1-i}{2} C e^{(i+1)ka}\)</p>
+        <p>これを \(x=0\) の式に代入して整理：</p>
+        <div class="ans-box">
+          <b>解：</b><br>
+          \(B_1 = \frac{1+i}{2} C e^{(i-1)ka}\)<br>
+          \(B_2 = \frac{1-i}{2} C e^{(i+1)ka}\)<br>
+          \(A_1 = C e^{ika} \left[ \cosh(ka) - i \sinh(ka) \right]\)<br>
+          \(A_2 = i C e^{ika} \sinh(ka)\)
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(d)</span>透過確率 \(T\) と反射確率 \(R\)</h3>
+        <p>\(\left|\cosh(ka) - i \sinh(ka)\right|^2 = \cosh^2(ka) + \sinh^2(ka) = 1 + 2\sinh^2(ka)\)</p>
+        <div class="ans-box">
+          <b>透過率 \(T\)：</b><br>
+          \[ T = \left|\frac{C}{A_1}\right|^2 = \frac{1}{1 + 2\sinh^2(ka)} \]\n
+          <b>反射率 \(R\)：</b><br>
+          \[ R = \left|\frac{A_2}{A_1}\right|^2 = \frac{2\sinh^2(ka)}{1 + 2\sinh^2(ka)} \]
+        </div>
+        <div class="insight">
+          <b>確率の保存：</b> 常に \(T + R = 1\) が成り立つ。古典的にはエネルギー不足（\(E < 2E\)）で100%反射されるが、量子効果によりトンネル透過（\(T > 0\)）が発生する。
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← [1] 波束</div>
+        <div class="navbtn next" data-goto="p3">次へ：[3] 水素原子 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [3] 水素原子と球面調和関数 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>[3] 3次元中心力場と水素原子</h2>
+      <p class="lead">球面座標系における角度依存性（球面調和関数）と動径方程式の極限挙動。</p>
+
+      <div class="card">
+        <h3><span class="tag">(a)〜(c)</span>\(\Phi(\phi)\) の解・周期条件・規格化</h3>
+        <p><b>(a) 一般解：</b><br>
+        \(\frac{d\Phi}{d\phi} = i m \Phi \implies \Phi(\phi) = C e^{im\phi}\)</p>
+        
+        <p><b>(b) 周期境界条件：</b><br>
+        \(\Phi(\phi + 2\pi) = \Phi(\phi) \implies e^{i m 2\pi} = 1\)</p>
+        <div class="ans-box"><b>制約：</b> \(m\) は整数 (\(m = 0, \pm 1, \pm 2, \dots\))</div>
+
+        <p><b>(c) 規格化：</b><br>
+        \(\int_0^{2\pi} |\Phi(\phi)|^2 d\phi = 1 \implies |C|^2 \int_0^{2\pi} d\phi = 2\pi |C|^2 = 1\)</p>
+        <div class="ans-box"><b>係数：</b> \(C = \frac{1}{\sqrt{2\pi}}\)</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(d)</span>球面調和関数 \(Y_{2,0}(\theta, \phi)\) の導出</h3>
+        <p>\((l, m) = (2, 0)\) を公式に代入 (\(x = \cos\theta\)):</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ Y_{2,0} = N_{2,0} (1-x^2)^0 \frac{d^2}{dx^2}(x^2 - 1)^2 e^{0} \]
+          </div>
+        </div>
+        <p>\((x^2-1)^2 = x^4 - 2x^2 + 1\) を2階微分：\(\frac{d^2}{dx^2}(x^4 - 2x^2 + 1) = 12x^2 - 4 = 4(3x^2 - 1)\)</p>
+        <p>角度部分の規格化定数 \(N_{2,0} = \sqrt{\frac{5}{16\pi}} \cdot \frac{1}{8}\)（展開調整後）：</p>
+        <div class="ans-box">
+          <b>解：</b> \( Y_{2,0}(\theta) = \sqrt{\frac{5}{16\pi}} (3\cos^2\theta - 1) \)
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(e)</span>\(|Y_{2,0}|\) の極座標プロット概形</h3>
+        <p>\(|3\cos^2\theta - 1|\) の形状評価：</p>
+        <p>・\(\theta = 0, \pi\)（z軸方向）：極大値 \(|3(1) - 1| = 2\)<br>
+        ・\(\theta = \pi/2\)（xy平面上）：極小値 \(|3(0) - 1| = 1\)<br>
+        ・\(3\cos^2\theta - 1 = 0 \implies \cos\theta = \pm 1/\sqrt{3}\) (\(\approx 54.7^\circ\)) でゼロ点。</p>
+        
+        <!-- SVG 概形図 -->
+        <svg class="svg-fig" viewBox="-100 -110 200 220" xmlns="http://www.w3.org/2000/svg">
+          <line x1="-80" y1="0" x2="80" y2="0" stroke="#5c6c8a" stroke-width="1"/>
+          <line x1="0" y1="-100" x2="0" y2="100" stroke="#5c6c8a" stroke-width="1"/>
+          <text x="85" y="4" fill="#8ea0bf" font-size="10">x</text>
+          <text x="-4" y="-102" fill="#8ea0bf" font-size="10">z</text>
+          <!-- d_z^2 orbital-like shape -->
+          <path d="M 0,0 C 40,-30 50,-80 0,-90 C -50,-80 -40,-30 0,0 C 30,-10 40,10 0,0 C -40,10 -30,-10 0,0 C 40,30 50,80 0,90 C -50,80 -40,30 0,0" 
+                fill="rgba(114,217,196,0.2)" stroke="#72d9c4" stroke-width="2"/>
+        </svg>
+
+        <div class="ans-box">
+          <b>選択肢：</b> <b>(ウ)</b> （z軸方向に大きなローブを持ち、赤道方向にも小さな膨らみを持つ $d_{z^2}$ 型パターン）
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(f)</span>動径関数の遠方極限 \(r \to \infty\)</h3>
+        <p>\(r \to \infty\) で Coulomb 項 \(\propto 1/r\) および遠心力ポテンシャル \(\propto 1/r^2\) は無視できる。</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ -\frac{\hbar^2}{2m_e} \frac{d^2\chi}{dr^2} = E \chi(r) \implies \frac{d^2\chi}{dr^2} = -\frac{2m_e E}{\hbar^2} \chi(r) \]
+          </div>
+        </div>
+        <p>\(E < 0\)（束縛状態）より \(\beta = \frac{\sqrt{-2m_e E}}{\hbar} > 0\) と置くと、\(\frac{d^2\chi}{dr^2} = \beta^2 \chi\)</p>
+        <p>一般解は \(\chi(r) = C_1 e^{-\beta r} + C_2 e^{\beta r}\)。\(r \to \infty\) での発散を防ぐ束縛条件 (\(\chi \to 0\)) より \(C_2 = 0\)。</p>
+        <div class="ans-box">
+          <b>解：</b> \( \chi(r) \propto e^{-\beta r} \quad \left( \text{但し } \beta = \frac{\sqrt{-2m_e E}}{\hbar} \right) \)
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">(g)</span>動径関数の原点極限 \(r \to 0\)</h3>
+        <p>\(r \to 0\) では、最も強く発散する遠心力項 \(\frac{\hbar^2 l(l+1)}{2m_e r^2}\) が支配的となる。</p>
+        <div class="eq-wrap">
+          <div class="eq-scroll">
+            \[ -\frac{\hbar^2}{2m_e} \frac{d^2\chi}{dr^2} + \frac{\hbar^2 l(l+1)}{2m_e r^2} \chi(r) = 0 \implies r^2 \frac{d^2\chi}{dr^2} - l(l+1)\chi = 0 \]
+          </div>
+        </div>
+        <p>試行解 \(\chi(r) = r^s\) を代入すると：\(s(s-1) - l(l+1) = 0 \implies s = l+1, \, -l\)</p>
+        <p>原点での波動関数の規格化可能性（\(r \to 0\) で \(\chi(0) = 0\)）から、正の冪指数を選択：</p>
+        <div class="ans-box">
+          <b>解：</b> \( \chi(r) \propto r^{l+1} \)
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← [2] 障壁</div>
+        <div></div>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+
+  function goTo(id){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === id));
+    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === id));
+    document.getElementById('panels').scrollIntoView({behavior:'smooth', block:'start'});
+    const activeTab = document.querySelector('.tab-btn.active');
+    if(activeTab) activeTab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => goTo(t.dataset.panel)));
+  document.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=> goTo(btn.dataset.goto));
+  });
+</script>
+</body>
+</html>
