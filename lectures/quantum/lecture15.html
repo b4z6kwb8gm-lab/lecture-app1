@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>量子力学1A 完全体系化ノート（第7講〜第14講 統括ガイド）</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:580px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:30px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:24px;
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 12px;
+    color:var(--ink-dim);
+    font-size:13.5px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    padding:9px 13px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:5px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:22px 18px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .card h3 .tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:5px;
+    font-weight:700;
+  }
+  .card h3 .tag.gold{
+    background:var(--gold);
+  }
+  .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  /* ---------- 徹底強化版 横スクロールCSS（スマホ対応） ---------- */
+  .eq-wrap, .note, .formula-box, .insight, .summary-sec, .summary-sec p {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .eq-scroll, .note, .formula-box, .insight, .summary-sec p {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    background: var(--bg-panel-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 12px 14px;
+    -webkit-overflow-scrolling: touch !important;
+    max-width: 100% !important;
+  }
+
+  .eq-scroll::-webkit-scrollbar, .note::-webkit-scrollbar, .insight::-webkit-scrollbar, .summary-sec p::-webkit-scrollbar {
+    height: 4px;
+  }
+  .eq-scroll::-webkit-scrollbar-thumb, .note::-webkit-scrollbar-thumb, .insight::-webkit-scrollbar-thumb, .summary-sec p::-webkit-scrollbar-thumb {
+    background: var(--teal-dim);
+    border-radius: 4px;
+  }
+
+  /* MathJax描画要素のハミだし防止 */
+  mjx-container[jax="CHTML"][display="true"],
+  mjx-container[jax="SVG"][display="true"],
+  mjx-math {
+    display: inline-block !important;
+    max-width: none !important;
+    min-width: max-content !important;
+    color: var(--ink) !important;
+  }
+
+  .insight{
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .note{
+    border-left:3px solid var(--teal-dim);
+    background:rgba(114,217,196,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;
+    color:var(--ink-dim);
+  }
+
+  .summary-sec h4{
+    font-family:"Zen Old Mincho", serif;
+    color:var(--gold);
+    font-size:15px;
+    border-bottom:1px solid var(--gold-dim);
+    padding-bottom:4px;
+    margin:12px 0 8px;
+  }
+
+  table.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin: 10px 0;
+  }
+  table.summary-table th, table.summary-table td {
+    border: 1px solid var(--rule);
+    padding: 8px;
+    text-align: left;
+  }
+  table.summary-table th {
+    background: var(--bg-panel-2);
+    color: var(--gold);
+  }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics 1A — Full Master Guide</div>
+    <h1>量子力学1A 全体系統括ノート</h1>
+    <p class="sub">第7講〜第14講：理論構築・数学的操作の意味・式の物理的解釈の完全整理</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>全講義のロードマップ</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>数学的「操作」の意味</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>主要な「式」の解釈</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>講義別（7〜14）詳細ノート</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ 01 全講義のロードマップ ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>01 全体像：量子力学で一通り何を達成しようとしているのか？</h2>
+      <p class="lead">ミクロな粒子の「状態」「エネルギー」「測定結果」を数学的に予言・統一する理論の全ストーリー。</p>
+
+      <div class="card">
+        <h3><span class="tag gold">理論のゴール</span>ミクロな世界の運動・状態・測定の完全予測</h3>
+        <p>量子力学の目標は、ミクロな系（電子、原子、分子振動、透過散乱など）において、<b>① 粒子がどんな状態（波動関数）をとるか、② 許されるエネルギー（固有値）は何か、③ 物理量を測定した際に何が起きるか</b> を数学的に予測する理論体系を組み上げることです。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">ストーリー</span>第7講から第14講までの4つのフェーズ</h3>
+        <table class="summary-table">
+          <tr>
+            <th>フェーズ</th>
+            <th>対象講義</th>
+            <th>達成すること・物理的内容</th>
+          </tr>
+          <tr>
+            <td><b>Phase 1</b><br>1次元束縛系</td>
+            <td>第7講, 第8講</td>
+            <td>有限井戸・調和振動子ポテンシャルの中で粒子が「束縛」されたとき、なぜエネルギーが離散化（量子化）し、波動関数が壁の外へ染み出すのかを解明する[cite: 1, 2]。</td>
+          </tr>
+          <tr>
+            <td><b>Phase 2</b><br>理論の体系化</td>
+            <td>第9講</td>
+            <td>具体系の経験を元に、「状態」「物理量」「Born則（確率）」「波束の収縮」「Schrödinger方程式（時間発展）」という5つの公理へ一般化する[cite: 3]。</td>
+          </tr>
+          <tr>
+            <td><b>Phase 3</b><br>3次元水素原子</td>
+            <td>第10, 11, 12講</td>
+            <td>3次元空間の中心力場（クーロン場）へ拡張[cite: 4, 6]。角運動量（球面調和関数 $Y_{l,m}$）と動径（Laguerre陪多項式）に変数分離し、水素原子の軌道（$s, p, d$）と束縛エネルギー（$-13.6\text{ eV}$）を完全解明する[cite: 4, 5, 6]。</td>
+          </tr>
+          <tr>
+            <td><b>Phase 4</b><br>非束縛系と波束</td>
+            <td>第13, 14講</td>
+            <td>壁を超えて無限遠へ移動できる自由粒子・散乱系を扱う[cite: 7, 8]。確率流束 $\boldsymbol{j}$、トンネル効果、デルタ関数規格化、ガウス波束による最小不確定性原理（$\Delta x \Delta p \ge \hbar/2$）を実証する[cite: 7, 8]。</td>
+          </tr>
+        </table>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：02 数学的「操作」の意味 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 02 数学的「操作」の意味 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>02 操作の物理的意味：数学的・理論的「操作」は何を示すのか？</h2>
+      <p class="lead">講義で頻繁に行われた各種の計算手続き（操作）が、物理的に何を意味しているのかの徹底解説。</p>
+
+      <div class="card">
+        <h3><span class="tag">操作 1</span>無次元化（Dimensionless Reduction）</h3>
+        <p><b>【数学的操作】</b> 座標やエネルギーを、基本定数の組合せ（典型長さ $\lambda = \sqrt{\hbar / m\omega}$ や Bohr半径 $r_0$）で割って $\xi = x/\lambda$ や $\rho = 2\kappa r$ に変換する[cite: 2, 6]。</p>
+        <div class="insight">
+          <b>【物理的意味】</b> 系の「本質的なスケール」を抜き出す操作[cite: 2]。「何と比べて大きいか/小さいか」を明確にし、特定の物理系（質量やバネ定数の固有値）に依らない普遍的な方程式に還元する[cite: 2]。
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">操作 2</span>漸近解（極限解）の分離</h3>
+        <p><b>【数学的操作】</b> 原点 $r \to 0$ や無限遠 $r \to \infty$（$\xi \to \infty$）での挙動を抽出し、$\Phi(\xi) = H(\xi) e^{-\xi^2/2}$ や $\chi(r) = \tilde{L}(r) e^{-\kappa r}$ のように積の形で置く[cite: 2, 6]。</p>
+        <div class="insight">
+          <b>【物理的意味】</b> 無限遠で波動関数が発散しない「束縛条件」や、原点での規格化可能性を担保する操作[cite: 2, 6]。解の「発散要因」をあらかじめ分離し、有限領域での振動・挙動（多項式部分）だけに計算を集中させる[cite: 2, 6]。
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">操作 3</span>級数の打ち切り（Polynomial Truncation）</h3>
+        <p><b>【数学的操作】</b> 冪級数展開 $H(\xi) = \sum a_n \xi^n$ や $L(\rho) = \sum c_k \rho^k$ の漸化式で、分子が $0$ になる条件（$a_{n_*+2} = 0$）を課して多項式で止める[cite: 2, 5, 6]。</p>
+        <div class="note">
+          <b>【物理的意味】 「エネルギーの量子化」を引き起こす本質的要因！</b>[cite: 2, 6]<br>
+          無限級数のままだと無限遠で $e^{+\xi^2/2}$ や $e^{+\kappa r}$ のように発散してしまうため、物理的に存在可能な状態（束縛状態）として許されるために、エネルギーが特定の値（量子数 $m, n$）しか取れなくなる[cite: 2, 6]。
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">操作 4</span>変数分離 と 可換演算子（Separation of Variables & Commutators）</h3>
+        <p><b>【数学的操作】</b> 3次元ハミルトニアンに対し $u(r,\theta,\phi) = R(r)\Theta(\theta)\Phi(\phi)$ と分離する[cite: 4]。</p>
+        <div class="insight">
+          <b>【物理的意味】</b> 交換関係 $[\hat{H}, \hat{L}^2] = 0, [\hat{L}^2, \hat{L}_z] = 0$（可換性）が存在するため、エネルギー・全角運動量・$z$成分角運動量を<b>同時に100%の精度で測定可能（両立する）</b>であることを示している[cite: 4]。
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">操作 5</span>境界接続（Boundary Conditions）</h3>
+        <p><b>【数学的操作】</b> ポテンシャル障壁の境界 $x = \pm a$ で、波動関数の「値」と「1階微分」を一致させる[cite: 1, 7, 9]。</p>
+        <div class="insight">
+          <b>【物理的意味】</b> 2階微分項（運動エネルギー）の不自然な発散を防ぎ、粒子が領域間を移行する際の<b>確率流束の連続性（確率保存則）</b>を要請する操作[cite: 1, 7, 9]。
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← 01 全講義ロードマップ</div>
+        <div class="navbtn next" data-goto="p3">次へ：03 主要な「式」の解釈 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 03 主要な「式」の解釈 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>03 式の物理的解釈：導出された主要公式は何を語っているのか？</h2>
+      <p class="lead">導出された数式が示しているミクロな世界の物理的現象と直感的な解釈。</p>
+
+      <div class="card">
+        <h3><span class="tag">第7, 13講</span>トンネル効果 と 透過率 $T$</h3>
+        <div class="note">\[ T = \frac{1}{\cosh^2(2\kappa a)} = \frac{4k^2\kappa^2}{4k^2\kappa^2 + (k^2 + \kappa^2)^2 \sinh^2(2\kappa a)} \xrightarrow{2a\kappa \gg 1} \frac{16k^2\kappa^2}{(k^2+\kappa^2)^2} e^{-4\kappa a} \]</div>
+        <p>・古典力学では $E < V_0$ の粒子は $100\%$ 反射（$T=0$）される[cite: 7, 9]。<br>
+        ・量子力学では壁の内部で波動関数が $e^{-\kappa x}$ 的に減衰しながらも**染み出す**ため、壁の向こうへ抜ける確率 $T > 0$（<b>トンネル効果</b>）が存在する[cite: 1, 7, 9]。<br>
+        ・壁幅 $2a$ や高さ $V_0$ が大きくなると、透過率は<b>指数関数的に急激に減衰する</b>[cite: 7]。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">第8講</span>調和振動子の固有値 と 零点エネルギー</h3>
+        <div class="note">\[ E_m = \hbar \omega \left(m + \frac{1}{2}\right) \qquad (m = 0, 1, 2, \dots) \]</div>
+        <p>・エネルギー準位は一定の間隔 $\hbar\omega$ で離散化される[cite: 2]。<br>
+        ・基底状態（$m=0$）でも $E_0 = \frac{1}{2}\hbar\omega \neq 0$（<b>零点エネルギー</b>）を持つ[cite: 2]。不確定性原理により、ミクロな粒子が原点で完全停止することができないことを意味する。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">第9講</span>Born則、期待値、確率の連続の式</h3>
+        <div class="note">\[ P(E_n) = |c_n|^2, \qquad \langle A \rangle = \int \psi^* \hat{A} \psi dx, \qquad \frac{\partial\rho}{\partial t} + \nabla \cdot \boldsymbol{j} = 0 \]</div>
+        <p>・波動関数の絶対値2乗 $|c_n|^2$ が測定確率を与える（Born則）[cite: 3]。<br>
+        ・確率密度の時間変化は、確率流束 $\boldsymbol{j}$ の流出入と釣り合う（確率の局所保存則）[cite: 7]。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">第10, 11講</span>角運動量の量子化 と 不確定性</h3>
+        <div class="note">\[ \hat{L}^2 Y_{l,m} = \hbar^2 l(l+1) Y_{l,m}, \qquad \hat{L}_z Y_{l,m} = \hbar m_l Y_{l,m} \qquad (|m_l| \le l) \]</div>
+        <p>・全角運動量 $|\boldsymbol{L}| = \hbar\sqrt{l(l+1)}$ と $z$ 成分 $L_z = \hbar m_l$ の双方が量子化される[cite: 5]。<br>
+        ・常に $|\boldsymbol{L}| > |L_z|_{\text{max}} = \hbar l$ であり、<b>角運動量が完全に向きを固定することはできない</b>（不確定性原理）[cite: 5]。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">第12講</span>水素原子の束縛エネルギー と Bohr半径</h3>
+        <div class="note">\[ E_n = -\frac{\hbar^2}{2m r_0^2}\frac{1}{n^2} \approx -\frac{13.6 \text{ eV}}{n^2}, \qquad r_0 = \frac{4\pi\epsilon_0 \hbar^2}{e^2 m} \approx 0.53 \text{ Å} \]</div>
+        <p>・エネルギーは主量子数 $n = 1, 2, 3, \dots$ のみで決まり、$n^2$ 重の縮退を持つ[cite: 6]。<br>
+        ・基底状態（$n=1$）のエネルギー $-13.6\text{ eV}$ は、電子を引き剥がすために必要なイオン化エネルギーを表す[cite: 6]。$r_0$ は水素原子の典型的な半径スケール[cite: 6]。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">第14講</span>ガウス波束 と 最小不確定性原理</h3>
+        <div class="note">\[ \Delta x \cdot \Delta p = \frac{\hbar}{2}\sqrt{1 + \frac{\hbar^2 \sigma^4}{m^2}t^2} \ge \frac{\hbar}{2} \]</div>
+        <p>・時刻 $t=0$ において、不確定性の積は理論的最小値 $\Delta x \Delta p = \frac{\hbar}{2}$ を正確に達成する（最小波束）[cite: 8]。<br>
+        ・時間の経過とともに空間的な広がり $\Delta x(t)$ は拡大していく（波束の拡散）[cite: 8]。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← 02 数学的「操作」の意味</div>
+        <div class="navbtn next" data-goto="p4">次へ：04 講義別（7〜14）詳細ノート →</div>
+      </footer>
+    </section>
+
+    <!-- ============ 04 講義別詳細ノート ============ -->
+    <section class="panel" data-panel="p4">
+      <h2>04 講義別（第7講〜第14講）理論・数式完全解説ノート</h2>
+      <p class="lead">講義ごとの数式変形と論理ステップの総まとめ。</p>
+
+      <!-- 第7講 -->
+      <div class="card">
+        <h3><span class="tag">第7講</span>有限井戸ポテンシャル</h3>
+        <p><b>1. 方程式と解の型:</b> 井戸の高さ $V_0$[cite: 1]。<br>
+        ・内部 ($|x| \le L$): $u'' = -k^2 u \implies u = A\cos(kx) + B\sin(kx)$[cite: 1]<br>
+        ・外部 ($|x| > L$): $u'' = \kappa^2 u \implies u = C e^{-\kappa |x|}$ （減衰解のみ残す）[cite: 1]</p>
+        <p><b>2. 偶関数解の超越方程式:</b> $x=L$ での値と微分の連続条件より $\kappa = k \tan(kL)$[cite: 1]。<br>
+        パラメータ $R^2 = (kL)^2 + (\kappa L)^2 = \frac{2mL^2 V_0}{\hbar^2}$ の円と $\tan$ 導入の交点問題へ還元[cite: 1]。</p>
+      </div>
+
+      <!-- 第8講 -->
+      <div class="card">
+        <h3><span class="tag">第8講</span>一次元調和振動子</h3>
+        <p><b>1. 無次元化:</b> $\lambda = \sqrt{\frac{\hbar}{m\omega}}$, $\xi = \frac{x}{\lambda}$, $\epsilon = \frac{2E}{\hbar\omega}$ $\implies \left[\frac{d^2}{d\xi^2} + (\epsilon - \xi^2)\right]\Phi(\xi) = 0$[cite: 2]。</p>
+        <p><b>2. Hermite方程式と漸化式:</b> $\Phi(\xi) = H(\xi)e^{-\xi^2/2} \implies H'' - 2\xi H' + (\epsilon - 1)H = 0$[cite: 2]。<br>
+        漸化式 $a_{n+2} = \frac{2n+1-\epsilon}{(n+2)(n+1)}a_n$[cite: 2]。$a_{n_*+2} = 0$ の打ち切り条件より $\epsilon = 2m+1 \implies E_m = \hbar\omega(m + 1/2)$[cite: 2]。</p>
+      </div>
+
+      <!-- 第9講 -->
+      <div class="card">
+        <h3><span class="tag">第9講</span>量子力学の5つの公理</h3>
+        <p><b>公理1:</b> 状態は波動関数 $\psi(x,t) = \sum c_n u_n(x) e^{-i E_n t/\hbar}$、完全性 $\sum u_n^*(x')u_n(x) = \delta(x-x')$[cite: 3]。<br>
+        <b>公理2:</b> 物理量はエルミート演算子（$\hat{x}, \hat{p}, \hat{H}$）の固有値（実数）[cite: 3]。<br>
+        <b>公理3:</b> 観測確率は $P(E_n) = |c_n|^2$[cite: 3]。期待値 $\langle A \rangle = \int \psi^* \hat{A} \psi dx = \sum |c_i|^2 a_i$[cite: 3]。<br>
+        <b>公理4:</b> 測定の瞬間、状態は固有状態へ収縮する[cite: 3]。$[\hat{A},\hat{B}]=0$ で同時測定可能[cite: 3, 4]。<br>
+        <b>公理5:</b> 時間発展は $i\hbar \frac{\partial\psi}{\partial t} = \hat{H}\psi$[cite: 3]。</p>
+      </div>
+
+      <!-- 第10, 11講 -->
+      <div class="card">
+        <h3><span class="tag">第10, 11講</span>中心力場・角運動量・球面調和関数</h3>
+        <p><b>1. 極座標分離:</b> $\hat{H} = \hat{H}(r) + \frac{\hat{L}^2}{2mr^2}$[cite: 4]。$u = R(r)\Theta(\theta)\Phi(\phi)$ と分離[cite: 4]。</p>
+        <p><b>2. 角度解 $\Phi(\phi)$ と $Y_{l,m}$:</b> $\Phi(\phi) = \frac{1}{\sqrt{2\pi}} e^{im\phi}$ ($m$ は整数)[cite: 4, 5]。<br>
+        $x = \cos\theta$ の代入からLegendre陪微分方程式を導出し、端点発散の打ち切り条件より $\lambda = l(l+1)$、量子化条件 $-l \le m_l \le l$[cite: 5]。</p>
+      </div>
+
+      <!-- 第12講 -->
+      <div class="card">
+        <h3><span class="tag">第12講</span>水素原子の動径方程式</h3>
+        <p><b>1. 標準形変形:</b> $R(r) = \frac{\chi(r)}{r} \implies \chi''(r) - \left[\kappa^2 - \frac{me^2}{2\pi\epsilon_0\hbar^2 r} + \frac{l(l+1)}{r^2}\right]\chi(r) = 0$[cite: 6]。</p>
+        <p><b>2. 漸近形と主量子数:</b> $\chi(r) \sim e^{-\kappa r} r^{l+1} L(\rho)$（$\rho = 2\kappa r$）[cite: 6]。漸化式の打ち切りより主量子数 $n = l + k_* + 1 \implies E_n = -\frac{13.6 \text{ eV}}{n^2}$（$n^2$ 重縮退）[cite: 6]。</p>
+      </div>
+
+      <!-- 第13, 14講 -->
+      <div class="card">
+        <h3><span class="tag">第13, 14講</span>散乱系・流束・ガウス波束</h3>
+        <p><b>1. 確率流束:</b> $\boldsymbol{j} = \frac{i\hbar}{2m}(\psi \nabla\psi^* - \psi^* \nabla\psi)$[cite: 7]。ポテンシャル障壁の透過率 $T = \frac{1}{1 + \sinh^2(2\kappa a)}$[cite: 7]。</p>
+        <p><b>2. デルタ関数規格化:</b> $\int_{-\infty}^\infty u_{k'}^* u_k dx = \delta(k - k')$ ($A_k = 1/\sqrt{2\pi}$)[cite: 8]。</p>
+        <p><b>3. ガウス型最小波束:</b> $\hat{u}(k) \propto e^{-(k-k_0)^2/2\sigma^2} \implies \Delta x \Delta p = \frac{\hbar}{2}\sqrt{1 + \frac{\hbar^2\sigma^4 t^2}{m^2}} \ge \frac{\hbar}{2}$[cite: 8]。</p>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p3">← 03 主要な「式」の解釈</div>
+        <div></div>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+
+    function goTo(id) {
+      tabs.forEach(function(t) {
+        if (t.getAttribute('data-panel') === id) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
+
+      panels.forEach(function(p) {
+        if (p.getAttribute('data-panel') === id) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      const mainContainer = document.getElementById('panels');
+      if (mainContainer) {
+        mainContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      const activeTab = document.querySelector('.tab-btn.active');
+      if (activeTab) {
+        activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        const targetPanel = this.getAttribute('data-panel');
+        if (targetPanel) {
+          goTo(targetPanel);
+        }
+      });
+    });
+
+    const navBtns = document.querySelectorAll('[data-goto]');
+    navBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const targetPanel = this.getAttribute('data-goto');
+        if (targetPanel) {
+          goTo(targetPanel);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
