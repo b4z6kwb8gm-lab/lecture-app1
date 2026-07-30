@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>2026年度 量子力学1A 予想・融合問題｜統合学習マスター</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1626;
+    --bg-panel:#161f34;
+    --bg-panel-2:#131b2e;
+    --ink:#eef2f8;
+    --ink-dim:#8ea0bf;
+    --ink-faint:#5c6c8a;
+    --gold:#e8c15f;
+    --gold-dim:#8a7443;
+    --teal:#72d9c4;
+    --teal-dim:#3f6f68;
+    --red:#e86f72;
+    --rule:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(114,217,196,0.07), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(232,193,95,0.06), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+
+  .app{
+    max-width:580px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:28px 20px 16px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:23px;
+    margin:6px 0 4px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    margin:0 0 8px;
+    color:var(--ink-dim);
+    font-size:13px;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    padding:10px 12px 0;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--rule);
+    position:sticky;
+    top:0;
+    z-index:20;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--ink-faint);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12px;
+    font-weight:500;
+    padding:9px 11px 11px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn .num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    margin-right:4px;
+    color:var(--ink-faint);
+  }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--teal);
+  }
+  .tab-btn.active .num{ color:var(--teal); }
+
+  /* ---------- PANELS ---------- */
+  main{
+    flex:1;
+    padding:20px 16px 60px;
+  }
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel h2{
+    font-family:"Zen Old Mincho", serif;
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel .lead{
+    color:var(--ink-dim);
+    font-size:13px;
+    margin:0 0 20px;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    margin:0 0 10px;
+    font-size:14px;
+    font-weight:700;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .card h3 .tag-q{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--gold);
+    background:rgba(232,193,95,0.12);
+    border:1px solid var(--gold-dim);
+    padding:2px 6px;
+    border-radius:4px;
+    font-weight:700;
+  }
+  .card h3 .tag-step{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px;
+    color:var(--bg);
+    background:var(--teal);
+    padding:2px 6px;
+    border-radius:4px;
+    font-weight:700;
+  }
+
+  .card p{ margin:8px 0; font-size:13.5px; color:var(--ink); line-height:1.7; }
+  .card p.dim{ color:var(--ink-dim); font-size:13px; }
+
+  /* ---------- FORMULA BOX ---------- */
+  .formula-box{
+    background:var(--bg-panel-2);
+    border-left:3px solid var(--teal);
+    border-radius:0 8px 8px 0;
+    padding:10px 12px;
+    margin:10px 0 12px;
+    font-size:12.5px;
+    color:var(--ink-dim);
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .formula-box .title{
+    color:var(--teal);
+    font-weight:700;
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    margin-bottom:4px;
+    display:block;
+  }
+
+  /* ---------- OPTIONS (選択肢デザイン) ---------- */
+  .options-grid{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:16px 0;
+  }
+  .opt-btn{
+    background:var(--bg-panel-2);
+    border:1px solid rgba(255, 255, 255, 0.12);
+    border-radius:10px;
+    padding:12px 14px;
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:13.5px;
+    text-align:left;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:all .2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    line-height:1.5;
+  }
+  .opt-btn:hover:not(:disabled){
+    border-color:var(--teal);
+    background:rgba(114,217,196,0.08);
+    transform:translateY(-1px);
+    box-shadow: 0 4px 10px rgba(114,217,196,0.15);
+  }
+  .opt-btn .opt-num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:12px;
+    font-weight:700;
+    color:var(--teal);
+    background:rgba(114,217,196,0.12);
+    border:1px solid var(--teal-dim);
+    padding:3px 8px;
+    border-radius:6px;
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:24px;
+  }
+  .opt-btn .opt-text{
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    overflow-x:auto;
+  }
+  .opt-btn:disabled{
+    cursor:default;
+    opacity:0.75;
+  }
+  
+  .opt-btn.correct{
+    border-color:var(--teal) !important;
+    background:rgba(114,217,196,0.18) !important;
+    opacity:1 !important;
+    box-shadow:0 0 12px rgba(114,217,196,0.3) !important;
+  }
+  .opt-btn.correct .opt-num{
+    background:var(--teal);
+    color:var(--bg);
+    border-color:var(--teal);
+  }
+  .opt-btn.wrong{
+    border-color:var(--red) !important;
+    background:rgba(232,111,114,0.18) !important;
+    opacity:1 !important;
+    box-shadow:0 0 12px rgba(232,111,114,0.3) !important;
+  }
+  .opt-btn.wrong .opt-num{
+    background:var(--red);
+    color:#fff;
+    border-color:var(--red);
+  }
+
+  .explain-area{
+    display:none;
+    margin-top:16px;
+    padding:14px 16px;
+    border-radius:10px;
+    font-size:13.5px;
+    line-height:1.65;
+    animation:fade .3s ease;
+  }
+  .explain-area.show{ display:block; }
+  .explain-area.is-correct{
+    border:1px solid var(--teal);
+    background:rgba(114,217,196,0.08);
+  }
+  .explain-area.is-wrong{
+    border:1px solid var(--red);
+    background:rgba(232,111,114,0.08);
+  }
+  .explain-title{
+    font-weight:700;
+    font-size:14.5px;
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .is-correct .explain-title{ color:var(--teal); }
+  .is-wrong .explain-title{ color:var(--red); }
+
+  /* ---------- 横スクロール強化（スマホ対応） ---------- */
+  .eq-wrap, .note, .formula-box, .insight, .summary-sec, .summary-sec p {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .eq-scroll, .note, .formula-box, .insight, .summary-sec p {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    background: var(--bg-panel-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 12px 14px;
+    -webkit-overflow-scrolling: touch !important;
+    max-width: 100% !important;
+  }
+
+  .eq-scroll::-webkit-scrollbar, .note::-webkit-scrollbar, .insight::-webkit-scrollbar, .summary-sec p::-webkit-scrollbar {
+    height: 4px;
+  }
+  .eq-scroll::-webkit-scrollbar-thumb, .note::-webkit-scrollbar-thumb, .insight::-webkit-scrollbar-thumb, .summary-sec p::-webkit-scrollbar-thumb {
+    background: var(--teal-dim);
+    border-radius: 4px;
+  }
+
+  /* MathJax描画要素のハミだし防止 */
+  mjx-container[jax="CHTML"][display="true"],
+  mjx-container[jax="SVG"][display="true"],
+  mjx-math {
+    display: inline-block !important;
+    max-width: none !important;
+    min-width: max-content !important;
+    color: var(--ink) !important;
+  }
+
+  .insight{
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(232,193,95,0.08), transparent);
+    border-radius:0 8px 8px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .insight b{ color:var(--gold); font-weight:700; }
+
+  .note{
+    border-left:3px solid var(--teal-dim);
+    background:rgba(114,217,196,0.05);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;
+    color:var(--ink-dim);
+  }
+
+  .summary-sec h4{
+    font-family:"Zen Old Mincho", serif;
+    color:var(--gold);
+    font-size:15px;
+    border-bottom:1px solid var(--gold-dim);
+    padding-bottom:4px;
+    margin:12px 0 8px;
+  }
+
+  footer.pagenav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    gap:10px;
+  }
+  .navbtn{
+    flex:1;
+    background:var(--bg-panel);
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:12.5px;
+    padding:11px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .navbtn:active{ background:var(--bg-panel-2); }
+  .navbtn.next{ color:var(--teal); }
+  .navbtn.prev{ color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="eyebrow">Quantum Mechanics 1A — Integrated Master</div>
+    <h1>2026年度 予想・融合問題 統合学習マスター</h1>
+    <p class="sub">解説ノート ＆ 6択クイズ演習をワンタップで切り替え</p>
+  </header>
+
+  <!-- スムーズに切り替えられるタブメニュー -->
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-panel="p1"><span class="num">01</span>【解説】大問1:ガウス波束</button>
+    <button class="tab-btn" data-panel="p2"><span class="num">02</span>【クイズ】大問1:ガウス波束</button>
+    <button class="tab-btn" data-panel="p3"><span class="num">03</span>【解説】大問2:段差ポテンシャル</button>
+    <button class="tab-btn" data-panel="p4"><span class="num">04</span>【クイズ】大問2:段差ポテンシャル</button>
+    <button class="tab-btn" data-panel="p5"><span class="num">05</span>【解説】大問3:p軌道・動径極限</button>
+    <button class="tab-btn" data-panel="p6"><span class="num">06</span>【クイズ】大問3:p軌道・動径極限</button>
+    <button class="tab-btn" data-panel="p7"><span class="num">07</span>【解説】大問4:融合球状障壁</button>
+    <button class="tab-btn" data-panel="p8"><span class="num">08</span>【クイズ】大問4:融合球状障壁</button>
+    <button class="tab-btn" data-panel="p9"><span class="num">09</span>直前要点確認シート</button>
+  </nav>
+
+  <main id="panels">
+
+    <!-- ============ [01] 解説：大問1 ============ -->
+    <section class="panel active" data-panel="p1">
+      <h2>大問[1] ガウス型波束と最小不確定性原理（解説ノート）</h2>
+      <p class="lead">ガウス積分を用いた規格化条件、平方完成による \(u(x)\) の導出、不確定性の積 \(\Delta x \Delta p\)。</p>
+
+      <div class="card">
+        <h3><span class="tag">大問1 (a)</span>重み関数 \(\hat{u}(k)\) の規格化定数 \(A\)</h3>
+        <p><b>【詳細ステップ】</b> 規格化条件 \(\int_{-\infty}^{\infty} |\hat{u}(k)|^2 dk = 1\) に \(\hat{u}(k) = A \exp\left[ -\frac{(k - k_0)^2}{2\sigma^2} \right]\) を代入する：</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ |A|^2 \int_{-\infty}^{\infty} \exp\left[ -\frac{(k - k_0)^2}{\sigma^2} \right] dk = 1 \]</div></div>
+        <p>ガウス積分の公式 \(\int_{-\infty}^{\infty} e^{-a(k-k_0)^2} dk = \sqrt{\frac{\pi}{a}}\) （\(a = \frac{1}{\sigma^2}\)）を適用する：</p>
+        <div class="note">\[ \mathbf{A = \frac{1}{\pi^{1/4}\sqrt{\sigma}}} \]</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">大問1 (b)</span>逆フーリエ変換と位置の確率密度 \(|u(x)|^2\)</h3>
+        <p><b>【詳細ステップ】</b> 定義 \(u(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} \hat{u}(k) e^{ikx} dk\) に代入し、指数部分を \(k\) について平方完成する：</p>
+        <div class="eq-wrap"><div class="eq-scroll">\[ -\frac{(k - k_0)^2}{2\sigma^2} + ikx = -\frac{1}{2\sigma^2}\left( k - k_0 - i\sigma^2 x \right)^2 - \frac{\sigma^2 x^2}{2} + i k_0 x \]</div></div>
+        <p>\(k\) に関するガウス積分を実行すると \(\sqrt{2\pi \sigma^2} = \sqrt{2\pi}\sigma\) が現れ、前線の分母 \(\sqrt{2\pi}\) と相殺する：</p>
+        <div class="note">\[ \mathbf{|u(x)|^2 = A^2 \sigma^2 e^{-\sigma^2 x^2} = \frac{\sigma}{\sqrt{\pi}} e^{-\sigma^2 x^2}} \quad (\text{\(x=0\) を中心とするガウス分布}) \]</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">大問1 (c)</span>標準偏差 \(\Delta x, \Delta p\) と最小不確定性</h3>
+        <p>分布より \(\Delta x = \frac{1}{\sqrt{2}\sigma}\)、\(\Delta p = \hbar \Delta k = \frac{\hbar \sigma}{\sqrt{2}}\) となる。</p>
+        <div class="note">\[ \mathbf{\Delta x \Delta p = \left(\frac{1}{\sqrt{2}\sigma}\right) \left(\frac{\hbar \sigma}{\sqrt{2}}\right) = \frac{\hbar}{2}} \quad (\text{理論的最小値を達成}) \]</div>
+      </div>
+
+      <footer class="pagenav">
+        <div></div>
+        <div class="navbtn next" data-goto="p2">次へ：【クイズ】大問1 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [02] クイズ：大問1 ============ -->
+    <section class="panel" data-panel="p2">
+      <h2>大問[1] 演習クイズ（ガウス波束）</h2>
+      <p class="lead">問題文とヒント公式を見て正しい選択肢を選んでください。</p>
+
+      <div class="card" id="q1a">
+        <h3><span class="tag-q">大問[1](a)</span><span class="tag-step">Q1</span>重み関数の規格化定数 \(A\)</h3>
+        <div class="formula-box">
+          <span class="title">ガウス積分の公式</span>
+          \[ \int_{-\infty}^{\infty} \exp\left[-a(k-k_0)^2\right] dk = \sqrt{\frac{\pi}{a}} \qquad (a > 0) \]
+        </div>
+        <p>\(\hat{u}(k) = A \exp\left[ -\frac{(k - k_0)^2}{2\sigma^2} \right]\) の規格化条件 \(\int_{-\infty}^\infty |\hat{u}(k)|^2 dk = 1\) から求まる \(A\) を選べ。</p>
+        
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q1a', 0)"><span class="opt-num">1</span><span class="opt-text">\(A = \frac{1}{\sqrt{\pi}\sigma}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 1)"><span class="opt-num">2</span><span class="opt-text">\(A = \frac{1}{\pi^{1/4}\sqrt{\sigma}}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 2)"><span class="opt-num">3</span><span class="opt-text">\(A = \sqrt{\frac{2}{\pi\sigma}}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 3)"><span class="opt-num">4</span><span class="opt-text">\(A = \frac{1}{2\pi \sigma^2}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 4)"><span class="opt-num">5</span><span class="opt-text">\(A = \frac{\sigma}{\pi}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1a', 5)"><span class="opt-num">6</span><span class="opt-text">\(A = 1\)</span></button>
+        </div>
+
+        <div class="explain-area" id="q1a-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">正解は **2** です。\(|A|^2 \int e^{-(k-k_0)^2/\sigma^2} dk = |A|^2 \sqrt{\pi}\sigma = 1 \implies A = \frac{1}{\pi^{1/4}\sqrt{\sigma}}\) となります。</div>
+        </div>
+      </div>
+
+      <div class="card" id="q1c">
+        <h3><span class="tag-q">大問[1](c)</span><span class="tag-step">Q2</span>不確定性の積 \(\Delta x \Delta p\)</h3>
+        <div class="formula-box">
+          <span class="title">標準偏差の定義と積</span>
+          \[ \Delta x = \frac{1}{\sqrt{2}\sigma}, \qquad \Delta p = \frac{\hbar \sigma}{\sqrt{2}} \]
+        </div>
+        <p>ガウス波束における不確定性の積 \(\Delta x \Delta p\) の値を選べ。</p>
+
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q1c', 0)"><span class="opt-num">1</span><span class="opt-text">\(\Delta x \Delta p = \hbar\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1c', 1)"><span class="opt-num">2</span><span class="opt-text">\(\Delta x \Delta p = \frac{\hbar}{2}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1c', 2)"><span class="opt-num">3</span><span class="opt-text">\(\Delta x \Delta p = \frac{\hbar}{2\sigma}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1c', 3)"><span class="opt-num">4</span><span class="opt-text">\(\Delta x \Delta p = 2\hbar\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1c', 4)"><span class="opt-num">5</span><span class="opt-text">\(\Delta x \Delta p = 0\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q1c', 5)"><span class="opt-num">6</span><span class="opt-text">\(\Delta x \Delta p = \frac{\hbar}{\pi}\)</span></button>
+        </div>
+
+        <div class="explain-area" id="q1c-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">正解は **2** です。\(\left(\frac{1}{\sqrt{2}\sigma}\right) \left(\frac{\hbar \sigma}{\sqrt{2}}\right) = \frac{\hbar}{2}\) となり、理論的最小値を達成します。</div>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p1">← 【解説】大問1</div>
+        <div class="navbtn next" data-goto="p3">次へ：【解説】大問2 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [03] 解説：大問2 ============ -->
+    <section class="panel" data-panel="p3">
+      <h2>大問[2] 1次元ポテンシャル段差と反射・透過（解説ノート）</h2>
+      <p class="lead">段差ポテンシャル \(V_0 < E\) に対するシュレディンガー方程式、確率流束 \(j\)、反射率 \(R\)・透過率 \(T\)。</p>
+
+      <div class="card">
+        <h3><span class="tag">大問2 (a)(b)(c)</span>解の設定と接続条件</h3>
+        <p><b>領域1 (\(x<0\)):</b> \(u_1 = A_1 e^{i k_1 x} + A_2 e^{-i k_1 x}\) \(\left(k_1 = \frac{\sqrt{2m_e E}}{\hbar}\right)\)</p>
+        <p><b>領域2 (\(x \ge 0\)):</b> \(u_2 = B_1 e^{i k_2 x}\) \(\left(k_2 = \frac{\sqrt{2m_e (E-V_0)}}{\hbar}\right)\)</p>
+        <p>\(x=0\) での連続および微分連続条件を連立させて解く：</p>
+        <div class="note">\[ \mathbf{A_2 = \frac{k_1 - k_2}{k_1 + k_2} A_1}, \qquad \mathbf{B_1 = \frac{2k_1}{k_1 + k_2} A_1} \]</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">大問2 (d)</span>反射率 \(R\) と透過率 \(T\)</h3>
+        <p>流束密度比より：</p>
+        <div class="note">\[ \mathbf{R = \left|\frac{A_2}{A_1}\right|^2 = \left(\frac{k_1 - k_2}{k_1 + k_2}\right)^2}, \qquad \mathbf{T = \frac{k_2}{k_1}\left|\frac{B_1}{A_1}\right|^2 = \frac{4 k_1 k_2}{(k_1 + k_2)^2}} \quad (R+T=1) \]</div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p2">← 【クイズ】大問1</div>
+        <div class="navbtn next" data-goto="p4">次へ：【クイズ】大問2 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [04] クイズ：大問2 ============ -->
+    <section class="panel" data-panel="p4">
+      <h2>大問[2] 演習クイズ（段差ポテンシャル）</h2>
+      <p class="lead">問題文とヒント公式を見て正しい選択肢を選んでください。</p>
+
+      <div class="card" id="q2d">
+        <h3><span class="tag-q">大問[2](d)</span><span class="tag-step">Q3</span>透過率 \(T\) の公式</h3>
+        <div class="formula-box">
+          <span class="title">流束比の定義</span>
+          \[ T = \frac{k_2}{k_1} \left|\frac{B_1}{A_1}\right|^2, \qquad B_1 = \frac{2k_1}{k_1 + k_2} A_1 \]
+        </div>
+        <p>段差ポテンシャルにおける透過率 \(T\) として正しい式を選べ。</p>
+
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q2d', 0)"><span class="opt-num">1</span><span class="opt-text">\(T = \frac{k_1 - k_2}{k_1 + k_2}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 1)"><span class="opt-num">2</span><span class="opt-text">\(T = \frac{4 k_1 k_2}{(k_1 + k_2)^2}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 2)"><span class="opt-num">3</span><span class="opt-text">\(T = \left(\frac{2k_1}{k_1 + k_2}\right)^2\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 3)"><span class="opt-num">4</span><span class="opt-text">\(T = \frac{(k_1 - k_2)^2}{(k_1 + k_2)^2}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 4)"><span class="opt-num">5</span><span class="opt-text">\(T = 1\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q2d', 5)"><span class="opt-num">6</span><span class="opt-text">\(T = 0\)</span></button>
+        </div>
+
+        <div class="explain-area" id="q2d-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">正解は **2** です。\(\frac{k_2}{k_1} \left(\frac{2k_1}{k_1 + k_2}\right)^2 = \frac{4k_1 k_2}{(k_1 + k_2)^2}\) と導かれます。</div>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p3">← 【解説】大問2</div>
+        <div class="navbtn next" data-goto="p5">次へ：【解説】大問3 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [05] 解説：大問3 ============ -->
+    <section class="panel" data-panel="p5">
+      <h2>大問[3] 水素原子 \(p_z\) 軌道と動径極限解析（解説ノート）</h2>
+      <p class="lead">球面調和関数 \(Y_{1,0}\)（\(p_z\) 軌道）の導出、プロット形状、原点極限 \(r \to 0\) のEuler型方程式。</p>
+
+      <div class="card">
+        <h3><span class="tag">大問3 (a)(b)</span>\(Y_{1,0}\)（\(p_z\) 軌道）の形と概形特徴</h3>
+        <p>一般公式に \(l=1, m=0\) を代入する (\(x=\cos\theta\))：</p>
+        <div class="note">\[ \mathbf{Y_{1,0}(\theta) = \sqrt{\frac{3}{4\pi}}\cos\theta} \]</div>
+        <p><b>【概形の特徴】</b> \(\theta = 0, \pi\) （\(z\) 軸上）で最大値をとり、\(\theta = \pi/2\) （\(x-y\) 平面上）で \(0\) となる。\(z\) 軸方向に上下に伸びた2つのダンベル型ローブを描く。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag">大問3 (c)</span>\(l=1\)（\(p\) 軌道）の原点極限 \(r \to 0\) 解</h3>
+        <p>\(r \to 0\) では遠心力項 \(\frac{\hbar^2 \cdot 1(1+1)}{2m_e r^2}\) が支配的となり、Euler型微分方程式 \(\frac{d^2 \chi}{dr^2} - \frac{2}{r^2}\chi = 0\) を得る。試行解 \(\chi = r^s \implies s = 2, -1\)。発散防止より：</p>
+        <div class="note">\[ \mathbf{\chi(r) \propto r^2} \qquad \left( \implies R(r) = \frac{\chi(r)}{r} \propto r^1 \right) \]</div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p4">← 【クイズ】大問2</div>
+        <div class="navbtn next" data-goto="p6">次へ：【クイズ】大問3 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [06] クイズ：大問3 ============ -->
+    <section class="panel" data-panel="p6">
+      <h2>大問[3] 演習クイズ（p軌道と動径極限）</h2>
+      <p class="lead">問題文とヒント公式を見て正しい選択肢を選んでください。</p>
+
+      <div class="card" id="q3c">
+        <h3><span class="tag-q">大問[3](c)</span><span class="tag-step">Q4</span>\(l=1\)（\(p\) 軌道）の原点極限 \(\chi(r)\)</h3>
+        <div class="formula-box">
+          <span class="title">支配的な Euler型方程式</span>
+          \[ \frac{d^2\chi}{dr^2} - \frac{2}{r^2}\chi = 0 \implies \chi(r) = r^s \]
+        </div>
+        <p>原点での発散を防ぐ境界条件を満たす解 \(\chi(r)\) の \(r\) 依存性を選べ。</p>
+
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q3c', 0)"><span class="opt-num">1</span><span class="opt-text">\(\chi(r) \propto \frac{1}{r}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3c', 1)"><span class="opt-num">2</span><span class="opt-text">\(\chi(r) \propto r^2\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3c', 2)"><span class="opt-num">3</span><span class="opt-text">\(\chi(r) \propto r\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3c', 3)"><span class="opt-num">4</span><span class="opt-text">\(\chi(r) \propto r^3\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3c', 4)"><span class="opt-num">5</span><span class="opt-text">\(\chi(r) \propto e^{-\alpha r}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q3c', 5)"><span class="opt-num">6</span><span class="opt-text">\(\chi(r) \propto \text{定数}\)</span></button>
+        </div>
+
+        <div class="explain-area" id="q3c-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">正解は **2** です。\(s(s-1) - 2 = 0 \implies s = 2, -1\)。発散を防ぐ条件より正の解 \(s=2\) つまり \(\chi(r) \propto r^2\) となります。</div>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p5">← 【解説】大問3</div>
+        <div class="navbtn next" data-goto="p7">次へ：【解説】大問4 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [07] 解説：大問4（融合） ============ -->
+    <section class="panel" data-panel="p7">
+      <h2>大問[4] 【最高峰融合問題】 3次元球状デルタ障壁（解説ノート）</h2>
+      <p class="lead">大問2（1次元障壁散乱）× 大問3（3次元動径方程式）の融合。動径不連続条件と透過振幅。</p>
+
+      <div class="card">
+        <h3><span class="tag gold">融合問題 (a)(b)</span>動径方程式と境界連続条件</h3>
+        <p><b>【(a) 動径方程式】</b> \(l=0\) かつ \(r \neq a\) で \(V(r)=0\) のため自由粒子型同次方程式：\(\frac{d^2 \chi}{dr^2} + k^2 \chi(r) = 0\)</p>
+        <p><b>【(b) 連続条件】</b> \(r=a\) における \(\chi_1(a) = \chi_2(a)\) より：</p>
+        <div class="note">\[ \mathbf{A \sin(ka) = B e^{-ika} + C e^{ika}} \]</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag gold">融合問題 (c)</span>微分の不連続条件（ジャンプ条件）の証明</h3>
+        <p>方程式を微小区間 \([a-\epsilon, a+\epsilon]\) で積分し \(\epsilon \to 0\) の極限をとる：</p>
+        <div class="note">\[ \mathbf{\left.\frac{d\chi_2}{dr}\right|_{r=a} - \left.\frac{d\chi_1}{dr}\right|_{r=a} = \frac{2m_e \alpha}{\hbar^2} \chi(a)} \quad (\text{証明終了}) \]</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag gold">融合問題 (d)</span>透過振幅比 \(\frac{C}{A}\) の導出</h3>
+        <p>\(\beta = \frac{2m_e \alpha}{\hbar^2}\) と置く。不連続条件に代入して \(B\) を消去する：</p>
+        <div class="note">\[ \mathbf{\frac{C}{A} = \frac{1}{2} + \frac{\beta}{2ik} e^{-ika} \sin(ka)} \]</div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p6">← 【クイズ】大問3</div>
+        <div class="navbtn next" data-goto="p8">次へ：【クイズ】大問4 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [08] クイズ：大問4（融合） ============ -->
+    <section class="panel" data-panel="p8">
+      <h2>大問[4] 演習クイズ（融合球状障壁）</h2>
+      <p class="lead">問題文とヒント公式を見て正しい選択肢を選んでください。</p>
+
+      <div class="card" id="q4c">
+        <h3><span class="tag-q">大問[4](c)</span><span class="tag-step">Q5</span>\(r=a\) での微分の不連続条件</h3>
+        <div class="formula-box">
+          <span class="title">微小区間積分とデルタ関数の性質</span>
+          \[ -\frac{\hbar^2}{2m_e}\int_{a-\epsilon}^{a+\epsilon} \chi'' dr + \alpha \int_{a-\epsilon}^{a+\epsilon} \delta(r-a)\chi(r) dr = 0 \]
+        </div>
+        <p>\(r=a\) における 1階微分の跳び（不連続条件）として正しい式を選べ。</p>
+
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q4c', 0)"><span class="opt-num">1</span><span class="opt-text">\(\chi_2'(a) - \chi_1'(a) = 0\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4c', 1)"><span class="opt-num">2</span><span class="opt-text">\(\chi_2'(a) - \chi_1'(a) = \frac{2m_e \alpha}{\hbar^2} \chi(a)\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4c', 2)"><span class="opt-num">3</span><span class="opt-text">\(\chi_2'(a) - \chi_1'(a) = -\frac{m_e \alpha}{\hbar^2}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4c', 3)"><span class="opt-num">4</span><span class="opt-text">\(\chi_2'(a) - \chi_1'(a) = \frac{\hbar^2}{2m_e \alpha} \chi(a)\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4c', 4)"><span class="opt-num">5</span><span class="opt-text">\(\chi_2'(a) - \chi_1'(a) = i k \chi(a)\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4c', 5)"><span class="opt-num">6</span><span class="opt-text">\(\chi_2'(a) - \chi_1'(a) = \infty\)</span></button>
+        </div>
+
+        <div class="explain-area" id="q4c-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">正解は **2** です。\(-\frac{\hbar^2}{2m_e}(\chi_2'(a) - \chi_1'(a)) + \alpha \chi(a) = 0\) を変形すると \(\chi_2'(a) - \chi_1'(a) = \frac{2m_e \alpha}{\hbar^2}\chi(a)\) となります。</div>
+        </div>
+      </div>
+
+      <div class="card" id="q4d">
+        <h3><span class="tag-q">大問[4](d)</span><span class="tag-step">Q6</span>透過振幅比 \(\frac{C}{A}\)</h3>
+        <div class="formula-box">
+          <span class="title">導出された解法関係</span>
+          \[ \beta = \frac{2m_e \alpha}{\hbar^2}, \qquad B e^{-ika} = A \sin(ka) - C e^{ika} \]
+        </div>
+        <p>球状障壁を抜ける透過振幅比 \(\frac{C}{A}\) の正しい形を選べ。</p>
+
+        <div class="options-grid">
+          <button class="opt-btn" onclick="checkAns('q4d', 0)"><span class="opt-num">1</span><span class="opt-text">\(\frac{C}{A} = \frac{1}{2} e^{ika}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4d', 1)"><span class="opt-num">2</span><span class="opt-text">\(\frac{C}{A} = \frac{1}{2} + \frac{\beta}{2ik} e^{-ika} \sin(ka)\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4d', 2)"><span class="opt-num">3</span><span class="opt-text">\(\frac{C}{A} = \frac{2ik}{2ik + \beta}\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4d', 3)"><span class="opt-num">4</span><span class="opt-text">\(\frac{C}{A} = \frac{\beta}{k} \cos(ka)\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4d', 4)"><span class="opt-num">5</span><span class="opt-text">\(\frac{C}{A} = 1\)</span></button>
+          <button class="opt-btn" onclick="checkAns('q4d', 5)"><span class="opt-num">6</span><span class="opt-text">\(\frac{C}{A} = 0\)</span></button>
+        </div>
+
+        <div class="explain-area" id="q4d-exp">
+          <div class="explain-title"></div>
+          <div class="explain-body">正解は **2** です。微分の不連続条件に \(B\) を消去して代入すると \(\frac{C}{A} = \frac{1}{2} + \frac{\beta}{2ik}e^{-ika}\sin(ka)\) と計算されます。</div>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p7">← 【解説】大問4</div>
+        <div class="navbtn next" data-goto="p9">次へ：直前要点確認 →</div>
+      </footer>
+    </section>
+
+    <!-- ============ [09] 直前要点確認 ============ -->
+    <section class="panel" data-panel="p9">
+      <h2>期末試験 直前要点サマリーシート</h2>
+      <p class="lead">予想・融合問題全体の解答と重要公式のまとめ（横スクロール絶対保障）。</p>
+
+      <div class="card">
+        <h3><span class="tag gold">要点 1</span>大問[1] ガウス波束の要点</h3>
+        <div class="summary-sec">
+          <p>・規格化定数: \(\mathbf{A = \frac{1}{\pi^{1/4}\sqrt{\sigma}}}\)<br>
+          ・不確定性: \(\mathbf{\Delta x \Delta p = \frac{\hbar}{2}}\) （最小不確定性）</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag gold">要点 2</span>大問[2] 段差ポテンシャルの要点</h3>
+        <div class="summary-sec">
+          <p>・反射率・透過率: \(\mathbf{R = \left(\frac{k_1 - k_2}{k_1 + k_2}\right)^2}, \quad \mathbf{T = \frac{4k_1 k_2}{(k_1 + k_2)^2}} \quad (R + T = 1)\)</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag gold">要点 3</span>大問[3] p軌道と動径極限の要点</h3>
+        <div class="summary-sec">
+          <p>・球面調和関数: \(\mathbf{Y_{1,0}(\theta) = \sqrt{\frac{3}{4\pi}}\cos\theta}\)<br>
+          ・\(l=1\) 原点極限: \(\frac{d^2\chi}{dr^2} - \frac{2}{r^2}\chi = 0 \implies \mathbf{\chi(r) \propto r^2}\)</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="tag gold">要点 4</span>大問[4] 融合球状障壁の要点</h3>
+        <div class="summary-sec">
+          <p>・微分のジャンプ条件: \(\mathbf{\left.\frac{d\chi_2}{dr}\right|_{r=a} - \left.\frac{d\chi_1}{dr}\right|_{r=a} = \frac{2m_e \alpha}{\hbar^2} \chi(a)}\)<br>
+          ・透過振幅比: \(\mathbf{\frac{C}{A} = \frac{1}{2} + \frac{\beta}{2ik} e^{-ika} \sin(ka)}\)</p>
+        </div>
+      </div>
+
+      <footer class="pagenav">
+        <div class="navbtn prev" data-goto="p8">← 【クイズ】大問4</div>
+        <div></div>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const answers = {
+    'q1a': 1, // index 1
+    'q1c': 1, // index 1
+    'q2d': 1, // index 1
+    'q3c': 1, // index 1
+    'q4c': 1, // index 1
+    'q4d': 1  // index 1
+  };
+
+  function checkAns(qId, selectedIdx) {
+    const card = document.getElementById(qId);
+    const buttons = card.querySelectorAll('.opt-btn');
+    const expArea = document.getElementById(qId + '-exp');
+    const expTitle = expArea.querySelector('.explain-title');
+    const correctIdx = answers[qId];
+
+    buttons.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (idx === correctIdx) {
+        btn.classList.add('correct');
+      } else if (idx === selectedIdx) {
+        btn.classList.add('wrong');
+      }
+    });
+
+    expArea.classList.add('show');
+    if (selectedIdx === correctIdx) {
+      expArea.classList.add('is-correct');
+      expTitle.innerHTML = '<span>正解！</span>';
+    } else {
+      expArea.classList.add('is-wrong');
+      expTitle.innerHTML = '<span>不正解...</span>';
+    }
+
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      MathJax.typesetPromise([expArea]);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+
+    function goTo(id) {
+      tabs.forEach(function(t) {
+        if (t.getAttribute('data-panel') === id) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
+
+      panels.forEach(function(p) {
+        if (p.getAttribute('data-panel') === id) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      const mainContainer = document.getElementById('panels');
+      if (mainContainer) {
+        mainContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      const activeTab = document.querySelector('.tab-btn.active');
+      if (activeTab) {
+        activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        const targetPanel = this.getAttribute('data-panel');
+        if (targetPanel) {
+          goTo(targetPanel);
+        }
+      });
+    });
+
+    const navBtns = document.querySelectorAll('[data-goto]');
+    navBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const targetPanel = this.getAttribute('data-goto');
+        if (targetPanel) {
+          goTo(targetPanel);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
